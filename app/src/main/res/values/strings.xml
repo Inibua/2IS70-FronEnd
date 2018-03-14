@@ -2,7 +2,7 @@
     <string name="app_name">Journaloo</string>
 
     <!-- Create landing activity strings -->
-    <string name= "landing_name">Landing</string>
+    <string name="landing_name">Landing</string>
     <string name="history_name">History</string>
     <string name="explore_name">Explore</string>
     <string name="profile_name">Profile</string>
