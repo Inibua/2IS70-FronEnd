@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Journaloo</string>
+
+    <!-- Create landing activity strings -->
+    <string name= "landing_name">Landing</string>
+    <string name="history_name">History</string>
+    <string name="explore_name">Explore</string>
+    <string name="profile_name">Profile</string>
+    <string name="start_name">Go Journaloo!</string>
+    <string name="landing_text">No current journey</string>
+
+    <!-- Create journey activity strings -->
+    <string name="title_name">Create a journey!</string>
+    <string name="create_name">Create</string>
+    <string name="cancel_name">Cancel</string>
+    <string name="journey_name">name of journey</string>
+
 </resources>
