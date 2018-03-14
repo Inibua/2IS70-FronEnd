@@ -90,18 +90,19 @@ public abstract class APIWrapperAbstract {
      * Retrieves Journeys from all users.
      *
      * @param pageNr
-     * @return
+     * @return Journey[] - array with all the journeys that excist
      */
     public abstract Journey[] getAllJourneys(int pageNr);
 
     /**
-     * Creates Journey
+     * Creates a Journey for the user
      *
      * @param journey
      */
     public abstract void createJourney(Journey journey);
 
     /**
+     * Updates the journey 
      *
      * @param journey
      */
