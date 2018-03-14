@@ -95,6 +95,7 @@ public abstract class APIWrapperAbstract {
     public abstract Journey[] getAllJourneys(int pageNr);
 
     /**
+     * Creates Journey
      *
      * @param journey
      */
