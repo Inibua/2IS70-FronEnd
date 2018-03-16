@@ -12,6 +12,7 @@ public class CreateJourneyActivity extends AppCompatActivity {
     public String nameJourney;
     public boolean privateJourney = false; // journey is set on public by default
 
+    //creating an object, needs to look up
     MainActivity obj = new MainActivity();
 
     EditText editJourneyName;
@@ -43,6 +44,7 @@ public class CreateJourneyActivity extends AppCompatActivity {
     }
 
     public void saveJourney(View view){
+        //try to set journeyActive to true
         obj.setJourneyActive(true);
         nameJourney = editJourneyName.getText().toString();
         Intent intent = new Intent(this, MainActivity.class);

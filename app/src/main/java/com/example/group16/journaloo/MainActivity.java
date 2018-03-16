@@ -15,14 +15,25 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private Button goJournaloo;
-    public boolean journeyActive = false; // becomes true if journey is saved, is used to change layout of MainActivity
+    public boolean journeyActive; // becomes true if journey is saved, is used to change layout of MainActivity
 
+    //constructor
+    public MainActivity() {
+        this.journeyActive = false;
+    }
+
+
+    // test creating object
+    MainActivity testObj = new MainActivity();
+
+    //set journeyActive
     public void setJourneyActive(boolean isActive){
         this.journeyActive = isActive;
     }
 
-    public boolean getJourneyActive(){
-        return this.journeyActive;
+    // get object created here
+    public MainActivity getTestObject(){
+        return testObj;
     }
 
     @Override
