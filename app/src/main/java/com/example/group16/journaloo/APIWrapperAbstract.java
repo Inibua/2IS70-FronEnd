@@ -7,7 +7,7 @@ import java.lang.Object;
  * Created by s169096 on 14-3-2018.
  */
 
-public abstract class APIWrapperAbstract {
+public interface APIWrapperAbstract {
     // DECLARATION VARIABLES
     //private static final Token.Type ACCESSTOKEN;
     private String googleGeolocationAPIKey;
@@ -95,70 +95,78 @@ public abstract class APIWrapperAbstract {
     public abstract Journey[] getAllJourneys(int pageNr);
 
     /**
-     * Creates a Journey for the user
+     * Creates a journey for the user
      *
-     * @param journey
+     * @param journey - Journey that user created
      */
     public abstract void createJourney(Journey journey);
 
     /**
-     * Updates the journey 
+     * Updates a journey for the user
      *
-     * @param journey
+     * @param journey - Journey that user updated
      */
     public abstract void updatejourney(Journey journey);
 
     /**
+     * Deletes a journey for the user
      *
-     *
-     * @param journey
+     * @param journey - Journey that user deleted
      */
     public abstract void deleteJourney(Journey journey);
 
     /**
+     * Retrieves a specific entry from the user
      *
-     * @param userid
-     * @return
+     * @param userid - User's Id whose journeys are retrieved
+     * @param entry - Entry user wants to get
+     * @return entry
      */
-    public abstract Entry getEntry(String userid);
+    public abstract Entry getEntry(String userid, Entry entry);
 
     /**
+     * Retrieves all the entries that belong to a certain journey
      *
-     * @param userId
-     * @return
+     * @param userId - User's Id whose entries are retrieved
+     * @param journey - Journey from which the entries are retrieved
+     * @return Entry[] - array with all entries of that journey in it
      */
-    public abstract Entry[] getJourneyEntries(String userId);
+    public abstract Entry[] getJourneyEntries(String userId, Journey journey);
 
     /**
+     * Retrieves all the entries that belong to a certain user
      *
      * @param userId
      * @param pageNum
-     * @return
+     * @return Entry[] - array with all the entries of that person
      */
     public abstract Entry[] getAllEntries(String userId, int pageNum);
 
     /**
+     * Creates an entry for the user
      *
      * @param entry
      */
     public abstract void createEntry(Entry entry);
 
     /**
-     *
+     * Updates an entry for the user
      * @param entry
      */
     public abstract void updateEntry(Entry entry);
 
     /**
+     * Deletes an entry for the user
      *
      * @param entry
      */
     public abstract void deleteEntry(Entry entry);
 
     /**
+     * Getting coordinates to determine the location
      *
      * @param coordinates
-     * @return
+     * @return coordinates - location from Google API
      */
     // Return the location from Google API
     public abstract String getLocation(String coordinates);
