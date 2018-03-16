@@ -89,7 +89,7 @@ public abstract class APIWrapperAbstract {
     /**
      * Retrieves Journeys from all users.
      *
-     * @param pageNr
+     * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with all the journeys that excist
      */
     public abstract Journey[] getAllJourneys(int pageNr);
@@ -136,8 +136,8 @@ public abstract class APIWrapperAbstract {
     /**
      * Retrieves all the entries that belong to a certain user
      *
-     * @param userId
-     * @param pageNum
+     * @param userId - User's Id whose entries are retrieved
+     * @param pageNum - which page number (which 10 entries exactly)
      * @return Entry[] - array with all the entries of that person
      */
     public abstract Entry[] getAllEntries(String userId, int pageNum);
@@ -145,27 +145,27 @@ public abstract class APIWrapperAbstract {
     /**
      * Creates an entry for the user
      *
-     * @param entry
+     * @param entry - Entry user wants to create
      */
     public abstract void createEntry(Entry entry);
 
     /**
      * Updates an entry for the user
-     * @param entry
+     * @param entry - Entry user wants to update
      */
     public abstract void updateEntry(Entry entry);
 
     /**
      * Deletes an entry for the user
      *
-     * @param entry
+     * @param entry - Entry user wants to delete
      */
     public abstract void deleteEntry(Entry entry);
 
     /**
      * Getting coordinates to determine the location
      *
-     * @param coordinates
+     * @param coordinates - coordinates of GPS
      * @return coordinates - location from Google API
      */
     // Return the location from Google API
