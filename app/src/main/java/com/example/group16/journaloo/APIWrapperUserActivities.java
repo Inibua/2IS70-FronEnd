@@ -7,7 +7,7 @@ package com.example.group16.journaloo;
 public class APIWrapperUserActivities extends APIWrapperAbstract {
     @Override
     public void signup(User currentUser) {
-        
+
     }
 
     @Override
@@ -61,7 +61,7 @@ public class APIWrapperUserActivities extends APIWrapperAbstract {
     }
 
     @Override
-    public void updatejourney(Journey journey) {
+    public void updateJourney(Journey journey) {
 
     }
 
