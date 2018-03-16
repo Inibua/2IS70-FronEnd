@@ -16,7 +16,6 @@
         tools:layout_editor_absoluteX="16dp"></include>
 
 
-
     <Button
         android:id="@+id/goJournaloo"
         android:layout_width="250dp"
