@@ -1,6 +1,7 @@
 package com.example.group16.journaloo;
 
 import android.content.Intent;
+import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,27 +15,40 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     private Button goJournaloo;
+    public boolean journeyActive = false; // becomes true if journey is saved, is used to change layout of MainActivity
+
+    public void setJourneyActive(boolean isActive){
+        this.journeyActive = isActive;
+    }
+
+    public boolean getJourneyActive(){
+        return this.journeyActive;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        if(!journeyActive) {
+            setContentView(R.layout.activity_main);
+            // find button and direct to create journey
+            goJournaloo = (Button) findViewById(R.id.goJournaloo);
+            goJournaloo.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    openCreateJourney();
+                }
+            });
+        } else {
+            setContentView(R.layout.activity_main_2);
+        }
 
 
         // create custom toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-
-        // find button and direct to create journey
-        goJournaloo = (Button) findViewById(R.id.goJournaloo);
-        goJournaloo.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                openCreateJourney();
-            }
-        });
     }
 
 
