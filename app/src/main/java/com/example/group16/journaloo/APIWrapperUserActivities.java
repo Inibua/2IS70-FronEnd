@@ -61,7 +61,7 @@ public class APIWrapperUserActivities extends APIWrapperAbstract {
     }
 
     @Override
-    public void updatejourney(Journey journey) {
+    public void updateJourney(Journey journey) {
 
     }
 

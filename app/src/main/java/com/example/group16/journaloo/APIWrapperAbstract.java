@@ -106,7 +106,7 @@ public abstract class APIWrapperAbstract {
      *
      * @param journey - Journey that user updated
      */
-    public abstract void updatejourney(Journey journey);
+    public abstract void updateJourney(Journey journey);
 
     /**
      * Deletes a journey for the user
