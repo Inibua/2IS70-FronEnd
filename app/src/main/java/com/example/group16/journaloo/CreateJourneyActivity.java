@@ -10,4 +10,9 @@ public class CreateJourneyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_journey);
     }
+
+    protected void getJourneyDetails(){
+        //get info from fields.
+    }
+
 }

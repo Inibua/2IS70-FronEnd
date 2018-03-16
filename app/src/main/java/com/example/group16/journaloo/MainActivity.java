@@ -1,14 +1,19 @@
 package com.example.group16.journaloo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button goJournaloo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +24,23 @@ public class MainActivity extends AppCompatActivity {
         // create custom toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+
+
+        // find button and direct to create journey
+        goJournaloo = (Button) findViewById(R.id.goJournaloo);
+        goJournaloo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                openCreateJourney();
+            }
+        });
+    }
+
+
+    public void openCreateJourney() {
+        Intent intent = new Intent(this, CreateJourneyActivity.class);
+        startActivity(intent);
     }
 
     @Override
