@@ -7,10 +7,10 @@ import java.lang.Object;
  * Created by s169096 on 14-3-2018.
  */
 
-public interface APIWrapperAbstract {
+public abstract class APIWrapperAbstract {
     // DECLARATION VARIABLES
     //private static final Token.Type ACCESSTOKEN;
-    private String googleGeolocationAPIKey;
+    public String googleGeolocationAPIKey;
     private User currentUser;
 
     // DECLARATION METHODS
