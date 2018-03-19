@@ -22,12 +22,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateJourneyActivity" />
-        <activity
-            android:name=".LoginActivity">
-            android:label="@string/title_activity_login"></activity>
-        <activity
-            android:name=".SignUpActivity">
-            android:label="@string/title_activity_sign_up"></activity>
+        <activity android:name=".LoginActivity">
+            android:label="@string/title_activity_login">
+        </activity>
+        <activity android:name=".SignUpActivity">
+            android:label="@string/title_activity_sign_up">
+        </activity>
+        <activity android:name=".NewEntryActivity"></activity>
+        <activity android:name=".ViewJourneyActivity"></activity>
 
     </application>
 
