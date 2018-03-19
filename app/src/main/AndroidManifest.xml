@@ -29,6 +29,8 @@
             android:label="@string/title_activity_sign_up">
         </activity>
         <activity android:name=".NewEntryActivity"></activity>
+        <activity android:name=".ViewJourneyActivity"></activity>
+
     </application>
 
 </manifest>
