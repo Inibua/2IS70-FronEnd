@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         } else {
             setContentView(R.layout.activity_main_2);
+            TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
+            nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
         }
 
 
@@ -40,12 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void stopJourney(View view){
         Intent intent = new Intent(this, MainActivity.class);
+        Toast.makeText(getApplicationContext(), "Saved Journey", Toast.LENGTH_SHORT).show();
         startActivity(intent);
     }
 
 
     public void openCreateJourney(View view){
         Intent intent = new Intent(this, CreateJourneyActivity.class);
+        finish();
         startActivity(intent);
     }
 
