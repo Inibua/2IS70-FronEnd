@@ -1,7 +1,6 @@
 package com.example.group16.journaloo;
 
 import android.content.Intent;
-import android.support.annotation.MainThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,48 +8,24 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button goJournaloo;
-    public boolean journeyActive; // becomes true if journey is saved, is used to change layout of MainActivity
+    public boolean journeyActive = false; // becomes true if journey is saved, is used to change layout of MainActivity
 
-    //constructor
-    public MainActivity() {
-        this.journeyActive = false;
-    }
-
-
-    // test creating object
-    MainActivity testObj = new MainActivity();
-
-    //set journeyActive
-    public void setJourneyActive(boolean isActive){
-        this.journeyActive = isActive;
-    }
-
-    // get object created here
-    public MainActivity getTestObject(){
-        return testObj;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(!journeyActive) {
-            setContentView(R.layout.activity_main);
-            // find button and direct to create journey
-            goJournaloo = (Button) findViewById(R.id.goJournaloo);
-            goJournaloo.setOnClickListener(new View.OnClickListener() {
+        if (getIntent().getExtras() != null) {
+            journeyActive = getIntent().getExtras().getBoolean("isActive");
+        }
 
-                @Override
-                public void onClick(View v) {
-                    openCreateJourney();
-                }
-            });
+        if (!journeyActive) {
+            setContentView(R.layout.activity_main);
+
         } else {
             setContentView(R.layout.activity_main_2);
         }
@@ -63,7 +38,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void openCreateJourney() {
+    public void stopJourney(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
+
+    public void openCreateJourney(View view){
         Intent intent = new Intent(this, CreateJourneyActivity.class);
         startActivity(intent);
     }

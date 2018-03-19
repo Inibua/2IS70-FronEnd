@@ -26,6 +26,7 @@
         android:background="@color/colorPrimary"
         android:text="@string/start_name"
         android:textSize="30sp"
+        android:onClick="openCreateJourney"
         app:layout_constraintBottom_toTopOf="@+id/app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -11,9 +11,7 @@ public class CreateJourneyActivity extends AppCompatActivity {
 
     public String nameJourney;
     public boolean privateJourney = false; // journey is set on public by default
-
-    //creating an object, needs to look up
-    MainActivity obj = new MainActivity();
+    public boolean journeyActive = false;
 
     EditText editJourneyName;
 
@@ -30,6 +28,7 @@ public class CreateJourneyActivity extends AppCompatActivity {
         //get info from fields.
     }
 
+
     public void selectItem(View view){
         boolean checked =((CheckBox) view ).isChecked();
         switch (view.getId()){
@@ -43,11 +42,13 @@ public class CreateJourneyActivity extends AppCompatActivity {
 
     }
 
+
     public void saveJourney(View view){
         //try to set journeyActive to true
-        obj.setJourneyActive(true);
+        journeyActive=true;
         nameJourney = editJourneyName.getText().toString();
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("isActive",journeyActive);
         startActivity(intent);
     }
 

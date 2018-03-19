@@ -43,7 +43,8 @@
         app:layout_constraintBottom_toTopOf="@+id/app_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        android:onClick="stopJourney"/>
 
 
 </android.support.constraint.ConstraintLayout>
