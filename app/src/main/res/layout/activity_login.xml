@@ -38,7 +38,8 @@
                 android:text="Login"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
-                android:textSize="30sp" />
+                android:textSize="30sp"
+                android:textStyle="bold|italic" />
 
             <TextView
                 android:id="@+id/textView2"
