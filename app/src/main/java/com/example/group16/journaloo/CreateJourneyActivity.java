@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class CreateJourneyActivity extends AppCompatActivity {
 
@@ -21,35 +22,34 @@ public class CreateJourneyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_journey);
 
         editJourneyName = (EditText) findViewById(R.id.editJourneyName);
-
-    }
-
-    protected void getJourneyDetails(){
-        //get info from fields.
     }
 
 
-    public void selectItem(View view){
-        boolean checked =((CheckBox) view ).isChecked();
-        switch (view.getId()){
+    public void selectItem(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch (view.getId()) {
             case R.id.checkPrivate:
-                if(checked){
+                if (checked) {
                     privateJourney = true;
                 }
                 break;
-
         }
-
     }
 
 
-    public void saveJourney(View view){
-        //try to set journeyActive to true
-        journeyActive=true;
-        nameJourney = editJourneyName.getText().toString();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("isActive",journeyActive);
-        startActivity(intent);
-    }
+    public void saveJourney(View view) {
 
+        if (editJourneyName.getText().toString().matches("")){
+            Toast.makeText(getApplicationContext(), "Please give the journey a name", Toast.LENGTH_SHORT).show();
+
+        } else {
+            journeyActive = true;
+            nameJourney = editJourneyName.getText().toString();
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("nameJourney", editJourneyName.getText().toString());
+            intent.putExtra("isActive", journeyActive);
+            finish();
+            startActivity(intent);
+        }
+    }
 }
