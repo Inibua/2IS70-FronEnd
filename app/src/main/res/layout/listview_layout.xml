@@ -9,7 +9,7 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/entryImageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="0.11"
@@ -20,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView"
+            android:layout_toEndOf="@+id/entryImageView"
+            android:layout_toRightOf="@+id/entryImageView"
             android:textColor="#333"
             android:textSize="22dp"
             android:textStyle="bold" />
@@ -31,8 +31,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvjourneyname"
-            android:layout_toEndOf="@+id/imageView"
-            android:layout_toRightOf="@+id/imageView"
+            android:layout_toEndOf="@+id/entryImageView"
+            android:layout_toRightOf="@+id/entryImageView"
             android:layout_weight="1"
             android:paddingLeft="5dp"
             android:textColor="#333"
