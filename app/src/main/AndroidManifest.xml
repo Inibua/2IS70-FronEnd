@@ -36,7 +36,8 @@
         <activity android:name=".NewEntryActivity" />
         <activity android:name=".ViewJourneyActivity" />
         <activity android:name=".ViewProfileActivity" />
-        <activity android:name=".EditProfileActivity"></activity>
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".ViewEntries"></activity>
     </application>
 
 </manifest>
