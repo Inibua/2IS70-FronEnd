@@ -78,7 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.profile:
+                Intent intent = new Intent(this, ViewProfileActivity.class);
                 Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
             default:
 

@@ -106,6 +106,7 @@
         android:layout_marginBottom="148dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:onClick="editPassword"
         android:text="Edit"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
