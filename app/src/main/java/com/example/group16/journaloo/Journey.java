@@ -9,6 +9,7 @@ import java.util.Date;
 public class Journey {
     public String journeyId;
     public String title;
+    public String description;
     public Date startDate;
     public Date endDate;
 }

@@ -9,30 +9,30 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/entryImageView"
+            android:id="@+id/imageViewent"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_weight="0.11"
             />
 
         <TextView
-            android:id="@+id/tvjourneyname"
+            android:id="@+id/tventryname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/entryImageView"
-            android:layout_toRightOf="@+id/entryImageView"
+            android:layout_toEndOf="@+id/imageViewent"
+            android:layout_toRightOf="@+id/imageViewent"
             android:textColor="#333"
             android:textSize="22dp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/tvdescription"
+            android:id="@+id/tventrydescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvjourneyname"
-            android:layout_toEndOf="@+id/entryImageView"
-            android:layout_toRightOf="@+id/entryImageView"
+            android:layout_below="@id/tventryname"
+            android:layout_toEndOf="@+id/imageViewent"
+            android:layout_toRightOf="@+id/imageViewent"
             android:layout_weight="1"
             android:paddingLeft="5dp"
             android:textColor="#333"

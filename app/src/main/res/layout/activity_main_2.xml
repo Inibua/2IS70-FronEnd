@@ -25,6 +25,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Current Journey:"
+        android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toTopOf="@+id/goJournaloo"

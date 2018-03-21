@@ -7,7 +7,7 @@ import java.lang.Object;
  * Created by s169096 on 14-3-2018.
  */
 
-public abstract class APIWrapperAbstract {
+public class APIWrapper {
     // DECLARATION VARIABLES
     //private static final Token.Type ACCESSTOKEN;
     public String googleGeolocationAPIKey;
@@ -21,7 +21,9 @@ public abstract class APIWrapperAbstract {
      *
      * @param currentUser - User to be created in data base
      */
-    public abstract void signup(User currentUser);
+    public void signup(User currentUser){
+
+    }
 
     /**
      * Function login(). Accepts the current user from fields in login activity.
@@ -29,14 +31,18 @@ public abstract class APIWrapperAbstract {
      *
      * @param currentUser - User who is goind to be logged in
      */
-    public abstract void login(User currentUser);
+    public void login(User currentUser){
+
+    }
 
     /**
      * Function logout() just logouts the currently logged in user.
      *
      * @param currentUser - User who is currently logged in and will we logged out
      */
-    public abstract void logout(User currentUser);
+    public void logout(User currentUser){
+
+    }
 
     /**
      * Gets new password from newPass field. G
@@ -44,7 +50,9 @@ public abstract class APIWrapperAbstract {
      *
      * @param currentUser - User whose password will be changed
      */
-    public abstract void resetPassword(User currentUser);
+    public void resetPassword(User currentUser){
+
+    }
 
     /**
      * Function used to retrieve a user from backend.
@@ -52,21 +60,27 @@ public abstract class APIWrapperAbstract {
      * @param userId - userId used to get User
      * @return User
      */
-    public abstract User getUser(String userId);
+    public User getUser(String userId){
+
+    }
 
     /**
      * Function which updates the current users info. Like profile pic, name, description, age
      *
      * @param currentUser - the user to be updated
      */
-    public abstract void updateUser(User currentUser);
+    public void updateUser(User currentUser){
+
+    }
 
     /**
      * Function which deletes the current user.
      *
      * @param currentUser - User to be deleted
      */
-    public abstract void deleteUser(User currentUser);
+    public void deleteUser(User currentUser){
+
+    }
 
     /**
      * Function which is used to get the currently logged in users journey.
@@ -75,7 +89,10 @@ public abstract class APIWrapperAbstract {
      * @return currentJourney
      * @throws NoJourneyException if there is no active journey
      */
-    public abstract Journey getCurrentJourney(String userId) throws NoJourneyException;
+    public Journey getCurrentJourney(String userId) throws NoJourneyException{
+        return new Journey();
+
+    }
 
     /**
      * Gets an array of the current user's journeys, aka his past journeys.
@@ -84,7 +101,9 @@ public abstract class APIWrapperAbstract {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with 10 journeys depending on the pageNr
      */
-    public abstract Journey[] getUserJourneys(String userId, int pageNr);
+    public Journey[] getUserJourneys(String userId, int pageNr){
+        return new Journey[];
+    }
 
     /**
      * Retrieves Journeys from all users.
@@ -92,28 +111,36 @@ public abstract class APIWrapperAbstract {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with all the journeys that excist
      */
-    public abstract Journey[] getAllJourneys(int pageNr);
+    public Journey[] getAllJourneys(int pageNr){
+        return new Journey[];
+    }
 
     /**
      * Creates a journey for the user
      *
      * @param journey - Journey that user created
      */
-    public abstract void createJourney(Journey journey);
+    public void createJourney(Journey journey){
+
+    }
 
     /**
      * Updates a journey for the user
      *
      * @param journey - Journey that user updated
      */
-    public abstract void updateJourney(Journey journey);
+    public void updateJourney(Journey journey){
+
+    }
 
     /**
      * Deletes a journey for the user
      *
      * @param journey - Journey that user deleted
      */
-    public abstract void deleteJourney(Journey journey);
+    public void deleteJourney(Journey journey){
+
+    }
 
     /**
      * Retrieves a specific entry from the user
@@ -122,7 +149,9 @@ public abstract class APIWrapperAbstract {
      * @param entry - Entry user wants to get
      * @return entry
      */
-    public abstract Entry getEntry(String userid, Entry entry);
+    public Entry getEntry(String userid, Entry entry){
+        return new Entry();
+    }
 
     /**
      * Retrieves all the entries that belong to a certain journey
@@ -131,7 +160,9 @@ public abstract class APIWrapperAbstract {
      * @param journey - Journey from which the entries are retrieved
      * @return Entry[] - array with all entries of that journey in it
      */
-    public abstract Entry[] getJourneyEntries(String userId, Journey journey);
+    public Entry[] getJourneyEntries(String userId, Journey journey){
+        return new Entry[];
+    }
 
     /**
      * Retrieves all the entries that belong to a certain user
@@ -140,27 +171,35 @@ public abstract class APIWrapperAbstract {
      * @param pageNum - which page number (which 10 entries exactly)
      * @return Entry[] - array with all the entries of that person
      */
-    public abstract Entry[] getAllEntries(String userId, int pageNum);
+    public Entry[] getAllEntries(String userId, int pageNum){
+        return new Entry[];
+    }
 
     /**
      * Creates an entry for the user
      *
      * @param entry - Entry user wants to create
      */
-    public abstract void createEntry(Entry entry);
+    public void createEntry(Entry entry){
+
+    }
 
     /**
      * Updates an entry for the user
      * @param entry - Entry user wants to update
      */
-    public abstract void updateEntry(Entry entry);
+    public void updateEntry(Entry entry){
+
+    }
 
     /**
      * Deletes an entry for the user
      *
      * @param entry - Entry user wants to delete
      */
-    public abstract void deleteEntry(Entry entry);
+    public void deleteEntry(Entry entry){
+
+    }
 
     /**
      * Getting coordinates to determine the location
@@ -169,5 +208,7 @@ public abstract class APIWrapperAbstract {
      * @return coordinates - location from Google API
      */
     // Return the location from Google API
-    public abstract String getLocation(String coordinates);
+    public String getLocation(String coordinates){
+
+    }
 }

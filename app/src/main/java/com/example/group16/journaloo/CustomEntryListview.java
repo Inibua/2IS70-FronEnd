@@ -10,20 +10,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CustomListview extends ArrayAdapter<String>{
+/**
+ * Created by s146958 on 21-3-2018.
+ */
 
-    private String[] journeyname;
-    private String[] desc;
-    private Integer[] imigid;
+public class CustomEntryListview extends ArrayAdapter<String> {
+
+    private String[] entryname;
+    private String[] entrydesc;
+    private Integer[] entryimigid;
     private Activity context;
 
-    public CustomListview(Activity context, String[] journeyname,String[] desc,Integer[] imigid) {
-        super(context, R.layout.listview_layout,journeyname);
+    public CustomEntryListview(Activity context, String[] entryname,String[] entrydesc,Integer[] entryimigid) {
+        super(context, R.layout.entrylistview_layout,entryname);
 
         this.context=context;
-        this.journeyname=journeyname;
-        this.desc=desc;
-        this.imigid=imigid;
+        this.entryname=entryname;
+        this.entrydesc=entrydesc;
+        this.entryimigid=entryimigid;
     }
 
     @NonNull
@@ -33,16 +37,16 @@ public class CustomListview extends ArrayAdapter<String>{
         ViewHolder viewHolder=null;
         if(r==null){
             LayoutInflater layoutInflater=context.getLayoutInflater();
-            r=layoutInflater.inflate(R.layout.listview_layout,null,true);
+            r=layoutInflater.inflate(R.layout.entrylistview_layout,null,true);
             viewHolder=new ViewHolder(r);
             r.setTag(viewHolder);
         }
         else{
             viewHolder= (ViewHolder) r.getTag();
         }
-        viewHolder.ivw.setImageResource(imigid[position]);
-        viewHolder.tvw1.setText(journeyname[position]);
-        viewHolder.tvw2.setText(desc[position]);
+        viewHolder.ivw.setImageResource(entryimigid[position]);
+        viewHolder.tvw1.setText(entryname[position]);
+        viewHolder.tvw2.setText(entrydesc[position]);
         return r;
 
     }
@@ -52,9 +56,9 @@ public class CustomListview extends ArrayAdapter<String>{
         ImageView ivw;
         ViewHolder(View v)
         {
-            tvw1= (TextView) v.findViewById(R.id.tvjourneyname);
-            tvw2= (TextView) v.findViewById(R.id.tvdescription);
-            ivw= (ImageView) v.findViewById(R.id.entryImageView);
+            tvw1= (TextView) v.findViewById(R.id.tventryname);
+            tvw2= (TextView) v.findViewById(R.id.tventrydescription);
+            ivw= (ImageView) v.findViewById(R.id.imageViewent);
 
         }
 

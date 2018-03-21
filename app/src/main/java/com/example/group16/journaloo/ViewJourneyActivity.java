@@ -1,7 +1,10 @@
 package com.example.group16.journaloo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.group16.journaloo.CustomListview;
@@ -21,5 +24,12 @@ public class ViewJourneyActivity extends AppCompatActivity {
         lst =(ListView)findViewById(R.id.listview);
         CustomListview customListview=new CustomListview(this,journeyname,desc,imigid);
         lst.setAdapter(customListview);
+        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
+                startActivity(intent);
+            }
+        });
     }
 }

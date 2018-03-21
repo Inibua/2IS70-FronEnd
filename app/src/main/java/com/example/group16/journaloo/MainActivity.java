@@ -171,10 +171,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Explore", Toast.LENGTH_SHORT).show();
                 break; // break to end action only do the filled in actions
             case R.id.history:
+                Intent intent2 = new Intent(this, ViewJourneyActivity.class);
                 Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
+                startActivity(intent2);
                 break;
             case R.id.profile:
+                Intent intent = new Intent(this, ViewProfileActivity.class);
                 Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
+                startActivity(intent);
                 break;
             default:
 

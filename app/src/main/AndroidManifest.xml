@@ -6,9 +6,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera2" />
+
+
+    <uses-feature android:name="android.hardware.camera2" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -35,7 +42,13 @@
         </activity>
         <activity android:name=".NewEntryActivity" />
         <activity android:name=".ViewJourneyActivity" />
+
         <activity android:name=".CreateEntryActivity"></activity>
+
+        <activity android:name=".ViewProfileActivity" />
+        <activity android:name=".EditProfileActivity" />
+        <activity android:name=".ViewEntries"></activity>
+
     </application>
 
 </manifest>
