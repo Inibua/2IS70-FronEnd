@@ -121,29 +121,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             /*
-            ImageView entryView = (ImageView) findViewById(R.id.entryView);
-            Bundle extras = data.getExtras();
-            Bitmap bitmap = (Bitmap) extras.get("data");
-
-
-            entryView.setImageBitmap(bitmap);
-
-
-            Intent intent = new Intent(this, NewEntryActivity.class);
-            startActivity(intent);
-          //  String partFilename = currentDateFormat();
-          //  storeCameraPhotoInSDCard(bitmap, partFilename);
-
-            // display the image from SD Card to ImageView Control
-            //String storeFilename = "photo_" + partFilename + ".jpg";
-           // Bitmap mBitmap = getImageFileFromSDCard(storeFilename);
-           // entryView.setImageBitmap(mBitmap);
-
+            String partFilename = currentDateFormat();
+            storeCameraPhotoInSDCard(bitmap, partFilename);
         */
         }
 
     }
-
+/*
     private String currentDateFormat(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
         String  currentTimeStamp = dateFormat.format(new Date());
@@ -176,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         return bitmap;
     }
 
+*/
 
 
 

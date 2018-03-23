@@ -13,7 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="bottom|end"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameJourney"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="0dp"></include>
 
     <TextView
@@ -73,19 +76,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.703"
         app:layout_constraintStart_toEndOf="@+id/nameJourney" />
-
-    <ImageView
-        android:id="@+id/entryView"
-        android:layout_width="304dp"
-        android:layout_height="280dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="68dp"
-        app:layout_constraintBottom_toTopOf="@+id/app_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameJourney" />
 
 
 </android.support.constraint.ConstraintLayout>
