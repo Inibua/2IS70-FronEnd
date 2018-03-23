@@ -25,10 +25,11 @@ public class NewEntryActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // String path = "sdcard/camera_app/cam_image.jpg";
 
         ImageView entryImageView = (ImageView) findViewById(R.id.entryImageView);
         entryImageView.setImageBitmap(bmp);
+
+        //String path = "sdcard/camera_app/cam_image.jpg";
         //entryView.setImageDrawable(Drawable.createFromPath(path));
 
 
