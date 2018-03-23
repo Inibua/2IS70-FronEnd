@@ -1,6 +1,7 @@
 package com.example.group16.journaloo;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -97,20 +98,48 @@ public class MainActivity extends AppCompatActivity {
 
         super.onActivityResult(requestCode, resultCode, data);
         if(MainActivity.requestCode == requestCode && resultCode == RESULT_OK){
+            Bundle extras = data.getExtras();
+            Bitmap bmp = (Bitmap) extras.get("data");
+            try {
+                //Write file
+                String filename = "bitmap.png";
+                FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
+                //Cleanup
+                stream.close();
+                bmp.recycle();
+
+                //Pop intent
+                Intent in1 = new Intent(this, NewEntryActivity.class);
+                in1.putExtra("image", filename);
+                startActivity(in1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+            /*
             ImageView entryView = (ImageView) findViewById(R.id.entryView);
             Bundle extras = data.getExtras();
             Bitmap bitmap = (Bitmap) extras.get("data");
+
+
             entryView.setImageBitmap(bitmap);
 
 
-            String partFilename = currentDateFormat();
-            storeCameraPhotoInSDCard(bitmap, partFilename);
+            Intent intent = new Intent(this, NewEntryActivity.class);
+            startActivity(intent);
+          //  String partFilename = currentDateFormat();
+          //  storeCameraPhotoInSDCard(bitmap, partFilename);
 
             // display the image from SD Card to ImageView Control
             //String storeFilename = "photo_" + partFilename + ".jpg";
            // Bitmap mBitmap = getImageFileFromSDCard(storeFilename);
            // entryView.setImageBitmap(mBitmap);
+
+        */
         }
 
     }
