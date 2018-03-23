@@ -15,6 +15,9 @@ import java.io.FileInputStream;
 
 public class NewEntryActivity extends AppCompatActivity {
 
+    public String entryDescription;
+    public String entryLocation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +49,9 @@ public class NewEntryActivity extends AppCompatActivity {
         } else if (descriptionEntry.getText().toString().matches("")){
             Toast.makeText(getApplicationContext(), "Please give the entry a description", Toast.LENGTH_SHORT).show();
         } else {
-            nameJourney = editJourneyName.getText().toString();
+            entryLocation = locationEntry.getText().toString();
+            entryDescription = descriptionEntry.getText().toString();
             Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("nameJourney", editJourneyName.getText().toString());
-            intent.putExtra("isActive", journeyActive);
             finish();
             startActivity(intent);
         }
