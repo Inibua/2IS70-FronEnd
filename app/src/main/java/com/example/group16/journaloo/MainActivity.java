@@ -8,12 +8,15 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,10 +31,11 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
 
     public boolean journeyActive = false; // becomes true if journey is saved, is used to change layout of MainActivity
     static final int requestCode =20;
+    public GestureDetectorCompat detector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             setContentView(R.layout.activity_main_2);
             TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
             nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
-
+            detector = new GestureDetectorCompat(this,this);
         }
 
 
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
+/*
     public void openCamera(View view) {
         Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -91,6 +95,31 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(photoCaptureIntent, requestCode);
     }
 
+    */
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float v, float v1) {
+        Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            Toast.makeText(getApplicationContext(),"SD card found",Toast.LENGTH_LONG).show();
+        } else{
+            Toast.makeText(getApplicationContext(),"SD card not found",Toast.LENGTH_LONG).show();
+        }
+
+        if(e2.getX() - e1.getX() > 50)  {
+            startActivityForResult(photoCaptureIntent, requestCode);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        detector.onTouchEvent(event);
+        return super.onTouchEvent(event);
+    }
 
 
     @Override
@@ -199,6 +228,34 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
-    
+
+
+    // unused required methods
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
 }
+
+
