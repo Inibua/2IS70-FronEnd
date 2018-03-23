@@ -9,7 +9,17 @@ import java.util.Date;
 public class Journey {
     public String journeyId;
     public String title;
-    public String description;
     public Date startDate;
     public Date endDate;
+
+    Journey () {
+
+    }
+
+    Journey (String journeyId, String title, Date startDate, Date endDate) {
+        this.journeyId = journeyId;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
