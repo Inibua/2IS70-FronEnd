@@ -61,7 +61,7 @@ public class APIWrapper {
      * @return User
      */
     public User getUser(String userId){
-
+        return new User();
     }
 
     /**
@@ -102,7 +102,7 @@ public class APIWrapper {
      * @return Journey[] - array with 10 journeys depending on the pageNr
      */
     public Journey[] getUserJourneys(String userId, int pageNr){
-        return new Journey[];
+        return new Journey[5];
     }
 
     /**
@@ -112,7 +112,7 @@ public class APIWrapper {
      * @return Journey[] - array with all the journeys that excist
      */
     public Journey[] getAllJourneys(int pageNr){
-        return new Journey[];
+        return new Journey[5];
     }
 
     /**
@@ -161,7 +161,7 @@ public class APIWrapper {
      * @return Entry[] - array with all entries of that journey in it
      */
     public Entry[] getJourneyEntries(String userId, Journey journey){
-        return new Entry[];
+        return new Entry[5];
     }
 
     /**
@@ -172,7 +172,7 @@ public class APIWrapper {
      * @return Entry[] - array with all the entries of that person
      */
     public Entry[] getAllEntries(String userId, int pageNum){
-        return new Entry[];
+        return new Entry[5];
     }
 
     /**
@@ -209,6 +209,6 @@ public class APIWrapper {
      */
     // Return the location from Google API
     public String getLocation(String coordinates){
-
+        return "";
     }
 }
