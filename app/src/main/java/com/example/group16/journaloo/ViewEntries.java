@@ -1,7 +1,10 @@
 package com.example.group16.journaloo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 public class ViewEntries extends AppCompatActivity {
@@ -17,5 +20,14 @@ public class ViewEntries extends AppCompatActivity {
         lst =(ListView)findViewById(R.id.listviewent);
         final CustomEntryListview customentryListview=new CustomEntryListview(this,entryname,entrydesc,entryimigid);
         lst.setAdapter(customentryListview);
+        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(ViewEntries.this, Entry.class);
+                intent.putExtra("IMAGE", entryimigid[position]);
+                intent.putExtra("NAME", entryname[position]);
+                startActivity(intent);
+            }
+        });
     }
 }
