@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/descriptionEditText"
+        android:id="@+id/descriptionEntryEditText"
         android:layout_width="261dp"
         android:layout_height="96dp"
         android:layout_marginBottom="20dp"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/locationEditText"
+        android:id="@+id/locationEntryEditText"
         android:layout_width="261dp"
         android:layout_height="43dp"
         android:layout_marginBottom="8dp"
@@ -49,7 +49,7 @@
         android:hint="location"
         android:inputType="textShortMessage|textLongMessage"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/saveEntry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent" />
@@ -64,7 +64,7 @@
         android:text="Description"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/descriptionEditText"
+        app:layout_constraintBottom_toTopOf="@+id/descriptionEntryEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent" />
@@ -79,12 +79,12 @@
         android:text="Location"
         android:textColor="@android:color/black"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/locationEditText"
+        app:layout_constraintBottom_toTopOf="@+id/locationEntryEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/saveEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
