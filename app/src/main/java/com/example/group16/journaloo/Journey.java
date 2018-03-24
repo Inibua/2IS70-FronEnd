@@ -8,18 +8,21 @@ import java.util.Date;
 
 public class Journey {
     public String journeyId;
+    public String userId;
     public String title;
     public Date startDate;
     public Date endDate;
+    public boolean privacy;
 
     Journey () {
 
     }
 
-    Journey (String journeyId, String title, Date startDate, Date endDate) {
+    Journey (String journeyId, String title, Date startDate, Date endDate, boolean privacy) {
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.privacy = privacy;
     }
 }
