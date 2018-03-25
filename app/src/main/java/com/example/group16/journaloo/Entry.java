@@ -13,9 +13,9 @@ import java.util.Date;
 /**
  * Created by s169096 on 14-3-2018.
  */
-
+// Is this an activity ir object template?
 public class Entry extends AppCompatActivity {
-    public String entryid;
+    public String entryId;
     public Image image;
     public Date date;
     public String description;
@@ -25,6 +25,27 @@ public class Entry extends AppCompatActivity {
     ImageView imageView;
     TextView textView;
 
+    Entry () {
+
+    }
+
+    Entry (String entryId, Image image, Date date, String description, String coordinates,
+           String location) {
+        this.entryId = entryId;
+        this.image = image;
+        this.date = date;
+        this.description = description;
+        this.coordinates = coordinates;
+        this.location = location;
+    }
+
+    Entry (String entryid, Image image, Date date, String description, String location) {
+        this.entryId = entryid;
+        this.image = image;
+        this.date = date;
+        this.description = description;
+        this.location = location;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

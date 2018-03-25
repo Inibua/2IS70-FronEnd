@@ -8,5 +8,20 @@ public class User {
     public String userId;
     public String userName;
     public String email;
-    private String password;
+    public String password;
+
+    User () {
+
+    }
+
+    User (String username, String password) {
+        this.userName = username;
+        this.password = password;
+    }
+
+    User (String username, String password, String email) {
+        this.userName = username;
+        this.password = password;
+        this.email = email;
+    }
 }
