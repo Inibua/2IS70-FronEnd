@@ -34,7 +34,6 @@ public class APIWrapper {
     private String url;
     private Request request;
 
-
     // Only used when logging in and updating user
     public static void decoded(String JWTEncoded) throws Exception {
         try {
@@ -42,6 +41,8 @@ public class APIWrapper {
             Log.d(TAG, token);
             Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
+
+            //User user = new User(getJson(split[1]));
         } catch (UnsupportedEncodingException e) {
             //Error
         }
