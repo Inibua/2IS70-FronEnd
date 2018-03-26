@@ -1,11 +1,13 @@
 package com.example.group16.journaloo;
 
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.Object;
 
 import okhttp3.Call;
@@ -25,11 +27,30 @@ public class APIWrapper {
     // DECLARATION VARIABLES
 
     private static final String TAG = MainActivity.class.getName();
+    private static java.lang.String token;
     private APIWrapper wrapper;
     private JSONObject obj;
     private OkHttpClient client;
     private String url;
     private Request request;
+
+
+    // Only used when logging in and updating user
+    public static void decoded(String JWTEncoded) throws Exception {
+        try {
+            String[] split = JWTEncoded.split("\\.");
+            Log.d(TAG, token);
+            Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
+            Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
+        } catch (UnsupportedEncodingException e) {
+            //Error
+        }
+    }
+
+    private static String getJson(String strEncoded) throws UnsupportedEncodingException{
+        byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
+        return new String(decodedBytes, "UTF-8");
+    }
 
     APIWrapper () {
 
@@ -122,12 +143,17 @@ public class APIWrapper {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.i(TAG, e.getMessage());
-                //create ne logged in user by using one of the constructors
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, response.body().toString());
+                try {
+                    token = response.body().string();
+                    decoded(token);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
