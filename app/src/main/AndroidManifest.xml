@@ -26,7 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,7 +34,7 @@
         </activity>
 
         <activity android:name=".CreateJourneyActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity">
             android:label="@string/title_activity_login">
         </activity>
         <activity android:name=".SignUpActivity">

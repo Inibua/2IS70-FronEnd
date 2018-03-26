@@ -64,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    private APIWrapper wrapper = APIWrapper.getWrapper();
+    private APIWrapper wrapper = APIWrapper.getWrapper(); // JON LOOK AT ME
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -319,7 +319,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
 
             User userToBeLoggedIn = new User(mUsername, mPassword);
-            wrapper.login(userToBeLoggedIn);
+            wrapper.login(userToBeLoggedIn); // JON LOOK AT ME
             //Thread.sleep(2000);
             
 
