@@ -33,7 +33,10 @@ public class APIWrapper {
     private OkHttpClient client;
     private String url;
     private Request request;
+
+    //Object that need to be passed between the app itself
     public User loggedInUser;
+    public Journey activeJourney;
 
     // Only used when logging in and updating user
     public void decoded(String JWTEncoded) throws Exception {
@@ -357,14 +360,14 @@ public class APIWrapper {
      *
      * @param journey - Journey that user created
      */
-    public void createJourney(Journey journey, String userId) { // POST
+    public void createJourney(Journey journey, User loggedInUser) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey";
         client = new OkHttpClient();
 
         try {
             obj.put("title", journey.title);
-            obj.put("userId", userId);
+            obj.put("userId", loggedInUser.userId);
             obj.put("startDate", journey.startDate);
             obj.put("endDate", journey.endDate);
             obj.put("privacy", journey.privacy);
@@ -381,6 +384,7 @@ public class APIWrapper {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
+                .addHeader("authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -433,9 +437,9 @@ public class APIWrapper {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with all the journeys that excist
      */
-    public Journey[] getAllJourneys(int pageNr) { // GET How do we get all journeys?
+    public Journey[] getAllJourneys(int pageNr) { // GET or post as parameters
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/journey";
+        url = "https://polar-cove-19347.herokuapp.com/journey/all";
         client = new OkHttpClient();
         return new Journey[5];
     }
@@ -444,21 +448,28 @@ public class APIWrapper {
      * Updates a journey for the user
      *
      * @param journey - Journey that user updated
+     * @param currentUser - logged in user whose Id we get
+     * @param stopped - to detect whether the journey is being updated or just stopped
      */
-    public void updateJourney(Journey journey, User currentUser) { // PUT
+    public void updateJourney(Journey journey, User currentUser, boolean stopped) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
         client = new OkHttpClient();
 
-        try {
-            obj.put("id", journey.journeyId);
-            obj.put("userId", currentUser.userId);
-            obj.put("startDate", journey.startDate);
-            obj.put("endDate", journey.endDate);
-            obj.put("privacy", journey.privacy);
-            obj.put("title", journey.title);
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        if (!stopped) {
+            try {
+                obj.put("id", journey.journeyId);
+                obj.put("userId", currentUser.userId);
+                obj.put("startDate", journey.startDate);
+                obj.put("endDate", journey.endDate);
+                obj.put("privacy", journey.privacy);
+                obj.put("title", journey.title);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            obj = null;
         }
 
         MediaType JSON = MediaType.parse("application/json");
@@ -600,8 +611,10 @@ public class APIWrapper {
      * Creates an entry for the user
      *
      * @param entry - Entry user wants to create
+     * @param journey - currently active journey
+     * @param currUser - currently logged in user
      */
-    public void createEntry(Entry entry, Journey journey) { // POST
+    public void createEntry(Entry entry, Journey journey, User currUser) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/entry/" + journey.journeyId;
         client = new OkHttpClient();
