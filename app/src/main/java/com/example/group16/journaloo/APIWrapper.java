@@ -27,22 +27,29 @@ public class APIWrapper {
     // DECLARATION VARIABLES
 
     private static final String TAG = MainActivity.class.getName();
-    private static java.lang.String token;
-    private APIWrapper wrapper;
+    private String token;
+    private static APIWrapper wrapper;
     private JSONObject obj;
     private OkHttpClient client;
     private String url;
     private Request request;
+    public User loggedInUser;
 
     // Only used when logging in and updating user
-    public static void decoded(String JWTEncoded) throws Exception {
+    public void decoded(String JWTEncoded) throws Exception {
         try {
             String[] split = JWTEncoded.split("\\.");
             Log.d(TAG, token);
             Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
 
-            //User user = new User(getJson(split[1]));
+            JSONObject jsonUSER = new JSONObject(getJson(split[1]));
+            String id = String.valueOf(jsonUSER.get("id"));
+            String username = String.valueOf(jsonUSER.get("username"));
+            String email = String.valueOf(jsonUSER.get("email"));
+
+            loggedInUser = new User(id, username, email);
+            //pass this user back to front end app
         } catch (UnsupportedEncodingException e) {
             //Error
         }
@@ -58,7 +65,7 @@ public class APIWrapper {
     }
 
     // Singleton pattern, public
-    public APIWrapper getWrapper() {
+    public static APIWrapper getWrapper() {
         if (wrapper == null) {
             wrapper = new APIWrapper();
         }
@@ -168,23 +175,25 @@ public class APIWrapper {
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/logout";
         client = new OkHttpClient();
+
+        token = null;
+
+        // transition to log in screen
     }
 
     /**
      * Gets new password from newPass field. G
      * and submits it to server to update the passed as parameter user in the backend.
      *
-     * @param currentUser - User whose password will be changed
+     * @param email - User whose password will be changed
      */
-    public void resetPassword(User currentUser) { // PUT
+    public void resetPassword(String email) { // PUT
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/user/"+currentUser.email+"/reset_password";
+        url = "https://polar-cove-19347.herokuapp.com/user/"+ email +"/reset_password";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("email", email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -209,7 +218,15 @@ public class APIWrapper {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, response.body().toString());
-                // Do something to front end
+                if (response.code() == 202) {
+                    //Display a toast that email is sending
+                    Log.d("Code 202", "Request is still being processed");
+                } else if (response.code() == 404) {
+                    // Display toast that email is not found
+                    Log.d("Code 404", "Email not found");
+                } else {
+                    Log.d("What happened????","This shouldn't be reached.");
+                }
             }
         });
     }
@@ -252,17 +269,17 @@ public class APIWrapper {
     /**
      * Function which updates the current users info. Like profile pic, name, description, age
      *
-     * @param currentUser - the user to be updated
+     * @param updatedUser - the user to be updated
      */
-    public void updateUser(User currentUser) { // PUT
+    public void updateUser(User updatedUser) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("username", updatedUser.userName);
+            obj.put("email", updatedUser.email);
+            obj.put("password", updatedUser.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
