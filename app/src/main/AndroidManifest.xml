@@ -44,7 +44,9 @@
         <activity android:name=".ViewJourneyActivity" />
 
         <!--<activity android:name=".CreateEntryActivity"></activity>-->
+
         <activity android:name=".Entry"></activity>
+
 
         <activity android:name=".ViewProfileActivity" />
         <activity android:name=".EditProfileActivity" />
