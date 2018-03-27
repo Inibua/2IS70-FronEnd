@@ -10,7 +10,7 @@ import android.widget.Toast;
 public class EditProfileActivity extends AppCompatActivity {
 
     public String passwordNew;
-
+    public String passwordConfirm;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,11 +21,13 @@ public class EditProfileActivity extends AppCompatActivity {
         EditText oldPassword = (EditText) findViewById(R.id.oldPasswordEditText);
         EditText newPassword = (EditText) findViewById(R.id.newPasswordEditText);
         EditText confirmPassword = (EditText) findViewById(R.id.confirmPasswordEditText);
+        passwordNew = newPassword.getText().toString();
+        passwordConfirm = confirmPassword.getText().toString();
         //add oldpassword check
-        if (newPassword == confirmPassword ){
+        if (passwordNew != passwordConfirm ){
             Toast.makeText(getApplicationContext(), "You mistyped your new password", Toast.LENGTH_SHORT).show();
 
-        } else {
+        } else if(passwordNew == passwordConfirm) {
             passwordNew = newPassword.getText().toString();
             Intent intent = new Intent(this, ViewProfileActivity.class);
             finish();
