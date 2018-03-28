@@ -20,7 +20,6 @@ public class Journey {
 
 
     Journey (int journeyId, String title, String startDate, String endDate, boolean privacy) {
-
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
