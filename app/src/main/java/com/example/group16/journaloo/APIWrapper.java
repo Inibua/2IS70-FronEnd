@@ -117,6 +117,7 @@ public class APIWrapper extends AppCompatActivity {
         MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON,
                 obj.toString());
+        Log.i("BODY", obj.toString());
         request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -133,7 +134,7 @@ public class APIWrapper extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, response.body().toString());
+                Log.i("WHAT RESPONSE", response.body().toString());
             }
         });
     }
