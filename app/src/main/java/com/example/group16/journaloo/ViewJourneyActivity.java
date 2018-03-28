@@ -15,9 +15,6 @@ public class ViewJourneyActivity extends AppCompatActivity {
     Journey[] journeys;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     ListView lst;
-    //String[] journeyname={"Curacao", "Litouwen"};
-    //String[] desc={"3 maanden stage lopen", "Teamweekend met DA3"};
-    //Integer[] imigid={R.drawable.flag_curacao,R.drawable.flag_lithuania};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +30,11 @@ public class ViewJourneyActivity extends AppCompatActivity {
         CustomListview customListview=new CustomListview(this, journeyNames);
         lst.setAdapter(customListview);
         for (Journey journey: journeys){
-            //final String title = journey.title;
             final Integer journeyid = journey.journeyId;
             lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
-                //intent.putExtra("TITLE", title);
                 intent.putExtra("JourneyId", journeyid);
                 startActivity(intent);
             }
