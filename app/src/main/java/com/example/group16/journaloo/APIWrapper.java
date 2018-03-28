@@ -122,7 +122,7 @@ public class APIWrapper extends AppCompatActivity {
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
-                .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
+                .addHeader("Postman-Token", "3a858617-5a45-42c9-826e-a313c211c012")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -170,16 +170,23 @@ public class APIWrapper extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
+                Log.i("ERRRRRROR", e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    token = response.body().string();
-                    decoded(token);
+                    //Log.i("TOKEN NOT TOKEN", response.body().string());
+                    if (response.code() == 404) {
+                        throw new Exception("status 404");
+                    } else {
+                        token = response.body().string();
+                        Log.d("TOKEN", token);
+                        decoded(token);
+                    }
 
                 } catch (Exception e) {
+                    Log.i("ERROR IN CATCH", "ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR");
                     e.printStackTrace();
                 }
             }
@@ -628,19 +635,17 @@ public class APIWrapper extends AppCompatActivity {
      * Creates an entry for the user
      *
      * @param entry - Entry user wants to create
-     * @param journey - currently active journey
-     * @param currUser - currently logged in user
      */
-    public void createEntry(Entry entry, Journey journey, User currUser) { // POST
+    public void createEntry(Entry entry) { // POST
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/entry/" + journey.journeyId;
+        url = "https://polar-cove-19347.herokuapp.com/entry/" + activeJourney.journeyId;
         client = new OkHttpClient();
 
         try {
-            obj.put("journeyId", journey.journeyId);
+            obj.put("journeyId", activeJourney.journeyId);
             obj.put("description", entry.description);
             obj.put("location", entry.location);
-            obj.put("coordinates", entry.coordinates);
+            //obj.put("coordinates", entry.coordinates);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -16,18 +16,13 @@ import android.widget.TextView;
 
 public class CustomEntryListview extends ArrayAdapter<String> {
 
-    private String[] entryname;
-    private String[] entrydesc;
-    private Integer[] entryimigid;
+    private Entry[] entries;
     private Activity context;
 
-    public CustomEntryListview(Activity context, String[] entryname,String[] entrydesc,Integer[] entryimigid) {
-        super(context, R.layout.entrylistview_layout,entryname);
-
+    public CustomEntryListview(Activity context, Entry[] entries) {
+        super(context, R.layout.entrylistview_layout);
         this.context=context;
-        this.entryname=entryname;
-        this.entrydesc=entrydesc;
-        this.entryimigid=entryimigid;
+        this.entries =entries;
     }
 
     @NonNull
@@ -44,9 +39,8 @@ public class CustomEntryListview extends ArrayAdapter<String> {
         else{
             viewHolder= (ViewHolder) r.getTag();
         }
-        viewHolder.ivw.setImageResource(entryimigid[position]);
-        viewHolder.tvw1.setText(entryname[position]);
-        viewHolder.tvw2.setText(entrydesc[position]);
+        viewHolder.ivw.setImageResource(entries[position].entryId);
+        viewHolder.tvw1.setText(entries[position].description);
         return r;
 
     }
