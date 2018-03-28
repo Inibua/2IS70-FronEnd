@@ -7,7 +7,7 @@ import java.util.Date;
  */
 
 public class Journey {
-    public Integer journeyId;
+    public int journeyId;
     public String userId;
     public String title;
     public String startDate;
@@ -19,7 +19,7 @@ public class Journey {
     }
 
 
-    Journey (Integer journeyId, String title, String startDate, String endDate, boolean privacy) {
+    Journey (int journeyId, String title, String startDate, String endDate, boolean privacy) {
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
