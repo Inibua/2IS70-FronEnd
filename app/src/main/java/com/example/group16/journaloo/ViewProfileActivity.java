@@ -18,14 +18,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         TextView usernameDisplay = (TextView) findViewById(R.id.usernameDisplayTextView);
         TextView emailDisplay = (TextView) findViewById(R.id.emailDisplayTextView);
         TextView passwordDisplay = (TextView) findViewById(R.id.passwordDisplayTextView);
-        //User user = wrapper.getLoggedInUser();
+        User user = wrapper.getLoggedInUser();
         if (wrapper.getLoggedInUser() == null){
             Log.d("user", wrapper.getLoggedInUser().userName);
         } else {
             Log.d("user found", "whatever");
         }
-        //usernameDisplay.setText(user.userName);
-        //emailDisplay.setText(user.email);
+        usernameDisplay.setText(user.userName);
+        emailDisplay.setText(user.email);
+        passwordDisplay.setText(user.password);
     }
 
     public void editPassword(View view) {
