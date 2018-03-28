@@ -143,6 +143,7 @@
                 android:id="@+id/loginLink"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:onClick="loginLink"
                 android:text="Already have an account. Click here!"
                 android:textAlignment="center"
                 android:textColor="@android:color/black" />

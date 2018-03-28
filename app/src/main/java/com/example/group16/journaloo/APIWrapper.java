@@ -1,5 +1,7 @@
 package com.example.group16.journaloo;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 
@@ -23,7 +25,7 @@ import okhttp3.Response;
  * Created by s169096 on 14-3-2018.
  */
 
-public class APIWrapper {
+public class APIWrapper extends AppCompatActivity {
     // DECLARATION VARIABLES
 
     private static final String TAG = MainActivity.class.getName();
@@ -38,11 +40,15 @@ public class APIWrapper {
     public User loggedInUser;
     public Journey activeJourney;
 
+    public String getToken() {
+        return token;
+    }
+
     // Only used when logging in and updating user
     public void decoded(String JWTEncoded) throws Exception {
         try {
             String[] split = JWTEncoded.split("\\.");
-            Log.d(TAG, token);
+            Log.d("TOKEN", token);
             Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
 
@@ -52,7 +58,7 @@ public class APIWrapper {
             String email = String.valueOf(jsonUSER.get("email"));
 
             loggedInUser = new User(id, username, email);
-            //pass this user back to front end app
+            //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
         }
@@ -82,17 +88,17 @@ public class APIWrapper {
      * Function signup(). Accepts as parameters the current user that is being created.
      * uses getUser after successful sign-up
      *
-     * @param currentUser - User to be created in data base
+     * @param userToBeCreated - User to be created in data base
      */
-    public void signup(User currentUser) { // POST
+    public void signup(User userToBeCreated) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("username", userToBeCreated.userName);
+            obj.put("email", userToBeCreated.email);
+            obj.put("password", userToBeCreated.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -125,16 +131,16 @@ public class APIWrapper {
      * Function login(). Accepts the current user from fields in login activity.
      * uses getUser() function to retrieve from backend.
      *
-     * @param currentUser - User who is goind to be logged in
+     * @param userToBeLoggedIn - User who is goind to be logged in
      */
-    public void login(User currentUser) { // POST
+    public void login(User userToBeLoggedIn) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/login";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("password", currentUser.password);
+            obj.put("username", userToBeLoggedIn.userName);
+            obj.put("password", userToBeLoggedIn.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
