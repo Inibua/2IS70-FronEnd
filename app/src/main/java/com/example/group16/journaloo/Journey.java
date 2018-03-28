@@ -7,7 +7,7 @@ import java.util.Date;
  */
 
 public class Journey {
-    public Integer journeyId;
+    public int journeyId;
     public String userId;
     public String title;
     public String startDate;
@@ -18,11 +18,9 @@ public class Journey {
 
     }
 
-<<<<<<< HEAD
-    Journey (Integer journeyId, String title, Date startDate, Date endDate, boolean privacy) {
-=======
-    Journey (String journeyId, String title, String startDate, String endDate, boolean privacy) {
->>>>>>> ea0fa4a4da588e2980b159f72585b4daf59be55d
+
+    Journey (int journeyId, String title, String startDate, String endDate, boolean privacy) {
+
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
