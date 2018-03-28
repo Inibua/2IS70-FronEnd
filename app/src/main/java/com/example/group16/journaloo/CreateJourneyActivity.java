@@ -8,11 +8,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 public class CreateJourneyActivity extends AppCompatActivity {
 
     public String nameJourney;
     public boolean privateJourney = false; // journey is set on public by default
     public boolean journeyActive = false;
+    private APIWrapper wrapper = APIWrapper.getWrapper();
 
     EditText editJourneyName;
 
@@ -48,6 +53,8 @@ public class CreateJourneyActivity extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             intent.putExtra("nameJourney", editJourneyName.getText().toString());
             intent.putExtra("isActive", journeyActive);
+            Journey journeyToBeCreated = new Journey(nameJourney);
+            wrapper.createJourney(journeyToBeCreated);
             finish();
             startActivity(intent);
         }

@@ -46,4 +46,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
             });
         }
     }
+
+
+
 }

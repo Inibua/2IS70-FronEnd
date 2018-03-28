@@ -25,6 +25,5 @@ public class ViewProfileActivity extends AppCompatActivity {
         TextView usernameDisplay = (TextView) findViewById(R.id.usernameDisplayTextView);
         TextView emailDisplay = (TextView) findViewById(R.id.emailDisplayTextView);
         TextView passwordDisplay = (TextView) findViewById(R.id.passwordDisplayTextView);
-
     }
 }

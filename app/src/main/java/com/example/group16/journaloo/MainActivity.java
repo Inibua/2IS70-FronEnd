@@ -1,6 +1,7 @@
 package com.example.group16.journaloo;
 
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -33,7 +34,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
 
-    public boolean journeyActive = false; // becomes true if journey is saved, is used to change layout of MainActivity
+    public boolean journeyActive; // becomes true if journey is saved, is used to change layout of MainActivity
+    public String nameOfJourney; // to be passed too the viewJourney activity when stopping an active journey
     static final int requestCode =20;
     public GestureDetectorCompat detector;
 
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             setContentView(R.layout.activity_main_2);
             TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
             nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
+            nameOfJourney = getIntent().getExtras().getString("nameJourney");
             detector = new GestureDetectorCompat(this,this);
         }
 
@@ -63,11 +66,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
 
-
-
     public void stopJourney(View view){
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ViewJourneyActivity.class);
         Toast.makeText(getApplicationContext(), "Saved Journey", Toast.LENGTH_SHORT).show();
+        finish();
         startActivity(intent);
     }
 
@@ -207,8 +209,18 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         switch (item.getItemId()) {
 
             case R.id.landing:
-                Toast.makeText(getApplicationContext(), "Landing", Toast.LENGTH_SHORT).show();
-                break;
+                if (!journeyActive) {
+                    Intent intentL = new Intent(this, MainActivity.class);
+                    Toast.makeText(getApplicationContext(), "Main", Toast.LENGTH_SHORT).show();
+                    startActivity(intentL);
+
+                }else{
+                    Intent intentL2 = new Intent(this,MainActivity.class);
+                    Toast.makeText(getApplicationContext(), "Main", Toast.LENGTH_SHORT).show();
+                    intentL2.putExtra("isActive", journeyActive);
+                    startActivity(intentL2);
+                }
+            break;
             case R.id.explore:
                 // fill in what should happen when clicked help
                 Toast.makeText(getApplicationContext(), "Explore", Toast.LENGTH_SHORT).show();

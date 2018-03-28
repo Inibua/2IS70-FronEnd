@@ -12,7 +12,14 @@ import android.widget.TextView;
 
 public class CustomListview extends ArrayAdapter<String>{
 
+<<<<<<< HEAD
     private String[] journeyNames;
+=======
+
+private String[] journeyname;
+    private String[] desc;
+    private Integer[] imigid;
+>>>>>>> ea0fa4a4da588e2980b159f72585b4daf59be55d
     private Activity context;
 
     public CustomListview(Activity context, String[] journeys) {
@@ -49,4 +56,7 @@ public class CustomListview extends ArrayAdapter<String>{
         }
 
     }
+
+
+
 }
