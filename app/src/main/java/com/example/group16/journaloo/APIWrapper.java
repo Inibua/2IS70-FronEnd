@@ -1,5 +1,7 @@
 package com.example.group16.journaloo;
 
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 
@@ -23,26 +25,40 @@ import okhttp3.Response;
  * Created by s169096 on 14-3-2018.
  */
 
-public class APIWrapper {
+public class APIWrapper extends AppCompatActivity {
     // DECLARATION VARIABLES
 
     private static final String TAG = MainActivity.class.getName();
-    private static java.lang.String token;
-    private APIWrapper wrapper;
+    private String token;
+    private static APIWrapper wrapper;
     private JSONObject obj;
     private OkHttpClient client;
     private String url;
     private Request request;
 
+    //Object that need to be passed between the app itself
+    public User loggedInUser;
+    public Journey activeJourney;
+
+    public String getToken() {
+        return token;
+    }
+
     // Only used when logging in and updating user
-    public static void decoded(String JWTEncoded) throws Exception {
+    public void decoded(String JWTEncoded) throws Exception {
         try {
             String[] split = JWTEncoded.split("\\.");
-            Log.d(TAG, token);
+            Log.d("TOKEN", token);
             Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
 
-            //User user = new User(getJson(split[1]));
+            JSONObject jsonUSER = new JSONObject(getJson(split[1]));
+            String id = String.valueOf(jsonUSER.get("id"));
+            String username = String.valueOf(jsonUSER.get("username"));
+            String email = String.valueOf(jsonUSER.get("email"));
+
+            loggedInUser = new User(id, username, email);
+            //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
         }
@@ -58,7 +74,7 @@ public class APIWrapper {
     }
 
     // Singleton pattern, public
-    public APIWrapper getWrapper() {
+    public static APIWrapper getWrapper() {
         if (wrapper == null) {
             wrapper = new APIWrapper();
         }
@@ -72,17 +88,17 @@ public class APIWrapper {
      * Function signup(). Accepts as parameters the current user that is being created.
      * uses getUser after successful sign-up
      *
-     * @param currentUser - User to be created in data base
+     * @param userToBeCreated - User to be created in data base
      */
-    public void signup(User currentUser) { // POST
+    public void signup(User userToBeCreated) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("username", userToBeCreated.userName);
+            obj.put("email", userToBeCreated.email);
+            obj.put("password", userToBeCreated.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -115,16 +131,16 @@ public class APIWrapper {
      * Function login(). Accepts the current user from fields in login activity.
      * uses getUser() function to retrieve from backend.
      *
-     * @param currentUser - User who is goind to be logged in
+     * @param userToBeLoggedIn - User who is goind to be logged in
      */
-    public void login(User currentUser) { // POST
+    public void login(User userToBeLoggedIn) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/login";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("password", currentUser.password);
+            obj.put("username", userToBeLoggedIn.userName);
+            obj.put("password", userToBeLoggedIn.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -168,23 +184,25 @@ public class APIWrapper {
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/logout";
         client = new OkHttpClient();
+
+        token = null;
+
+        // transition to log in screen
     }
 
     /**
      * Gets new password from newPass field. G
      * and submits it to server to update the passed as parameter user in the backend.
      *
-     * @param currentUser - User whose password will be changed
+     * @param email - User whose password will be changed
      */
-    public void resetPassword(User currentUser) { // PUT
+    public void resetPassword(String email) { // PUT
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/user/"+currentUser.email+"/reset_password";
+        url = "https://polar-cove-19347.herokuapp.com/user/"+ email +"/reset_password";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("email", email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -209,7 +227,15 @@ public class APIWrapper {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 Log.i(TAG, response.body().toString());
-                // Do something to front end
+                if (response.code() == 202) {
+                    //Display a toast that email is sending
+                    Log.d("Code 202", "Request is still being processed");
+                } else if (response.code() == 404) {
+                    // Display toast that email is not found
+                    Log.d("Code 404", "Email not found");
+                } else {
+                    Log.d("What happened????","This shouldn't be reached.");
+                }
             }
         });
     }
@@ -252,17 +278,17 @@ public class APIWrapper {
     /**
      * Function which updates the current users info. Like profile pic, name, description, age
      *
-     * @param currentUser - the user to be updated
+     * @param updatedUser - the user to be updated
      */
-    public void updateUser(User currentUser) { // PUT
+    public void updateUser(User updatedUser) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
 
         try {
-            obj.put("username", currentUser.userName);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
+            obj.put("username", updatedUser.userName);
+            obj.put("email", updatedUser.email);
+            obj.put("password", updatedUser.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -340,14 +366,14 @@ public class APIWrapper {
      *
      * @param journey - Journey that user created
      */
-    public void createJourney(Journey journey, String userId) { // POST
+    public void createJourney(Journey journey, User loggedInUser) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey";
         client = new OkHttpClient();
 
         try {
             obj.put("title", journey.title);
-            obj.put("userId", userId);
+            obj.put("userId", loggedInUser.userId);
             obj.put("startDate", journey.startDate);
             obj.put("endDate", journey.endDate);
             obj.put("privacy", journey.privacy);
@@ -364,6 +390,7 @@ public class APIWrapper {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
+                .addHeader("authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -416,9 +443,9 @@ public class APIWrapper {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with all the journeys that excist
      */
-    public Journey[] getAllJourneys(int pageNr) { // GET How do we get all journeys?
+    public Journey[] getAllJourneys(int pageNr) { // GET or post as parameters
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/journey";
+        url = "https://polar-cove-19347.herokuapp.com/journey/all";
         client = new OkHttpClient();
         return new Journey[5];
     }
@@ -427,21 +454,28 @@ public class APIWrapper {
      * Updates a journey for the user
      *
      * @param journey - Journey that user updated
+     * @param currentUser - logged in user whose Id we get
+     * @param stopped - to detect whether the journey is being updated or just stopped
      */
-    public void updateJourney(Journey journey, User currentUser) { // PUT
+    public void updateJourney(Journey journey, User currentUser, boolean stopped) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
         client = new OkHttpClient();
 
-        try {
-            obj.put("id", journey.journeyId);
-            obj.put("userId", currentUser.userId);
-            obj.put("startDate", journey.startDate);
-            obj.put("endDate", journey.endDate);
-            obj.put("privacy", journey.privacy);
-            obj.put("title", journey.title);
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+        if (!stopped) {
+            try {
+                obj.put("id", journey.journeyId);
+                obj.put("userId", currentUser.userId);
+                obj.put("startDate", journey.startDate);
+                obj.put("endDate", journey.endDate);
+                obj.put("privacy", journey.privacy);
+                obj.put("title", journey.title);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            obj = null;
         }
 
         MediaType JSON = MediaType.parse("application/json");
@@ -583,8 +617,10 @@ public class APIWrapper {
      * Creates an entry for the user
      *
      * @param entry - Entry user wants to create
+     * @param journey - currently active journey
+     * @param currUser - currently logged in user
      */
-    public void createEntry(Entry entry, Journey journey) { // POST
+    public void createEntry(Entry entry, Journey journey, User currUser) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/entry/" + journey.journeyId;
         client = new OkHttpClient();

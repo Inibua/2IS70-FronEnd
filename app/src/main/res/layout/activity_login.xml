@@ -126,6 +126,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="signUpLink"
                 android:text="No account yet. Create your account here!"
                 android:textAlignment="center"
                 android:textColor="@android:color/black"

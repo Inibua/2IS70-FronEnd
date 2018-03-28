@@ -19,9 +19,9 @@ public class User {
         this.password = password;
     }
 
-    User (String username, String password, String email) {
+    User (String userId, String username, String email) {
+        this.userId = userId;
         this.userName = username;
-        this.password = password;
         this.email = email;
     }
 }
