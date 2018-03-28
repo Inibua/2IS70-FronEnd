@@ -58,9 +58,16 @@ public class APIWrapper extends AppCompatActivity {
             String email = String.valueOf(jsonUSER.get("email"));
 
             loggedInUser = new User(id, username, email);
+            if (loggedInUser == null) {
+                Log.d("LOGGED IN USER", "I DO NOT WORK");
+            } else {
+                Log.d("LOGGED IN USER", "I WORK");
+            }
+
             //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
+            Log.d("hoi","hoi");
         }
     }
 
