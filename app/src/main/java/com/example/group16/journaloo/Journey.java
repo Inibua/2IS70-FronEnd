@@ -10,19 +10,23 @@ public class Journey {
     public String journeyId;
     public String userId;
     public String title;
-    public Date startDate;
-    public Date endDate;
+    public String startDate;
+    public String endDate;
     public boolean privacy;
 
     Journey () {
 
     }
 
-    Journey (String journeyId, String title, Date startDate, Date endDate, boolean privacy) {
+    Journey (String journeyId, String title, String startDate, String endDate, boolean privacy) {
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.privacy = privacy;
+    }
+
+    Journey (String title) {
+        this.title = title;
     }
 }

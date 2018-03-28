@@ -37,7 +37,7 @@ public class APIWrapper extends AppCompatActivity {
     private Request request;
 
     //Object that need to be passed between the app itself
-    public User loggedInUser;
+    private User loggedInUser;
     public Journey activeJourney;
 
     public String getToken() {
@@ -79,6 +79,10 @@ public class APIWrapper extends AppCompatActivity {
             wrapper = new APIWrapper();
         }
         return wrapper;
+    }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
     }
 
 
@@ -366,7 +370,7 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param journey - Journey that user created
      */
-    public void createJourney(Journey journey, User loggedInUser) { // POST
+    public void createJourney(Journey journey) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey";
         client = new OkHttpClient();
@@ -374,9 +378,9 @@ public class APIWrapper extends AppCompatActivity {
         try {
             obj.put("title", journey.title);
             obj.put("userId", loggedInUser.userId);
-            obj.put("startDate", journey.startDate);
-            obj.put("endDate", journey.endDate);
-            obj.put("privacy", journey.privacy);
+            //obj.put("startDate", journey.startDate);
+            //obj.put("endDate", journey.endDate);
+            //obj.put("privacy", journey.privacy);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -390,7 +394,7 @@ public class APIWrapper extends AppCompatActivity {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
-                .addHeader("authorization", token)
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
