@@ -12,19 +12,21 @@ import android.widget.TextView;
 
 public class CustomListview extends ArrayAdapter<String>{
 
+<<<<<<< HEAD
+    private String[] journeyNames;
+=======
 
 private String[] journeyname;
     private String[] desc;
     private Integer[] imigid;
+>>>>>>> ea0fa4a4da588e2980b159f72585b4daf59be55d
     private Activity context;
 
-    public CustomListview(Activity context, String[] journeyname,String[] desc,Integer[] imigid) {
-        super(context, R.layout.listview_layout,journeyname);
+    public CustomListview(Activity context, String[] journeys) {
+        super(context, R.layout.listview_layout,journeys);
 
         this.context=context;
-        this.journeyname=journeyname;
-        this.desc=desc;
-        this.imigid=imigid;
+        this.journeyNames=journeyNames;
     }
 
     @NonNull
@@ -41,21 +43,15 @@ private String[] journeyname;
         else{
             viewHolder= (ViewHolder) r.getTag();
         }
-        viewHolder.ivw.setImageResource(imigid[position]);
-        viewHolder.tvw1.setText(journeyname[position]);
-        viewHolder.tvw2.setText(desc[position]);
+        viewHolder.tvw1.setText(journeyNames[position]);
         return r;
 
     }
     class ViewHolder{
         TextView tvw1;
-        TextView tvw2;
-        ImageView ivw;
         ViewHolder(View v)
         {
             tvw1= (TextView) v.findViewById(R.id.tvjourneyname);
-            tvw2= (TextView) v.findViewById(R.id.tvdescription);
-            ivw= (ImageView) v.findViewById(R.id.entryImageView);
 
         }
 
