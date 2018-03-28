@@ -172,8 +172,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             showProgress(true);
             wrapper.login(userToBeLoggedIn);
+
             if (wrapper.getLoggedInUser() != null) {
                 Intent intent = new Intent(this, MainActivity.class);
+                finish();
                 startActivity(intent);
             } else {
                 Intent intent = new Intent(this, LoginActivity.class);

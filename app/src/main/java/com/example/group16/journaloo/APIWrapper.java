@@ -53,17 +53,12 @@ public class APIWrapper extends AppCompatActivity {
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
 
             JSONObject jsonUSER = new JSONObject(getJson(split[1]));
-            String id = String.valueOf(jsonUSER.get("id"));
+            String idString = String.valueOf(jsonUSER.get("id"));
             String username = String.valueOf(jsonUSER.get("username"));
             String email = String.valueOf(jsonUSER.get("email"));
+            int id = Integer.valueOf(idString);
 
             loggedInUser = new User(id, username, email);
-            if (loggedInUser == null) {
-                Log.d("LOGGED IN USER", "I DO NOT WORK");
-            } else {
-                Log.d("LOGGED IN USER", "I WORK");
-            }
-
             //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
@@ -182,7 +177,7 @@ public class APIWrapper extends AppCompatActivity {
                         throw new Exception("status 404");
                     } else {
                         token = response.body().string();
-                        Log.d("TOKEN", token);
+                        //Log.d("TOKEN", token);
                         decoded(token);
                     }
 
