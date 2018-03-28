@@ -17,6 +17,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
     public String entryDescription;
     public String entryLocation;
+    private APIWrapper wrapper = APIWrapper.getWrapper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class NewEntryActivity extends AppCompatActivity {
         } else {
             entryLocation = locationEntry.getText().toString();
             entryDescription = descriptionEntry.getText().toString();
+            Entry entryToBeCraeted = new Entry(entryLocation, entryDescription);
+            wrapper.createEntry(entryToBeCraeted);
             Intent intent = new Intent(this, MainActivity.class);
             finish();
             startActivity(intent);
