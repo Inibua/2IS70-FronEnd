@@ -42,21 +42,33 @@ public class CreateJourneyActivity extends AppCompatActivity {
     }
 
 
-    public void saveJourney(View view) {
+    public void saveJourney(View view) throws NoJourneyException {
 
         if (editJourneyName.getText().toString().matches("")){
-            Toast.makeText(getApplicationContext(), "Please give the journey a name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Please give the journey a name",
+                    Toast.LENGTH_SHORT).show();
 
         } else {
             journeyActive = true;
             nameJourney = editJourneyName.getText().toString();
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("nameJourney", editJourneyName.getText().toString());
-            intent.putExtra("isActive", journeyActive);
             Journey journeyToBeCreated = new Journey(nameJourney);
-            wrapper.createJourney(journeyToBeCreated);
-            finish();
-            startActivity(intent);
+            wrapper.createJourney(journeyToBeCreated); // CREATE A NEW JOURNEY
+            wrapper.getCurrentJourneyRequest(); // REQUEST THE CURRENT JOURNEY
+            Journey activeJourneyObj = wrapper.getCurrentJourney();// GET THAT JOURNEY AS ACTIVE JOURNEY
+            if (activeJourneyObj != null) { // IF NOT NULL, CONTINUE AS EXPECTED
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra("nameJourney", activeJourneyObj.title);
+                intent.putExtra("isActive", journeyActive);
+                finish();
+                startActivity(intent);
+            } else { // IF NULL TOAST FOR SOMETHING WRONG AND TRY AGAIN
+                Toast.makeText(getApplicationContext(), "Something went wrong when getting " +
+                        "active journey", Toast.LENGTH_LONG).show();
+                journeyActive = false;
+                Intent intent = new Intent(this, CreateJourneyActivity.class);
+                finish();
+                startActivity(intent);
+            }
         }
     }
 }

@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class Journey {
     public int journeyId;
-    public String userId;
+    public int userId;
     public String title;
     public String startDate;
     public String endDate;
@@ -18,13 +18,18 @@ public class Journey {
 
     }
 
-
     Journey (int journeyId, String title, String startDate, String endDate, boolean privacy) {
         this.journeyId = journeyId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.privacy = privacy;
+    }
+
+    Journey(int journeyId, int userId, String title) {
+        this.journeyId = journeyId;
+        this.userId = userId;
+        this.title = title;
     }
 
     Journey (String title) {
