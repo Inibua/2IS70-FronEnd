@@ -38,10 +38,17 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public String nameOfJourney; // to be passed too the viewJourney activity when stopping an active journey
     static final int requestCode =20;
     public GestureDetectorCompat detector;
+    private APIWrapper wrapper = APIWrapper.getWrapper();
+    private Journey activeJourneyObj;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        try {
+            Thread.sleep(1900);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         if (getIntent().getExtras() != null) {
             journeyActive = getIntent().getExtras().getBoolean("isActive");
@@ -52,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         } else {
             setContentView(R.layout.activity_main_2);
+            activeJourneyObj = wrapper.getCurrentJourney();
             TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
             nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
             nameOfJourney = getIntent().getExtras().getString("nameJourney");

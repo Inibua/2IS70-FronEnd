@@ -5,7 +5,7 @@ package com.example.group16.journaloo;
  */
 
 public class User {
-    public String userId;
+    public int userId;
     public String userName;
     public String email;
     public String password;
@@ -19,7 +19,13 @@ public class User {
         this.password = password;
     }
 
-    User (String userId, String username, String email) {
+    User (String username, String email, String password) {
+        this.userName = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    User (int userId, String username, String email) {
         this.userId = userId;
         this.userName = username;
         this.email = email;

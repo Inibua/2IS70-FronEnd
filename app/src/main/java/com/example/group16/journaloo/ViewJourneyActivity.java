@@ -12,25 +12,38 @@ import com.example.group16.journaloo.R;
 
 public class ViewJourneyActivity extends AppCompatActivity {
 
+    Journey[] journeys;
+    private APIWrapper wrapper = APIWrapper.getWrapper();
     ListView lst;
-    String[] journeyname={"Curacao", "Litouwen"};
-    String[] desc={"3 maanden stage lopen", "Teamweekend met DA3"};
-    Integer[] imigid={R.drawable.flag_curacao,R.drawable.flag_lithuania};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
         lst =(ListView)findViewById(R.id.listview);
-        CustomListview customListview=new CustomListview(this,journeyname,desc,imigid);
-        lst.setAdapter(customListview);
-        lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
-                startActivity(intent);
+        if (journeys == null) {
+
+        } else {
+            String[] journeyNames = new String[journeys.length];
+            for (int i = 0; i < journeys.length; i++) {
+                Journey journey = journeys[i];
+                String titleJ = journey.title;
+                journeyNames[i] = titleJ;
             }
-        });
+            CustomListview customListview = new CustomListview(this, journeyNames);
+            lst.setAdapter(customListview);
+            for (Journey journey : journeys) {
+                final Integer journeyid = journey.journeyId;
+                lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
+                        intent.putExtra("JourneyId", journeyid);
+                        startActivity(intent);
+                    }
+                });
+            }
+        }
     }
 
 

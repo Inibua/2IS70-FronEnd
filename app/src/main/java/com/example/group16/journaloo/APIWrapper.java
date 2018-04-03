@@ -37,8 +37,9 @@ public class APIWrapper extends AppCompatActivity {
     private Request request;
 
     //Object that need to be passed between the app itself
-    public User loggedInUser;
-    public Journey activeJourney;
+    private User loggedInUser;
+    private Journey activeJourney;
+    private User userFromGetUser;
 
     public String getToken() {
         return token;
@@ -53,14 +54,16 @@ public class APIWrapper extends AppCompatActivity {
             Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
 
             JSONObject jsonUSER = new JSONObject(getJson(split[1]));
-            String id = String.valueOf(jsonUSER.get("id"));
+            String idString = String.valueOf(jsonUSER.get("id"));
             String username = String.valueOf(jsonUSER.get("username"));
             String email = String.valueOf(jsonUSER.get("email"));
+            int id = Integer.valueOf(idString);
 
             loggedInUser = new User(id, username, email);
             //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
+            Log.d("hoi","hoi");
         }
     }
 
@@ -74,13 +77,16 @@ public class APIWrapper extends AppCompatActivity {
     }
 
     // Singleton pattern, public
-    public static APIWrapper getWrapper() {
+    public synchronized static APIWrapper getWrapper() {
         if (wrapper == null) {
             wrapper = new APIWrapper();
         }
         return wrapper;
     }
 
+    public User getLoggedInUser() {
+        return loggedInUser;
+    }
 
     // DECLARATION METHODS
 
@@ -90,7 +96,7 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param userToBeCreated - User to be created in data base
      */
-    public void signup(User userToBeCreated) { // POST
+    public synchronized void signup(User userToBeCreated) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
@@ -106,12 +112,13 @@ public class APIWrapper extends AppCompatActivity {
         MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON,
                 obj.toString());
+        Log.i("BODY", obj.toString());
         request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
-                .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
+                .addHeader("Postman-Token", "3a858617-5a45-42c9-826e-a313c211c012")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -122,7 +129,7 @@ public class APIWrapper extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, response.body().toString());
+                Log.i("WHAT RESPONSE", response.body().toString());
             }
         });
     }
@@ -133,7 +140,7 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param userToBeLoggedIn - User who is goind to be logged in
      */
-    public void login(User userToBeLoggedIn) { // POST
+    public synchronized void login(User userToBeLoggedIn) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/login";
         client = new OkHttpClient();
@@ -159,16 +166,23 @@ public class APIWrapper extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
+                Log.i("ERRRRRROR", e.getMessage());
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    token = response.body().string();
-                    decoded(token);
+                    //Log.i("TOKEN NOT TOKEN", response.body().string());
+                    if (response.code() == 404) {
+                        throw new Exception("status 404");
+                    } else {
+                        token = response.body().string();
+                        //Log.d("TOKEN", token);
+                        decoded(token);
+                    }
 
                 } catch (Exception e) {
+                    Log.i("ERROR IN CATCH", "ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR");
                     e.printStackTrace();
                 }
             }
@@ -178,9 +192,8 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Function logout() just logouts the currently logged in user.
      *
-     * @param currentUser - User who is currently logged in and will we logged out
      */
-    public void logout(User currentUser) { // POST?
+    public synchronized void logout() {
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user/logout";
         client = new OkHttpClient();
@@ -194,15 +207,14 @@ public class APIWrapper extends AppCompatActivity {
      * Gets new password from newPass field. G
      * and submits it to server to update the passed as parameter user in the backend.
      *
-     * @param email - User whose password will be changed
      */
-    public void resetPassword(String email) { // PUT
+    public synchronized void resetPassword() { // PUT
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/user/"+ email +"/reset_password";
+        url = "https://polar-cove-19347.herokuapp.com/user/"+ loggedInUser.email +"/reset_password";
         client = new OkHttpClient();
 
         try {
-            obj.put("email", email);
+            obj.put("email", loggedInUser.email);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -246,14 +258,13 @@ public class APIWrapper extends AppCompatActivity {
      * @param userId - userId used to get User
      * @return User
      */
-    public User getUser(String userId) { // GET?
+    public void getUser(String userId) { // GET?
         url = "https://polar-cove-19347.herokuapp.com/user/" + userId;
         client = new OkHttpClient();
 
         request = new Request.Builder()
                 .url(url)
                 .get()
-                .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "a2725cba-dd4f-40dd-b33b-f5e34f5c9031")
                 .build();
@@ -267,12 +278,30 @@ public class APIWrapper extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                Log.i(TAG, response.body().toString());
+                String userJsonString = response.body().string();
+                try {
+                    JSONObject jsonGetUser = new JSONObject(userJsonString);
+                    setUserFromGetUserMethod(jsonGetUser);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                Log.i(TAG, userJsonString);
                 //create new user from retrieved data
             }
         });
+    }
 
-        return new User();
+    public void setUserFromGetUserMethod(JSONObject jsonGetUser) throws JSONException {
+        String idString = String.valueOf(jsonGetUser.get("id"));
+        String username = String.valueOf(jsonGetUser.get("username"));
+        String email = String.valueOf(jsonGetUser.get("email"));
+        int id = Integer.valueOf(idString);
+        userFromGetUser = null;
+        userFromGetUser = new User(id, username, email);
+    }
+
+    public User getUserFromGetUserMethod() {
+        return userFromGetUser;
     }
 
     /**
@@ -323,7 +352,7 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param currentUser - User to be deleted
      */
-    public void deleteUser(User currentUser) { // DELETE
+    public synchronized void deleteUser(User currentUser) { // DELETE
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/user";
         client = new OkHttpClient();
@@ -366,17 +395,17 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param journey - Journey that user created
      */
-    public void createJourney(Journey journey, User loggedInUser) { // POST
+    public synchronized void createJourney(Journey journey) { // POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey";
         client = new OkHttpClient();
 
         try {
+            obj.put("user_id", loggedInUser.userId);
             obj.put("title", journey.title);
-            obj.put("userId", loggedInUser.userId);
-            obj.put("startDate", journey.startDate);
-            obj.put("endDate", journey.endDate);
-            obj.put("privacy", journey.privacy);
+            //obj.put("startDate", journey.startDate);
+            //obj.put("endDate", journey.endDate);
+            //obj.put("privacy", journey.privacy);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -390,7 +419,7 @@ public class APIWrapper extends AppCompatActivity {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
-                .addHeader("authorization", token)
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -410,17 +439,68 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Function which is used to get the currently logged in users journey.
      *
-     * @param journeyId - Journey's id of which journey will be returned if it is existing
      * @return currentJourney
      * @throws NoJourneyException if there is no active journey
      */
-    public Journey getCurrentJourney(String journeyId) throws NoJourneyException {
+    public synchronized void getCurrentJourneyRequest() throws NoJourneyException {
         // GET? POST
         // how exactly do we get current journey?
-        obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/journey?journeyId=" + journeyId;
+        url = "https://polar-cove-19347.herokuapp.com/journey/" + loggedInUser.userId + "/active";
         client = new OkHttpClient();
-        return new Journey();
+
+        request = new Request.Builder()
+                .url(url)
+                .get()
+                .addHeader("Authorization", token)
+                .addHeader("Cache-Control", "no-cache")
+                .addHeader("Postman-Token", "94611929-d412-42e3-a46c-d9dce0c9e933")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, e.getMessage());
+                // Display some toast
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                String currentJourneyJsonString = response.body().string();
+                Log.i(TAG, currentJourneyJsonString);
+                try {
+                    JSONObject jsonGetCurrentJourney = new JSONObject(currentJourneyJsonString);
+                    if (jsonGetCurrentJourney == null){
+                        throw new NoJourneyException("Something went wrong when getting active J");
+                    }
+                    setCurrentJourney(jsonGetCurrentJourney);
+                } catch (NoJourneyException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void setCurrentJourney(JSONObject jsonJourney) throws JSONException {
+        String idString = String.valueOf(jsonJourney.get("id"));
+        String userIdString = String.valueOf(jsonJourney.get("user_id"));
+        String title = String.valueOf(jsonJourney.get("title"));
+        int id = Integer.valueOf(idString);
+        int user_id = Integer.valueOf(userIdString);
+        activeJourney = new Journey(id, user_id, title);
+        Log.i("SET ACTIVE JOURNEY", activeJourney.title);
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Journey getCurrentJourney() { // MAYBE CALL REQUEST HERE SO THAT IT IS EASIER AT FRONT END
+        //Log.i("ACTIVE JOURNEY API", activeJourney.title);
+        return activeJourney;
     }
 
     /**
@@ -454,10 +534,9 @@ public class APIWrapper extends AppCompatActivity {
      * Updates a journey for the user
      *
      * @param journey - Journey that user updated
-     * @param currentUser - logged in user whose Id we get
      * @param stopped - to detect whether the journey is being updated or just stopped
      */
-    public void updateJourney(Journey journey, User currentUser, boolean stopped) { // PUT
+    public void updateJourney(Journey journey, boolean stopped) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
         client = new OkHttpClient();
@@ -466,7 +545,7 @@ public class APIWrapper extends AppCompatActivity {
         if (!stopped) {
             try {
                 obj.put("id", journey.journeyId);
-                obj.put("userId", currentUser.userId);
+                obj.put("userId", loggedInUser.userId);
                 obj.put("startDate", journey.startDate);
                 obj.put("endDate", journey.endDate);
                 obj.put("privacy", journey.privacy);
@@ -508,21 +587,21 @@ public class APIWrapper extends AppCompatActivity {
      *
      * @param journey - Journey that user deleted
      */
-    public void deleteJourney(Journey journey, User currentUser) { //DELETE
+    public void deleteJourney(Journey journey) { //DELETE
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
         client = new OkHttpClient();
 
-        try {
+        /*try {
             obj.put("id", journey.journeyId);
-            obj.put("userId", currentUser.userId);
+            obj.put("userId", loggedInUserUser.userId);
             obj.put("startDate", journey.startDate);
             obj.put("endDate", journey.endDate);
             obj.put("privacy", journey.privacy);
             obj.put("title", journey.title);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
 
         MediaType JSON = MediaType.parse("application/json");
         RequestBody body = RequestBody.create(JSON,
@@ -552,11 +631,10 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Retrieves a specific entry from the user
      *
-     * @param userId - User's Id whose journeys are retrieved
      * @param entry - Entry user wants to get
      * @return entry
      */
-    public Entry getEntry(String userId, Entry entry) { // GET?POST
+    public Entry getEntry(Entry entry) { // GET?POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/entry/" + entry.entryId;
         client = new OkHttpClient();
@@ -617,19 +695,17 @@ public class APIWrapper extends AppCompatActivity {
      * Creates an entry for the user
      *
      * @param entry - Entry user wants to create
-     * @param journey - currently active journey
-     * @param currUser - currently logged in user
      */
-    public void createEntry(Entry entry, Journey journey, User currUser) { // POST
+    public synchronized void createEntry(Entry entry) { // POST
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/entry/" + journey.journeyId;
+        url = "https://polar-cove-19347.herokuapp.com/entry";
         client = new OkHttpClient();
 
         try {
-            obj.put("journeyId", journey.journeyId);
+            obj.put("journey_id", activeJourney.journeyId);
             obj.put("description", entry.description);
-            obj.put("location", entry.location);
-            obj.put("coordinates", entry.coordinates);
+            //obj.put("location", entry.location);
+            //obj.put("coordinates", entry.coordinates);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -643,6 +719,7 @@ public class APIWrapper extends AppCompatActivity {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "57ab0c2b-088b-1811-2c38-9c469fae5b69")
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -669,7 +746,7 @@ public class APIWrapper extends AppCompatActivity {
         client = new OkHttpClient();
 
         try {
-            obj.put("journeyId", journey.journeyId);
+            obj.put("journey_id", journey.journeyId);
             obj.put("description", entry.description);
             obj.put("location", entry.location);
             obj.put("coordinates", entry.coordinates);

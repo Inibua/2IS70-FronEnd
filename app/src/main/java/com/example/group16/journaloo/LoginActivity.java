@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,13 +47,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
 
@@ -75,22 +69,30 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         userNameInput = (EditText) findViewById(R.id.username);
         mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        /*mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    try {
+                        attemptLogin();
+                    } catch (NoJourneyException e) {
+                        e.printStackTrace();
+                    }
                     return true;
                 }
                 return false;
             }
-        });
+        });*/
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                try {
+                    attemptLogin();
+                } catch (NoJourneyException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -153,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    private void attemptLogin() {
+    private void attemptLogin() throws NoJourneyException {
 
         // Store values at the time of the login attempt.
         String username = userNameInput.getText().toString();
@@ -179,8 +181,44 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // perform the user login attempt.
             showProgress(true);
             wrapper.login(userToBeLoggedIn);
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (wrapper.getLoggedInUser() != null) {
+                wrapper.getCurrentJourneyRequest();
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Journey activeJourneyObj = wrapper.getCurrentJourney();
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                //Log.i("AM I ACTIIIIIIIIIIIIVE", activeJourneyObj.toString());
+                if (activeJourneyObj != null) {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("isActive", true);
+                    intent.putExtra("nameJourney", activeJourneyObj.title);
+                    finish();
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("isActive", false);
+                    finish();
+                    startActivity(intent);
+                }
+            } else {
+                Intent intent = new Intent(this, LoginActivity.class);
+                finish();
+                startActivity(intent);
+            }
+
             // -------------------------------------LOGIN ends here, finish with finding journey.
         }
     }
