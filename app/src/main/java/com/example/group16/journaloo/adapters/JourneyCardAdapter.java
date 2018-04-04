@@ -37,7 +37,7 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
             public void onClick(View view) {
                 Context context = holder.cardView.getContext();
                 Intent intent = new Intent(context, ViewEntriesActivity.class);
-                intent.putExtra("id", journey.id);
+                intent.putExtra("journeyId", journey.id);
                 context.startActivity(intent);
             }
         });

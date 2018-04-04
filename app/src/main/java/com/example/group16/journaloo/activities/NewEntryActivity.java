@@ -67,12 +67,6 @@ public class NewEntryActivity extends AppCompatActivity {
         ImageView entryImageView = findViewById(R.id.entryImageView);
         entryImageView.setImageBitmap(bmp);
 
-
-        /* Old internal storage staving image
-        String path = "sdcard/camera_app/cam_image.jpg";
-        entryView.setImageDrawable(Drawable.createFromPath(path));
-        */
-
         // GPS
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -124,7 +118,6 @@ public class NewEntryActivity extends AppCompatActivity {
                         Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.INTERNET
                 }, 10);
-                return;
             }
         }
     }
@@ -177,8 +170,6 @@ public class NewEntryActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
-
         }
     }
 }

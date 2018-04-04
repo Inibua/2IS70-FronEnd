@@ -11,14 +11,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.fragments.EntryRecyclerViewFragment;
+import com.example.group16.journaloo.fragments.JourneyEntryRecyclerViewFragment;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
@@ -42,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 setContentView(R.layout.activity_main);
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
-                Log.d("main", "didnt get journeys");
             }
 
             @Override
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                EntryRecyclerViewFragment frag = EntryRecyclerViewFragment.newInstance(activeJourney.id);
+                JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment.newInstance(activeJourney.id);
                 fragmentTransaction.replace(R.id.fragment_container, frag);
                 fragmentTransaction.commit();
             }
@@ -132,9 +130,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 bmp.recycle();
 
                 //Pop intent
-                Intent in1 = new Intent(this, NewEntryActivity.class);
-                in1.putExtra("image", filename);
-                startActivity(in1);
+                Intent intent = new Intent(this, NewEntryActivity.class);
+                intent.putExtra("image", filename);
+                startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
