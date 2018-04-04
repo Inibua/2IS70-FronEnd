@@ -20,7 +20,8 @@ public class ViewJourneyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
-        lst =(ListView)findViewById(R.id.listview);
+        lst = findViewById(R.id.listview);
+        journeys = wrapper.getUserJourneys("101", 1);
         if (journeys == null) {
 
         } else {
