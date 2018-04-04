@@ -42,6 +42,8 @@
     <string name="entry_card_description">Description here</string>
     <string name="current_journey">Current Journey</string>
     <string name="journey_stop_button">Stop</string>
+    <string name="EntryCardLocation">Location</string>
+    <string name="EntryCardDate">Date</string>
 
 
 </resources>
