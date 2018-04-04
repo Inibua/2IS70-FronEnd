@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainRootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.group16.journaloo.activity.MainActivity"
@@ -26,14 +27,14 @@
         android:layout_height="43dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:onClick="stopJourney"
         android:paddingTop="15dp"
         android:text="@string/journey_stop_button"
         app:layout_constraintBottom_toTopOf="@+id/entryRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="8dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/nameJourney"
@@ -49,18 +50,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/entryRecyclerView"
-        android:layout_width="385dp"
-        android:layout_height="449dp"
+    <LinearLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="384dp"
+        android:layout_height="433dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/app_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameJourney" />
+        app:layout_constraintTop_toBottomOf="@+id/nameJourney"
+        tools:layout_editor_absoluteX="0dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--android:id="@+id/entryRecyclerView"-->
+    <!--android:layout_width="385dp"-->
+    <!--android:layout_height="449dp"-->
+    <!--android:layout_marginBottom="8dp"-->
+    <!--android:layout_marginEnd="8dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_marginTop="8dp"-->
+    <!--app:layout_constraintBottom_toTopOf="@+id/app_bar"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toBottomOf="@+id/nameJourney" />-->
 
 
 </android.support.constraint.ConstraintLayout>

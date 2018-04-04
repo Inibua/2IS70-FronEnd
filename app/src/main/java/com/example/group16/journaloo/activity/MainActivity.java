@@ -4,37 +4,25 @@ package com.example.group16.journaloo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.group16.journaloo.api.APIWrapper;
-import com.example.group16.journaloo.model.Entry;
-import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
+import com.example.group16.journaloo.fragment.EntryRecycleViewFragment;
+import com.example.group16.journaloo.model.Journey;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private final static Gson gson = new Gson();
@@ -43,38 +31,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
-    private ArrayList<Entry> activeJourneyEntries;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    static int PAGE_SIZE = 10;
-
-
-    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int visibleItemCount = mLayoutManager.getChildCount();
-            int totalItemCount = mLayoutManager.getItemCount();
-            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-
-            if (!isLoading && !isLastPage) {
-                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                        && totalItemCount >= PAGE_SIZE) {
-                    // TODO: implement item loading
-//                    loadMoreItems();
-                }
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +40,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onFail(Exception error) {
                 setContentView(R.layout.activity_main);
-
-                // create custom toolbar
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
+//                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
             }
 
             @Override
@@ -98,38 +53,17 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 setContentView(R.layout.activity_main_active);
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
+//                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
 
-                mRecyclerView = findViewById(R.id.entryRecyclerView);
-                mRecyclerView.setHasFixedSize(true);
-                mLayoutManager = new LinearLayoutManager(MainActivity.this);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                activeJourneyEntries = new ArrayList<>();
-                mAdapter = new EntryCardAdapter(activeJourneyEntries);
-                mRecyclerView.setAdapter(mAdapter);
-                // Pagination
-                mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
-
-                wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
-                    @Override
-                    public void onFail(Exception error) {
-                        Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
-                        }.getType());
-                        activeJourneyEntries.addAll(loaded);
-                        mAdapter.notifyDataSetChanged();
-
-                        // create custom toolbar
-                        Toolbar toolbar = findViewById(R.id.app_bar);
-                        setSupportActionBar(toolbar);
-                    }
-                });
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                EntryRecycleViewFragment frag = EntryRecycleViewFragment.newInstance(activeJourney.id);
+                fragmentTransaction.add(R.id.fragment_container, frag);
+                fragmentTransaction.commit();
             }
         });
-
         detector = new GestureDetectorCompat(this, this);
     }
 
