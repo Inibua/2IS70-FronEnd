@@ -44,7 +44,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
         String authToken = sharedPref.getString(getString(R.string.auth_token), "");
         if (!authToken.isEmpty()) {
             try {
-                wrapper.decode(authToken);
+                wrapper.decodeAndStore(authToken);
                 final Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);

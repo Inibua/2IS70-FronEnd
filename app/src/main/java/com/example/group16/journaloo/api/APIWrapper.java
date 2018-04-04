@@ -60,16 +60,10 @@ public class APIWrapper {
     }
 
     // Only used when logging in and updating user
-    public void decode(String JWTEncoded) throws UnsupportedEncodingException {
+    public void decodeAndStore(String JWTEncoded) throws UnsupportedEncodingException {
         token = JWTEncoded;
-
         String[] split = JWTEncoded.split("\\.");
-        Log.d("TOKEN", token);
-        Log.d("JWT_DECODED", "Header: " + fromBase64(split[0]));
-        Log.d("JWT_DECODED", "Body: " + fromBase64(split[1]));
-
         loggedInUser = gson.fromJson(fromBase64(split[1]), User.class);
-        //Goes to
     }
 
     private static String fromBase64(String strEncoded) throws UnsupportedEncodingException {
@@ -164,7 +158,7 @@ public class APIWrapper {
             public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
                     try {
-                        decode(response.body().string());
+                        decodeAndStore(response.body().string());
                     } catch (Exception e) {
                         onFailure(call, new IOException(e));
                         return;
@@ -230,7 +224,7 @@ public class APIWrapper {
      *
      * @param userId - user_id used to get User
      */
-    public void getUser(int userId) { // GET
+    public void getUser(int userId, MainThreadCallback responseHandler) { // GET
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .addPathSegment(String.valueOf(userId))
@@ -241,26 +235,7 @@ public class APIWrapper {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-                // Display some toast
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String userJsonString = response.body().string();
-                try {
-                    JSONObject jsonGetUser = new JSONObject(userJsonString);
-                    setUserFromGetUserMethod(jsonGetUser);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                Log.i(TAG, userJsonString);
-                //create new user from retrieved data
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     private void setUserFromGetUserMethod(JSONObject jsonGetUser) throws JSONException {
@@ -432,12 +407,11 @@ public class APIWrapper {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return array with past journeys of given user (userId) and pageNr
      */
-    synchronized public void getUserJourneys(int pageNr) {
-        Log.d("I ENTERED", "1");
+    synchronized public void getUserJourneys(int userId, int pageNr, MainThreadCallback responseHandler) {
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
                 .addPathSegment("user")
-                .addPathSegment(String.valueOf(loggedInUser.id))
+                .addPathSegment(String.valueOf(userId))
                 .addQueryParameter("page", String.valueOf(pageNr))
                 .build();
 
@@ -446,38 +420,7 @@ public class APIWrapper {
                 .get()
                 .build();
 
-        Log.d("I ENTERED", "2");
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.d("I ENTERED", "4");
-                Log.i(TAG, e.getMessage());
-                // Display some toast
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                Log.d("I ENTERED", "3");
-                int code = response.code();
-                if (code == 200) {
-                    String userJourneysString = response.body().string();
-                    Log.d(TAG, userJourneysString);
-
-                    try {
-                        Log.d("I ENTERED", "5");
-                        JSONArray userJourneysJson = new JSONArray(userJourneysString);
-                        Log.d("I ENTERED", "6");
-                        convertJSONArrayToNormalArray(userJourneysJson); // CONVERTS JSON ARRAY TO NORMAL ARRAY
-                        // TODO: make json converter method from JSONObject to Journey and use it
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Log.d("CODE", "DIFFERENT THAN 200");
-                    Log.d("CODE", String.valueOf(code));
-                }
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     private void convertJSONArrayToNormalArray(JSONArray jsonArrayJouneys) throws JSONException {

@@ -115,6 +115,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
 
+                // create custom toolbar
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
+
                 mRecyclerView = findViewById(R.id.entryRecyclerView);
                 mRecyclerView.setHasFixedSize(true);
                 mLayoutManager = new LinearLayoutManager(MainActivity.this);
@@ -128,30 +132,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                 detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
 
-                wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
-                    @Override
-                    public void onFail(Exception error) {
-                        Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
-                        isLoading = false;
-                    }
-
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        ArrayList<Entry> page = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
-                        }.getType());
-
-                        if (page.size() < PAGE_SIZE) {
-                            isLastPage = true;
-                        }
-
-                        activeJourneyEntries.addAll(page);
-                        mAdapter.notifyDataSetChanged();
-
-                        // create custom toolbar
-                        Toolbar toolbar = findViewById(R.id.app_bar);
-                        setSupportActionBar(toolbar);
-                    }
-                });
+                currentPage = -1;
+                loadMoreItems();
             }
         });
     }
@@ -163,6 +145,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         wrapper.endJourney(activeJourney, new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
+                error.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Failed to end journey", Toast.LENGTH_LONG).show();
             }
 
@@ -186,16 +169,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         if (e2.getX() - e1.getX() <= 50) {
             return false;
         }
-
         Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//        String state = Environment.getExternalStorageState();
-//
-//        if (Environment.MEDIA_MOUNTED.equals(state)) {
-//            Toast.makeText(getApplicationContext(), "SD card found", Toast.LENGTH_LONG).show();
-//        } else {
-//            Toast.makeText(getApplicationContext(), "SD card not found", Toast.LENGTH_LONG).show();
-//        }
-
         startActivityForResult(photoCaptureIntent, requestCode);
         return true;
     }
@@ -223,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 String filename = "bitmap.png";
                 FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
 
-                bmp.compress(Bitmap.CompressFormat.PNG, 75, stream);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
                 //Cleanup
                 stream.close();
@@ -244,44 +218,35 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
-            case R.id.landing:
-                if (activeJourney == null) {
-                    Intent intentL = new Intent(this, MainActivity.class);
-                    Toast.makeText(getApplicationContext(), "Main", Toast.LENGTH_SHORT).show();
-                    startActivity(intentL);
-                } else {
-                    Intent intentL2 = new Intent(this, MainActivity.class);
-                    Toast.makeText(getApplicationContext(), "Main", Toast.LENGTH_SHORT).show();
-                    intentL2.putExtra("isActive", false);
-                    startActivity(intentL2);
-                }
-                break;
             case R.id.explore:
-                // fill in what should happen when clicked help
-                Intent intentE = new Intent(this, ExploreActivity.class);
+                intent = new Intent(this, ExploreActivity.class);
                 Toast.makeText(getApplicationContext(), "Explore", Toast.LENGTH_SHORT).show();
-                startActivity(intentE);
-                break; // break to end action only do the filled in actions
-            case R.id.history:
-                Intent intent2 = new Intent(this, ViewJourneyActivity.class);
-                Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
-                startActivity(intent2);
                 break;
-            case R.id.profile:
-                Intent intent = new Intent(this, ViewProfileActivity.class);
-                Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
-                startActivity(intent);
-                break;
-            default:
 
+            case R.id.history:
+                intent = new Intent(this, HistoryActivity.class);
+                Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
+                intent.putExtra("id", wrapper.getLoggedInUser().id);
+                break;
+
+            case R.id.profile:
+                intent = new Intent(this, ViewProfileActivity.class);
+                Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
+
+                break;
+
+            default:
+                intent = new Intent(this, MainActivity.class);
         }
+
+        startActivity(intent);
         return super.onOptionsItemSelected(item);
     }
 

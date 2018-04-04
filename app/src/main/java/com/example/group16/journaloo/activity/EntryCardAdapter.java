@@ -4,7 +4,6 @@ package com.example.group16.journaloo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,9 +23,6 @@ import java.util.Locale;
 public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.ViewHolder> {
     private List<Entry> entryList;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View cardView;
         public TextView date;
@@ -54,7 +50,6 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public EntryCardAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent,
                                                           int viewType) {
-        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
 
