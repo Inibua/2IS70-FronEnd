@@ -17,11 +17,6 @@ import org.json.JSONObject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-
-/**
- * Created by s169096 on 14-3-2018.
- */
-
 public class APIWrapper {
     public static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
 

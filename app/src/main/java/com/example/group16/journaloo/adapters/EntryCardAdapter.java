@@ -4,7 +4,6 @@ package com.example.group16.journaloo.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,7 @@ import com.example.group16.journaloo.activities.EditEntryActivity;
 import com.example.group16.journaloo.api.GlideApp;
 import com.example.group16.journaloo.models.Entry;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,7 +32,6 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
 
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_entry_layout, parent, false);
-        Log.d(TAG, "onCreateViewHolder called");
         return new ViewHolder(v);
     }
 
@@ -60,16 +56,8 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
                 .centerCrop()
                 .into(holder.image);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.ENGLISH);
-
-        try {
-            Date date = format.parse(entry.created);
-            holder.date.setText(date.toString());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        Log.d(TAG, "onBindViewHolder called");
+        SimpleDateFormat fmt = new SimpleDateFormat("MMMM dd yyyy", Locale.ENGLISH);
+        holder.date.setText(fmt.format(entry.created));
 
         holder.location.setText(entry.location);
         holder.description.setText(entry.description);
