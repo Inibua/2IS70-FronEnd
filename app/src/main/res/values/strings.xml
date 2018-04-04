@@ -54,9 +54,4 @@
     <string name="journaloo_auth">journaloo_auth</string>
     <string name="new_entry_button">add</string>
     <string name="new_journey">new journey</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
 </resources>

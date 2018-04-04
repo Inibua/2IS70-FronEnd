@@ -65,7 +65,7 @@ public abstract class RecyclerViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.card_recyclerview, container, false);
+        final View rootView = inflater.inflate(R.layout.recyclerview, container, false);
         rootView.setTag(TAG);
 
         mRecyclerView = rootView.findViewById(R.id.recyclerView);

@@ -23,7 +23,7 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.journey_card_layout, parent, false);
+                .inflate(R.layout.card_journey_layout, parent, false);
 
         return new ViewHolder(v);
     }

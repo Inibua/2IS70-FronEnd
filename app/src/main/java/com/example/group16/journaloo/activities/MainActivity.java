@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView
+                .OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 // set item as selected to persist highlight
@@ -78,7 +79,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 wrapper.setActiveJourney(activeJourney);
                 setTitle(activeJourney.title);
 
-                JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment.newInstance(activeJourney.id);
+                JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment
+                        .newInstance(activeJourney.id);
                 setFragment(frag);
             }
         });
@@ -94,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private void setupHistoryFragment() {
         setTitle("History");
 
-        JourneyRecyclerViewFragment frag = JourneyRecyclerViewFragment.newInstance(wrapper.getLoggedInUser().id);
+        JourneyRecyclerViewFragment frag = JourneyRecyclerViewFragment.newInstance(wrapper
+                .getLoggedInUser().id);
         setFragment(frag);
     }
 
@@ -142,12 +145,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onFail(Exception error) {
                 error.printStackTrace();
-                Toast.makeText(getApplicationContext(), "Failed to end journey", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Failed to end journey", Toast
+                        .LENGTH_LONG).show();
             }
 
             @Override
             public void onSuccess(String responseBody) {
-                Toast.makeText(getApplicationContext(), "Journey saved to history", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Journey saved to history", Toast
+                        .LENGTH_SHORT).show();
                 startActivity(intent);
             }
         });

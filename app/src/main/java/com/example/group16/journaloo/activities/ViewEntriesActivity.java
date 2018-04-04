@@ -20,7 +20,7 @@ public class ViewEntriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_appbar_recyclerview);
+        setContentView(R.layout.fragment_appbar_recyclerview);
 
         final int journeyId = getIntent().getIntExtra("journeyId", -1);
         wrapper.getJourney(journeyId, new MainThreadCallback() {

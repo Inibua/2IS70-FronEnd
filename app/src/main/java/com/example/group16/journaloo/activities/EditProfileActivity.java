@@ -1,6 +1,5 @@
 package com.example.group16.journaloo.activities;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -38,9 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
         } else if(Objects.equals(passwordNew, passwordConfirm)) {
             User userUpdate = new User(user.username, user.email, passwordNew);
             wrapper.updateUser(userUpdate);
-            Intent intent = new Intent(this, ViewProfileActivity.class);
             finish();
-            startActivity(intent);
         }
     }
 }

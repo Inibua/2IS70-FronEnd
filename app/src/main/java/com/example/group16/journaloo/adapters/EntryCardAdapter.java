@@ -34,7 +34,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
                                                           int viewType) {
 
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_layout, parent, false);
+                .inflate(R.layout.card_entry_layout, parent, false);
         Log.d(TAG, "onCreateViewHolder called");
         return new ViewHolder(v);
     }
