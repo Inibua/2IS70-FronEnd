@@ -10,17 +10,26 @@ import android.widget.ListView;
 import com.example.group16.journaloo.CustomListview;
 import com.example.group16.journaloo.R;
 
+import java.util.NoSuchElementException;
+
 public class ViewJourneyActivity extends AppCompatActivity {
 
     Journey[] journeys;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     ListView lst;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
+<<<<<<< HEAD
         lst =(ListView)findViewById(R.id.listview);
+        journeys = wrapper.getUserJourneys("101", 1); // TODO: remove hardcoding
+=======
+        lst = findViewById(R.id.listview);
+        journeys = wrapper.getUserJourneys("101", 1);
+>>>>>>> 61338d12510d70b23f34916c270ebdfa1c3802fa
         if (journeys == null) {
 
         } else {
@@ -29,6 +38,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
                 Journey journey = journeys[i];
                 String titleJ = journey.title;
                 journeyNames[i] = titleJ;
+                //journeyNames[i] = journeys[i].title;
             }
             CustomListview customListview = new CustomListview(this, journeyNames);
             lst.setAdapter(customListview);
