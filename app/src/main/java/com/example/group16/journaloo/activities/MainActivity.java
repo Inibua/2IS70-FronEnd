@@ -6,9 +6,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
@@ -29,17 +34,38 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
+    private DrawerLayout mDrawerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_active);
+        Toolbar toolbar = findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                // set item as selected to persist highlight
+                item.setChecked(true);
+                // close drawer when item is tapped
+                mDrawerLayout.closeDrawers();
+                return navItemSelected(item);
+            }
+        });
+
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+        actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
 
         wrapper.getActiveJourney(new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
-                setContentView(R.layout.activity_main);
-                Toolbar toolbar = findViewById(R.id.app_bar);
-                setSupportActionBar(toolbar);
+                setTitle("No active journey");
+                // TODO: load button fragment
             }
 
             @Override
@@ -48,10 +74,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 wrapper.setActiveJourney(activeJourney);
                 setTitle(activeJourney.title);
 
-                setContentView(R.layout.activity_main_active);
-
-                Toolbar toolbar = findViewById(R.id.app_bar);
-                setSupportActionBar(toolbar);
                 detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -61,6 +83,39 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 fragmentTransaction.commit();
             }
         });
+
+
+    }
+
+    private boolean navItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+            case R.id.nav_landing:
+                intent = new Intent(this, MainActivity.class);
+                break;
+            case R.id.nav_explore:
+                intent = new Intent(this, ExploreActivity.class);
+                break;
+
+            case R.id.nav_history:
+                intent = new Intent(this, HistoryActivity.class);
+                intent.putExtra("userId", wrapper.getLoggedInUser().id);
+                break;
+
+            case R.id.nav_profile:
+                intent = new Intent(this, ViewProfileActivity.class);
+                break;
+
+            case R.id.stopButton:
+                stopJourney();
+                return true;
+
+            default:
+                intent = new Intent(this, MainActivity.class);
+        }
+
+        startActivity(intent);
+        return true;
     }
 
     private void stopJourney() {
@@ -140,41 +195,24 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
         inflater.inflate(R.menu.main_active_actionicons, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
         switch (item.getItemId()) {
-            case R.id.explore:
-                intent = new Intent(this, ExploreActivity.class);
-                Toast.makeText(getApplicationContext(), "Explore", Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.history:
-                intent = new Intent(this, HistoryActivity.class);
-                Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
-                intent.putExtra("userId", wrapper.getLoggedInUser().id);
-                break;
-
-            case R.id.profile:
-                intent = new Intent(this, ViewProfileActivity.class);
-                Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
-                break;
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
 
             case R.id.stopButton:
                 stopJourney();
-                return super.onOptionsItemSelected(item);
+                return true;
 
             default:
-                intent = new Intent(this, MainActivity.class);
+                return super.onOptionsItemSelected(item);
         }
-
-        startActivity(intent);
-        return super.onOptionsItemSelected(item);
     }
 
 
