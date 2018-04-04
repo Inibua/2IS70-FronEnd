@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,15 +19,11 @@ public class ViewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-        TextView usernameDisplay = findViewById(R.id.username_textview);
-        TextView emailDisplay = findViewById(R.id.email_textview);
+
         User user = wrapper.getLoggedInUser();
 
-        if (wrapper.getLoggedInUser() == null) {
-            Log.d("user", wrapper.getLoggedInUser().username);
-        } else {
-            Log.d("user found", "whatever");
-        }
+        TextView usernameDisplay = findViewById(R.id.username_textview);
+        TextView emailDisplay = findViewById(R.id.email_textview);
 
         usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         });
     }
 
-    public void stopJourney(View view) {
+    private void stopJourney() {
         final Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         wrapper.endJourney(activeJourney, new MainThreadCallback() {
@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.main_active_actionicons, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -162,8 +163,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.profile:
                 intent = new Intent(this, ViewProfileActivity.class);
                 Toast.makeText(getApplicationContext(), "Profile", Toast.LENGTH_SHORT).show();
-
                 break;
+
+            case R.id.stopButton:
+                stopJourney();
+                return super.onOptionsItemSelected(item);
 
             default:
                 intent = new Intent(this, MainActivity.class);
