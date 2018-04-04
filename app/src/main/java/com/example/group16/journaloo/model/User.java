@@ -6,7 +6,7 @@ package com.example.group16.journaloo.model;
 
 public class User {
     public int id;
-    public String userName;
+    public String username;
     public String email;
     public String password;
 
@@ -15,19 +15,19 @@ public class User {
     }
 
     public User(String username, String password) {
-        this.userName = username;
+        this.username = username;
         this.password = password;
     }
 
     public User(String username, String email, String password) {
-        this.userName = username;
+        this.username = username;
         this.email = email;
         this.password = password;
     }
 
     public User (int id, String username, String email) {
         this.id = id;
-        this.userName = username;
+        this.username = username;
         this.email = email;
     }
 }

@@ -23,11 +23,11 @@ public class ViewProfileActivity extends AppCompatActivity {
         TextView passwordDisplay = (TextView) findViewById(R.id.passwordDisplayTextView);
         User user = wrapper.getLoggedInUser();
         if (wrapper.getLoggedInUser() == null){
-            Log.d("user", wrapper.getLoggedInUser().userName);
+            Log.d("user", wrapper.getLoggedInUser().username);
         } else {
             Log.d("user found", "whatever");
         }
-        usernameDisplay.setText(user.userName);
+        usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);
         passwordDisplay.setText("..........");
     }

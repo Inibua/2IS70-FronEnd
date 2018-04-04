@@ -37,7 +37,7 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!Objects.equals(passwordNew, passwordConfirm)) {
             Toast.makeText(getApplicationContext(), "You mistyped your new password", Toast.LENGTH_SHORT).show();
         } else if(Objects.equals(passwordNew, passwordConfirm)) {
-            User userUpdate = new User(user.userName, user.email, passwordNew);
+            User userUpdate = new User(user.username, user.email, passwordNew);
             wrapper.updateUser(userUpdate);
             Intent intent = new Intent(this, ViewProfileActivity.class);
             finish();

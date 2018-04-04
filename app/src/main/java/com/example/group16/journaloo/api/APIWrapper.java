@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
-import com.example.group16.journaloo.activity.MainActivity;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.model.User;
@@ -16,7 +15,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -37,7 +35,7 @@ import okhttp3.Response;
 
 public class APIWrapper {
     // DECLARATION VARIABLES
-    private static final String TAG = MainActivity.class.getName();
+    private static final String TAG = APIWrapper.class.getName();
     private static final MediaType JSON = MediaType.parse("application/json");
     private static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
     private static final Gson gson = new Gson();
@@ -110,7 +108,7 @@ public class APIWrapper {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("username", userToBeCreated.userName);
+            obj.put("username", userToBeCreated.username);
             obj.put("email", userToBeCreated.email);
             obj.put("password", userToBeCreated.password);
         } catch (JSONException e) {
@@ -154,7 +152,7 @@ public class APIWrapper {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("username", user.userName);
+            obj.put("username", user.username);
             obj.put("password", user.password);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -184,6 +182,8 @@ public class APIWrapper {
                         return;
                     }
                     responseHandler.onSuccess(token);
+                } else {
+                    responseHandler.onFailure(call, new IOException("Login unsuccessful"));
                 }
             }
         });
@@ -302,7 +302,7 @@ public class APIWrapper {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("username", updatedUser.userName);
+            obj.put("username", updatedUser.username);
             obj.put("email", updatedUser.email);
             obj.put("password", updatedUser.password);
         } catch (JSONException e) {
@@ -344,7 +344,7 @@ public class APIWrapper {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("username", currentUser.userName);
+            obj.put("username", currentUser.username);
             obj.put("email", currentUser.email);
             obj.put("password", currentUser.password);
         } catch (JSONException e) {
