@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.activities.EditProfileActivity;
+import com.example.group16.journaloo.activities.EditPasswordActivity;
 import com.example.group16.journaloo.activities.LoginActivity;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.models.User;
@@ -36,6 +36,15 @@ public class ViewProfileFragment extends Fragment {
         usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);
 
+        Button editPasswordButton = rootView.findViewById(R.id.edit_password_button);
+        editPasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), EditPasswordActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button logoutButton = rootView.findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,10 +69,5 @@ public class ViewProfileFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    public void editPassword(View view) {
-        Intent intent = new Intent(getContext(), EditProfileActivity.class);
-        startActivity(intent);
     }
 }

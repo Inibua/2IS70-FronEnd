@@ -4,6 +4,7 @@ package com.example.group16.journaloo.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +41,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Entry entry = entryList.get(position);
+        Log.d("Adapter", "Entry: " + entry.user_id + " " + entry.description);
 
         if (entry.user_id == wrapper.getLoggedInUser().id) {
             holder.cardView.setOnClickListener(new View.OnClickListener() {
@@ -51,6 +53,12 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
                     context.startActivity(intent);
                 }
             });
+            Log.d("Adapter", "entry.user_id=" + entry.user_id + "\t loggedInUser.id=" + wrapper
+                    .getLoggedInUser().id);
+        } else {
+            Log.d("Adapter", "user.id != loggedInUser.id... NANI");
+            Log.d("Adapter", "entry.user_id=" + entry.user_id + "\t loggedInUser.id=" + wrapper
+                    .getLoggedInUser().id);
         }
 
         String url = "https://polar-cove-19347.herokuapp.com/entry/" + entry.id + "/image";

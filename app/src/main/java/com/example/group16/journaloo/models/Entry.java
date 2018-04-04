@@ -15,6 +15,7 @@ public class Entry {
     }
 
     public static class NewEntry {
+        public int user_id;
         public int journey_id;
         public String location;
         public String coordinates;

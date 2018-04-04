@@ -69,43 +69,21 @@ public class APIWrapper {
      * Function signup(). Accepts as parameters the current user that is being created.
      * uses getUser after successful sign-up
      *
-     * @param userToBeCreated - User to be created in data base
+     * @param user - User to be created in data base
      */
-    public void signup(User userToBeCreated) { // POST
+    public void signup(User user, final MainThreadCallback responseHandler) { // POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("username", userToBeCreated.username);
-            obj.put("email", userToBeCreated.email);
-            obj.put("password", userToBeCreated.password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
-        Log.i("BODY", obj.toString());
-
+        RequestBody body = RequestBody.create(JSON, gson.toJson(user));
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
                 .addHeader("Content-Type", "application/json")
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i("WHAT RESPONSE", response.body().toString());
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
@@ -499,7 +477,6 @@ public class APIWrapper {
      * Retrieves a specific entry from the user
      *
      * @param entryID - EntryID user wants to get
-     * @return entry
      */
     public void getEntry(int entryID, MainThreadCallback responseHandler) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
@@ -563,6 +540,7 @@ public class APIWrapper {
      * @param entry - Entry user wants to create
      */
     public void createEntry(Entry.NewEntry entry, final String filename, final Context cxt, final MainThreadCallback responseHandler) { // POST
+        entry.user_id = loggedInUser.id;
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .build();
@@ -570,6 +548,7 @@ public class APIWrapper {
         Log.i(TAG, "pre POST req");
         entry.journey_id = activeJourney.id;
         RequestBody body = RequestBody.create(JSON, gson.toJson(entry));
+        Log.d("APIWRAPPER", "Creating entry");
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
