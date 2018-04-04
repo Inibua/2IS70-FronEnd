@@ -15,9 +15,9 @@ public class ViewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-        TextView usernameDisplay = findViewById(R.id.usernameDisplayTextView);
-        TextView emailDisplay = findViewById(R.id.emailDisplayTextView);
-        TextView passwordDisplay = findViewById(R.id.passwordDisplayTextView);
+        TextView usernameDisplay = (TextView) findViewById(R.id.usernameDisplayTextView);
+        TextView emailDisplay = (TextView) findViewById(R.id.emailDisplayTextView);
+        TextView passwordDisplay = (TextView) findViewById(R.id.passwordDisplayTextView);
         User user = wrapper.getLoggedInUser();
         if (wrapper.getLoggedInUser() == null){
             Log.d("user", wrapper.getLoggedInUser().userName);

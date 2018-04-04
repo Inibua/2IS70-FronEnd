@@ -18,7 +18,7 @@ public class ViewEntries extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_entries);
-        lst = findViewById(R.id.listviewent);
+        lst = (ListView) findViewById(R.id.listviewent);
         final CustomEntryListview customentryListview = new CustomEntryListview(this, entries);
         lst.setAdapter(customentryListview);
         lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
