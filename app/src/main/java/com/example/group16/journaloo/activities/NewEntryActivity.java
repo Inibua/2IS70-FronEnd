@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -9,25 +9,24 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.Entry;
-import com.example.group16.journaloo.R;
-
+import com.example.group16.journaloo.models.Entry;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -84,20 +83,19 @@ public class NewEntryActivity extends AppCompatActivity {
                 JsonObjectRequest request = new JsonObjectRequest("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinates + "&key=AIzaSyCMuOH4q9f_FY8xjMHmhmInZLsvLRi09gE", new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try{
+                        try {
                             address = response.getJSONArray("results").getJSONObject(0).getString("formatted_address");
                             locationEntry.setText(address);
-                        } catch (JSONException e){
+                        } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                    },new Response.ErrorListener() {
+                }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        }
+                    }
                 });
                 requestQueue.add(request);
-
 
 
             }
@@ -133,12 +131,22 @@ public class NewEntryActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
             case 10:
-                if(grantResults.length>0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
-                return;
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                locationManager.requestLocationUpdates("gps", 5000, 0, locationListener);
+
 
         }
     }
@@ -146,10 +154,10 @@ public class NewEntryActivity extends AppCompatActivity {
     public void saveEntry(View view) {
         final Intent intent = new Intent(this, MainActivity.class);
 
-        if (locationEntry.getText().toString().isEmpty()){
+        if (locationEntry.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please give the entry a location",
                     Toast.LENGTH_LONG).show();
-        } else if (descriptionEntry.getText().toString().isEmpty()){
+        } else if (descriptionEntry.getText().toString().isEmpty()) {
             Toast.makeText(getApplicationContext(), "Please give the entry a description",
                     Toast.LENGTH_LONG).show();
         } else {
@@ -169,7 +177,6 @@ public class NewEntryActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
-
 
 
         }

@@ -1,11 +1,9 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.os.Environment;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
@@ -22,13 +20,9 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.fragment.EntryRecycleViewFragment;
-import com.example.group16.journaloo.model.Journey;
-import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.api.APIWrapper;
-import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.Entry;
-import com.example.group16.journaloo.model.Journey;
+import com.example.group16.journaloo.fragments.EntryRecycleViewFragment;
+import com.example.group16.journaloo.models.Entry;
+import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
 import java.io.FileOutputStream;
@@ -49,56 +43,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private boolean isLastPage = false;
     private static int PAGE_SIZE = 10;
     private int currentPage = 0;
-    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
-        @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-        }
-
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            int visibleItemCount = mLayoutManager.getChildCount();
-            int totalItemCount = mLayoutManager.getItemCount();
-            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-
-            if (!isLoading && !isLastPage) {
-                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                        && totalItemCount >= PAGE_SIZE) {
-
-                    loadMoreItems();
-                }
-            }
-        }
-    };
-
-    private void loadMoreItems() {
-        isLoading = true;
-        currentPage += 1;
-        wrapper.getJourneyEntries(activeJourney.id, currentPage, new MainThreadCallback() {
-            @Override
-            public void onFail(Exception error) {
-                Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
-                isLoading = false;
-            }
-
-            @Override
-            public void onSuccess(String responseBody) {
-                ArrayList<Entry> page = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
-                }.getType());
-
-                isLoading = false;
-                if (page.size() < PAGE_SIZE) {
-                    isLastPage = true;
-                }
-
-                activeJourneyEntries.addAll(page);
-                mAdapter.notifyDataSetChanged();
-            }
-        });
-        Log.d(TAG, "loading more items");
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,25 +66,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
 
-                // create custom toolbar
-                Toolbar toolbar = findViewById(R.id.app_bar);
-                setSupportActionBar(toolbar);
-
-                mRecyclerView = findViewById(R.id.entryRecyclerView);
-                mRecyclerView.setHasFixedSize(true);
-                mLayoutManager = new LinearLayoutManager(MainActivity.this);
-                mRecyclerView.setLayoutManager(mLayoutManager);
-                activeJourneyEntries = new ArrayList<>();
-                mAdapter = new EntryCardAdapter(activeJourneyEntries);
-                mRecyclerView.setAdapter(mAdapter);
-                // Pagination
-                mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
-                isLoading = false;
-
-                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
-
-                currentPage = -1;
-                loadMoreItems();
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
                 detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);

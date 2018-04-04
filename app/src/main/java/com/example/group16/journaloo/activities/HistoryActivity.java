@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,13 +9,13 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.Journey;
-import com.example.group16.journaloo.model.User;
+import com.example.group16.journaloo.models.Journey;
+import com.example.group16.journaloo.models.User;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-import static com.example.group16.journaloo.activity.ViewEntries.gson;
+import static com.example.group16.journaloo.activities.ViewEntries.gson;
 
 public class HistoryActivity extends AppCompatActivity {
 

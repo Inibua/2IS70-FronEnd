@@ -1,17 +1,16 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.model.User;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.models.User;
 
 import java.util.Objects;
 
@@ -29,8 +28,8 @@ public class EditProfileActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void editPasswordButton (View view) {
         User user = wrapper.getLoggedInUser();
-        EditText newPassword = (EditText) findViewById(R.id.newPasswordEditText);
-        EditText confirmPassword = (EditText) findViewById(R.id.confirmPasswordEditText);
+        EditText newPassword = findViewById(R.id.newPasswordEditText);
+        EditText confirmPassword = findViewById(R.id.confirmPasswordEditText);
         passwordNew = newPassword.getText().toString();
         passwordConfirm = confirmPassword.getText().toString();
 

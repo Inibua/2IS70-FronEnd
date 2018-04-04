@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.model.Journey;
+import com.example.group16.journaloo.models.Journey;
 
 import java.util.List;
 

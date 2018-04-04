@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
-import com.example.group16.journaloo.model.User;
+import com.example.group16.journaloo.models.User;
 
 public class ViewProfileActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();

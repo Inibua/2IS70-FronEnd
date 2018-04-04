@@ -1,17 +1,16 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.api.APIWrapper;
 
 public class EditEntryActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();
@@ -28,8 +27,8 @@ public class EditEntryActivity extends AppCompatActivity {
         location = getIntent().getExtras().getString("location");
         description = getIntent().getExtras().getString("description");
 
-        TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
-        EditText descriptionEditEntry = (EditText) findViewById(R.id.descriptionEditEntryEditText);
+        TextView locationTextView = findViewById(R.id.locationTextView);
+        EditText descriptionEditEntry = findViewById(R.id.descriptionEditEntryEditText);
         wrapper.getImage(entry_id);
         Bitmap bmp = wrapper.getImageCurrentEntryBitmap();
         ImageView entryImageView = findViewById(R.id.entryImageView);
@@ -40,7 +39,7 @@ public class EditEntryActivity extends AppCompatActivity {
     }
 
     public void saveEditEntry(View view){
-        EditText descriptionEditEntry = (EditText) findViewById(R.id.descriptionEditEntryEditText);
+        EditText descriptionEditEntry = findViewById(R.id.descriptionEditEntryEditText);
 
         if (descriptionEditEntry.getText().toString().matches(description)) {
             Toast.makeText(getApplicationContext(), "There are no changes",

@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.model;
+package com.example.group16.journaloo.models;
 
 import android.media.Image;
 

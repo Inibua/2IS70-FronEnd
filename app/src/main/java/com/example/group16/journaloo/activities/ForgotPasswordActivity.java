@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -17,7 +17,6 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
@@ -133,7 +132,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderM
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
-                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), com.example.group16.journaloo.activity.ForgotPasswordActivity.ProfileQuery.PROJECTION,
+                        ContactsContract.Contacts.Data.CONTENT_DIRECTORY), com.example.group16.journaloo.activities.ForgotPasswordActivity.ProfileQuery.PROJECTION,
 
                 // Select only email addresses.
                 ContactsContract.Contacts.Data.MIMETYPE +
@@ -150,7 +149,7 @@ public class ForgotPasswordActivity extends AppCompatActivity implements LoaderM
         List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(com.example.group16.journaloo.activity.ForgotPasswordActivity.ProfileQuery.ADDRESS));
+            emails.add(cursor.getString(com.example.group16.journaloo.activities.ForgotPasswordActivity.ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
     }

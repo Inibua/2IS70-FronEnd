@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.User;
+import com.example.group16.journaloo.models.User;
 
 import java.io.UnsupportedEncodingException;
 

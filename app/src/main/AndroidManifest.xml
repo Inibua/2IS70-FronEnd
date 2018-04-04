@@ -24,10 +24,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity"></activity>
-        <activity android:name=".activity.CreateJourneyActivity" />
-        <activity android:name=".activity.ForgotPasswordActivity" />
-        <activity android:name=".activity.LoginActivity">
+        <activity android:name=".activities.MainActivity"></activity>
+        <activity android:name=".activities.CreateJourneyActivity" />
+        <activity android:name=".activities.ForgotPasswordActivity" />
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,18 +35,18 @@
             </intent-filter>
             android:label="@string/title_activity_login">
         </activity>
-        <activity android:name=".activity.SignUpActivity">
+        <activity android:name=".activities.SignUpActivity">
             android:label="@string/title_activity_sign_up">
         </activity>
-        <activity android:name=".activity.NewEntryActivity" />
-        <activity android:name=".activity.HistoryActivity" />
+        <activity android:name=".activities.NewEntryActivity" />
+        <activity android:name=".activities.HistoryActivity" />
 
         <!-- <activity android:name=".CreateEntryActivity"></activity> -->
-        <activity android:name=".activity.ViewProfileActivity" />
-        <activity android:name=".activity.EditProfileActivity" />
-        <activity android:name=".activity.ViewEntries" />
-        <activity android:name=".activity.EditEntryActivity" />
-        <activity android:name=".activity.ExploreActivity"></activity>
+        <activity android:name=".activities.ViewProfileActivity" />
+        <activity android:name=".activities.EditProfileActivity" />
+        <activity android:name=".activities.ViewEntries" />
+        <activity android:name=".activities.EditEntryActivity" />
+        <activity android:name=".activities.ExploreActivity"></activity>
     </application>
 
 </manifest>

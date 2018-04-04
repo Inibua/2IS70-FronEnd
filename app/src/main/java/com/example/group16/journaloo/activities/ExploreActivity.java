@@ -1,16 +1,14 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
-import com.example.group16.journaloo.api.APIWrapper;
-import com.example.group16.journaloo.model.Journey;
-import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.models.Entry;
 
 public class ExploreActivity extends AppCompatActivity {
 

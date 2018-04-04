@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.adapter;
+package com.example.group16.journaloo.adapters;
 
 
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.activity.EditEntryActivity;
+import com.example.group16.journaloo.activities.EditEntryActivity;
 import com.example.group16.journaloo.api.GlideApp;
-import com.example.group16.journaloo.model.Entry;
+import com.example.group16.journaloo.models.Entry;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

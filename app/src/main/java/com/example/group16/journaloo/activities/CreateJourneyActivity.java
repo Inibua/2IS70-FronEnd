@@ -1,17 +1,16 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.Journey;
-import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.model.User;
+import com.example.group16.journaloo.models.Journey;
+import com.example.group16.journaloo.models.User;
 
 public class CreateJourneyActivity extends AppCompatActivity {
 

@@ -1,8 +1,8 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +10,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.api.MainThreadCallback;
+import com.example.group16.journaloo.models.Entry;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 

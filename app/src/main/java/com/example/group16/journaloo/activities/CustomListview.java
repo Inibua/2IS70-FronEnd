@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.activities;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.example.group16.journaloo.R;
 
 public class CustomListview extends ArrayAdapter<String>{
@@ -46,7 +44,7 @@ public class CustomListview extends ArrayAdapter<String>{
         TextView tvw1;
         ViewHolder(View v)
         {
-            tvw1= (TextView) v.findViewById(R.id.tvjourneyname);
+            tvw1 = v.findViewById(R.id.tvjourneyname);
 
         }
 
