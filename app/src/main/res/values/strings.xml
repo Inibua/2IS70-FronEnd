@@ -40,6 +40,8 @@
     <string name="location">location</string>
     <string name="EntryCardDescription">Insert Description</string>
     <string name="entry_card_description">Description here</string>
+    <string name="current_journey">Current Journey</string>
+    <string name="journey_stop_button">Stop</string>
 
 
 </resources>

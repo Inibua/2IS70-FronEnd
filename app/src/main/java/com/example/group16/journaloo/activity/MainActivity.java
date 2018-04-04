@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -35,18 +37,49 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
-    final static Gson gson = new Gson();
+    private final static Gson gson = new Gson();
     private static final String TAG = MainActivity.class.getName();
-    static final int requestCode = 20;
-    public GestureDetectorCompat detector;
+    private static final int requestCode = 20;
+    private GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
     private ArrayList<Entry> activeJourneyEntries;
-    private ListView lst;
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private boolean isLoading = false;
+    private boolean isLastPage = false;
+    static int PAGE_SIZE = 10;
+
+
+    private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            int visibleItemCount = mLayoutManager.getChildCount();
+            int totalItemCount = mLayoutManager.getItemCount();
+            int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+
+            if (!isLoading && !isLastPage) {
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                        && totalItemCount >= PAGE_SIZE) {
+                    // TODO: implement item loading
+//                    loadMoreItems();
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         wrapper.refreshActiveJourney(new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
@@ -61,9 +94,20 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             public void onSuccess(String responseBody) {
                 activeJourney = gson.fromJson(responseBody, Journey.class);
                 wrapper.setActiveJourney(activeJourney);
+
                 setContentView(R.layout.activity_main_active);
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
+
+                mRecyclerView = findViewById(R.id.entryRecyclerView);
+                mRecyclerView.setHasFixedSize(true);
+                mLayoutManager = new LinearLayoutManager(MainActivity.this);
+                mRecyclerView.setLayoutManager(mLayoutManager);
+                activeJourneyEntries = new ArrayList<>();
+                mAdapter = new EntryCardAdapter(activeJourneyEntries);
+                mRecyclerView.setAdapter(mAdapter);
+                // Pagination
+                mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
 
                 wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
                     @Override
@@ -73,35 +117,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                     @Override
                     public void onSuccess(String responseBody) {
-                        activeJourneyEntries = new ArrayList<>();
-
-                        ListView lst = findViewById(R.id.entryListView);
-                        CustomEntryListview entryListview =
-                                new CustomEntryListview(MainActivity.this, activeJourneyEntries);
-
-                        lst.setAdapter(entryListview);
-
-                        ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>(){}.getType());
-                        entryListview.addAll(loaded);
+                        ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
+                        }.getType());
+                        activeJourneyEntries.addAll(loaded);
+                        mAdapter.notifyDataSetChanged();
 
                         // create custom toolbar
                         Toolbar toolbar = findViewById(R.id.app_bar);
                         setSupportActionBar(toolbar);
-
-                        for (final Entry entry : activeJourneyEntries) {
-                            lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                                    Intent intent = new Intent(MainActivity.this, EditEntryActivity.class);
-                                    Log.i(TAG, "Hi you clicked a button amigo");
-                                    intent.putExtra("id", entry.id);
-                                    intent.putExtra("location", entry.location);
-                                    intent.putExtra("description", entry.description);
-
-                                    startActivity(intent);
-                                }
-                            });
-                        }
                     }
                 });
             }
@@ -109,8 +132,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
         detector = new GestureDetectorCompat(this, this);
     }
-
-
 
 
     public void stopJourney(View view) {
