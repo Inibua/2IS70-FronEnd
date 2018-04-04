@@ -26,7 +26,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         }
         usernameDisplay.setText(user.userName);
         emailDisplay.setText(user.email);
-        //passwordDisplay.setText(user.password);
+        passwordDisplay.setText("..........");
     }
 
     public void editPassword(View view) {

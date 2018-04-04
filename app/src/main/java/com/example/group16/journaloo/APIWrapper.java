@@ -173,8 +173,9 @@ public class APIWrapper extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 try {
                     //Log.i("TOKEN NOT TOKEN", response.body().string());
-                    if (response.code() == 404) {
-                        throw new Exception("status 404");
+                    int statusCode = response.code();
+                    if (statusCode == 404 || statusCode == 401) {
+                        loggedInUser = null;
                     } else {
                         token = response.body().string();
                         //Log.d("TOKEN", token);
@@ -305,7 +306,8 @@ public class APIWrapper extends AppCompatActivity {
     }
 
     /**
-     * Function which updates the current users info. Like profile pic, name, description, age
+     * Function which updates the current users info.
+     * Updates username, email and password.
      *
      * @param updatedUser - the user to be updated
      */
@@ -331,6 +333,7 @@ public class APIWrapper extends AppCompatActivity {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Cache-Control", "no-cache")
                 .addHeader("Postman-Token", "0705dae9-f363-4fb0-8ba2-cfbb03b5ee85")
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {

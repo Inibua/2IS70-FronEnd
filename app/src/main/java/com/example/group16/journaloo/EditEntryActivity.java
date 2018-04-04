@@ -17,9 +17,9 @@ public class EditEntryActivity extends AppCompatActivity {
 
         TextView locationTextView = (TextView) findViewById(R.id.locationTextView);
         EditText descriptionEditEntry = (EditText) findViewById(R.id.descriptionEditEntryEditText);
-        Entry entry = wrapper.getEntry(Entry entry);
-        locationTextView.setText(entry.location);
-        descriptionEditEntry.setHint(entry.description);
+        //Entry entry = wrapper.getEntry(Entry entry);
+        //locationTextView.setText(entry.location);
+        //descriptionEditEntry.setHint(entry.description);
 
     }
 

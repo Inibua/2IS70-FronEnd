@@ -12,6 +12,7 @@ import android.widget.Toast;
 import java.util.Objects;
 
 public class EditProfileActivity extends AppCompatActivity {
+    private APIWrapper wrapper = APIWrapper.getWrapper();
 
     public String passwordNew;
     public String passwordConfirm;
@@ -22,18 +23,18 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void editPasswordButton (View view){
-        EditText oldPassword = (EditText) findViewById(R.id.oldPasswordEditText);
+    public void editPasswordButton (View view) {
+        User user = wrapper.getLoggedInUser();
         EditText newPassword = (EditText) findViewById(R.id.newPasswordEditText);
         EditText confirmPassword = (EditText) findViewById(R.id.confirmPasswordEditText);
         passwordNew = newPassword.getText().toString();
         passwordConfirm = confirmPassword.getText().toString();
-        //add oldpassword check
-        if (!Objects.equals(passwordNew, passwordConfirm)){
-            Toast.makeText(getApplicationContext(), "You mistyped your new password", Toast.LENGTH_SHORT).show();
 
+        if (!Objects.equals(passwordNew, passwordConfirm)) {
+            Toast.makeText(getApplicationContext(), "You mistyped your new password", Toast.LENGTH_SHORT).show();
         } else if(Objects.equals(passwordNew, passwordConfirm)) {
-            passwordNew = newPassword.getText().toString();
+            User userUpdate = new User(user.userName, user.email, passwordNew);
+            wrapper.updateUser(userUpdate);
             Intent intent = new Intent(this, ViewProfileActivity.class);
             finish();
             startActivity(intent);
