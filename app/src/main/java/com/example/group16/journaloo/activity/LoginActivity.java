@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences("credentials", Context.MODE_PRIVATE);
         String authToken = sharedPref.getString(getString(R.string.auth_token), "");
         if (!authToken.isEmpty()) {
             try {
@@ -118,7 +118,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
                 public void onSuccess(String responseBody) {
                     if (stayLoggedInCheckBox.isChecked()) {
                         Log.d("LoginActivity", "stay logged in set!");
-                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences sharedPref = getSharedPreferences("credentials", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString(getString(R.string.auth_token), wrapper.getToken());
                         editor.apply();

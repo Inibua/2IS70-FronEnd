@@ -30,6 +30,8 @@
         app:layout_constraintBottom_toTopOf="@+id/emailDisplayTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.27"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
         app:layout_constraintStart_toEndOf="@+id/textView14" />
 
     <TextView
@@ -43,6 +45,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView15"
+        android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -56,6 +59,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView17"
+        android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
@@ -70,6 +74,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.27"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
         app:layout_constraintStart_toEndOf="@+id/textView17" />
 
     <TextView
@@ -84,6 +90,8 @@
         app:layout_constraintBottom_toTopOf="@+id/passwordDisplayTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.27"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="24dp"
         app:layout_constraintStart_toEndOf="@+id/textView15" />
 
     <TextView
@@ -97,6 +105,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="24dp"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -128,5 +137,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/logout_button"
+        android:layout_width="387dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:backgroundTint="@color/warning_color"
+        android:text="Log out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
