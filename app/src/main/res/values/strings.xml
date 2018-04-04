@@ -38,6 +38,8 @@
     <string name="create_new_entry">Create New Entry</string>
     <string name="description">description</string>
     <string name="location">location</string>
+    <string name="EntryCardDescription">Insert Description</string>
+    <string name="entry_card_description">Description here</string>
 
 
 </resources>
