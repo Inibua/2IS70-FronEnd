@@ -215,6 +215,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 startActivityForResult(photoCaptureIntent, requestCode);
                 return true;
 
+            case R.id.newJourneyButton:
+                Intent intent = new Intent(this, CreateJourneyActivity.class);
+                startActivity(intent);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

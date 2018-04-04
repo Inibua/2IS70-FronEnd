@@ -53,6 +53,7 @@
     <string name="login_password_textfield">Password</string>
     <string name="journaloo_auth">journaloo_auth</string>
     <string name="new_entry_button">add</string>
+    <string name="new_journey">new journey</string>
 
 
 </resources>

@@ -11,4 +11,10 @@
         android:id="@+id/addButton"
         android:title="@string/new_entry_button"
         app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/newJourneyButton"
+        android:title="@string/new_journey"
+        app:showAsAction="ifRoom|withText" />
+
 </menu>
