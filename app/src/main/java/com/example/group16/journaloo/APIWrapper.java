@@ -24,6 +24,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+
+import static android.support.v4.os.LocaleListCompat.create;
 //import java.lang.Enum<Token.Type>;
 
 /**
@@ -472,6 +474,7 @@ public class APIWrapper extends AppCompatActivity {
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+<<<<<<< HEAD
 
                 String currentJourneyJsonString = response.body().string();
                 Log.i(TAG, currentJourneyJsonString);
@@ -479,12 +482,27 @@ public class APIWrapper extends AppCompatActivity {
                     JSONObject jsonGetCurrentJourney = new JSONObject(currentJourneyJsonString);
                     if (jsonGetCurrentJourney == null) {
                         throw new NoJourneyException("Something went wrong when getting active J");
+=======
+                int responseCode = response.code();
+                if (responseCode == 200) {
+                    String currentJourneyJsonString = response.body().string();
+                    Log.i(TAG, currentJourneyJsonString);
+                    try {
+                        JSONObject jsonGetCurrentJourney = new JSONObject(currentJourneyJsonString);
+                        if (jsonGetCurrentJourney == null) {
+                            throw new NoJourneyException("Something went wrong when getting active J");
+                        }
+                        setCurrentJourney(jsonGetCurrentJourney);
+                    } catch (NoJourneyException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+>>>>>>> 61338d12510d70b23f34916c270ebdfa1c3802fa
                     }
-                    setCurrentJourney(jsonGetCurrentJourney);
-                } catch (NoJourneyException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                } else if (responseCode == 404) {
+                    // do something
+                } else {
+                    // asdf
                 }
             }
         });
@@ -533,7 +551,7 @@ public class APIWrapper extends AppCompatActivity {
     public Journey[] getAllJourneys(int pageNr) { // GET or post as parameters
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/all";
-        client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
         return new Journey[5];
     }
 
@@ -541,27 +559,21 @@ public class APIWrapper extends AppCompatActivity {
      * Updates a journey for the user
      *
      * @param journey - Journey that user updated
-     * @param stopped - to detect whether the journey is being updated or just stopped
      */
-    public void updateJourney(Journey journey, boolean stopped) { // PUT
+    public void updateJourney(Journey journey) { // PUT
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
-        client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
 
-
-        if (!stopped) {
-            try {
-                obj.put("id", journey.journeyId);
-                obj.put("userId", loggedInUser.userId);
-                obj.put("startDate", journey.startDate);
-                obj.put("endDate", journey.endDate);
-                obj.put("privacy", journey.privacy);
-                obj.put("title", journey.title);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            obj = null;
+        try {
+            obj.put("id", journey.journeyId);
+            obj.put("user_id", loggedInUser.userId);
+            obj.put("start_date", journey.startDate);
+            obj.put("end_date", journey.endDate);
+//            obj.put("privacy", journey.privacy);
+            obj.put("title", journey.title);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
 
         MediaType JSON = MediaType.parse("application/json");
@@ -571,8 +583,36 @@ public class APIWrapper extends AppCompatActivity {
                 .url(url)
                 .put(body)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Cache-Control", "no-cache")
-                .addHeader("Postman-Token", "0705dae9-f363-4fb0-8ba2-cfbb03b5ee85")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                Log.i(TAG, response.body().toString());
+                // Do something to front end
+            }
+        });
+    }
+
+    /**
+     * Ends a journey
+     *
+     * @param journey the journey to end
+     */
+    public void endJourney(Journey journey) {
+        OkHttpClient client = new OkHttpClient();
+        url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId + "/end";
+        MediaType empty = MediaType.parse("");
+        RequestBody body = RequestBody.create(empty, "");
+        request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -597,7 +637,7 @@ public class APIWrapper extends AppCompatActivity {
     public void deleteJourney(Journey journey) { //DELETE
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + journey.journeyId;
-        client = new OkHttpClient();
+        OkHttpClient client = new OkHttpClient();
 
         /*try {
             obj.put("id", journey.journeyId);

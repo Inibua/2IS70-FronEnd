@@ -1,12 +1,9 @@
 package com.example.group16.journaloo;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.view.GestureDetectorCompat;
@@ -19,18 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
 
@@ -58,9 +47,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             setContentView(R.layout.activity_main);
 
         } else {
-            setContentView(R.layout.activity_main_2);
+            setContentView(R.layout.activity_main_active);
             activeJourneyObj = wrapper.getCurrentJourney();
-            TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
+            TextView nameJourney = findViewById(R.id.nameJourney);
             nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
             nameOfJourney = getIntent().getExtras().getString("nameJourney");
             detector = new GestureDetectorCompat(this,this);
@@ -68,21 +57,23 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
 
         // create custom toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        Toolbar toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
     }
 
 
     public void stopJourney(View view){
-        Intent intent = new Intent(this, ViewJourneyActivity.class);
-        Toast.makeText(getApplicationContext(), "Saved Journey", Toast.LENGTH_SHORT).show();
+        journeyActive = false;
+        wrapper.endJourney(activeJourneyObj);
+        Intent intent = new Intent(this, MainActivity.class);
+        Toast.makeText(getApplicationContext(), "Journey Ended", Toast.LENGTH_SHORT).show();
         finish();
         startActivity(intent);
     }
 
 
-    public void openCreateJourney(View view){
+    public void openCreateJourney(View view) {
         Intent intent = new Intent(this, CreateJourneyActivity.class);
         finish();
         startActivity(intent);
