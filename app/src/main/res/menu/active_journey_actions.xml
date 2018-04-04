@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/active_journey_buttons"
+        app:showAsAction="ifRoom|withText">
+
+        <item
+            android:id="@+id/stopButton"
+            android:title="@string/journey_stop_button"
+            app:showAsAction="ifRoom|withText" />
+
+        <item
+            android:id="@+id/addButton"
+            android:title="@string/new_entry_button"
+            app:showAsAction="ifRoom|withText" />
+    </group>
+</menu>

@@ -20,10 +20,7 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.fragments.AllEntryRecyclerViewFragment;
-import com.example.group16.journaloo.fragments.JourneyEntryRecyclerViewFragment;
-import com.example.group16.journaloo.fragments.JourneyRecyclerViewFragment;
-import com.example.group16.journaloo.fragments.ViewProfileFragment;
+import com.example.group16.journaloo.fragments.*;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
@@ -33,9 +30,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private final static Gson gson = new Gson();
     private static final String TAG = MainActivity.class.getName();
     private static final int requestCode = 20;
+
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
     private DrawerLayout mDrawerLayout;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +64,24 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         setupLandingFragment();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     private void setupLandingFragment() {
         wrapper.getActiveJourney(new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
                 setTitle("No active journey");
-                // TODO: load button fragment
+                menu.setGroupVisible(R.id.active_journey_buttons, false);
+                NoJourneyFragment frag = new NoJourneyFragment();
+                setFragment(frag);
             }
 
             @Override
@@ -78,8 +89,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 activeJourney = gson.fromJson(responseBody, Journey.class);
                 wrapper.setActiveJourney(activeJourney);
                 setTitle(activeJourney.title);
+                menu.setGroupVisible(R.id.active_journey_buttons, true);
 
-                JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment
+                JourneyEntriesRVFragment frag = JourneyEntriesRVFragment
                         .newInstance(activeJourney.id);
                 setFragment(frag);
             }
@@ -88,20 +100,25 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     private void setupExploreFragment() {
         setTitle("Explore");
+        menu.setGroupVisible(R.id.active_journey_buttons, false);
 
-        AllEntryRecyclerViewFragment frag = new AllEntryRecyclerViewFragment();
+        AllEntriesRVFragment frag = new AllEntriesRVFragment();
         setFragment(frag);
     }
 
     private void setupHistoryFragment() {
         setTitle("History");
+        menu.setGroupVisible(R.id.active_journey_buttons, false);
 
-        JourneyRecyclerViewFragment frag = JourneyRecyclerViewFragment.newInstance(wrapper
+        JourneysRVFragment frag = JourneysRVFragment.newInstance(wrapper
                 .getLoggedInUser().id);
         setFragment(frag);
     }
 
     private void setupProfileFragment() {
+        setTitle("Profile");
+
+        menu.setGroupVisible(R.id.active_journey_buttons, false);
         ViewProfileFragment frag = new ViewProfileFragment();
         setFragment(frag);
     }
@@ -129,41 +146,29 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.nav_profile:
                 setupProfileFragment();
                 return true;
-
-            case R.id.stopButton:
-                stopJourney();
-                return true;
         }
 
         return false;
     }
 
     private void stopJourney() {
-        final Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         wrapper.endJourney(activeJourney, new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
                 error.printStackTrace();
                 Toast.makeText(getApplicationContext(), "Failed to end journey", Toast
                         .LENGTH_LONG).show();
+                setupLandingFragment();
             }
 
             @Override
             public void onSuccess(String responseBody) {
                 Toast.makeText(getApplicationContext(), "Journey saved to history", Toast
                         .LENGTH_SHORT).show();
-                startActivity(intent);
+                setupLandingFragment();
             }
         });
     }
-
-
-    public void openCreateJourney(View view) {
-        Intent intent = new Intent(this, CreateJourneyActivity.class);
-        startActivity(intent);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,8 +203,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_active_actionicons, menu);
+        inflater.inflate(R.menu.active_journey_actions, menu);
+        menu.setGroupVisible(R.id.active_journey_buttons, false);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -217,11 +224,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.addButton:
                 Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(photoCaptureIntent, requestCode);
-                return true;
-
-            case R.id.newJourneyButton:
-                Intent intent = new Intent(this, CreateJourneyActivity.class);
-                startActivity(intent);
                 return true;
 
             default:

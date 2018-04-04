@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.fragments.JourneyEntryRecyclerViewFragment;
+import com.example.group16.journaloo.fragments.JourneyEntriesRVFragment;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
@@ -41,7 +41,7 @@ public class ViewEntriesActivity extends AppCompatActivity {
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment.newInstance(journey.id);
+                JourneyEntriesRVFragment frag = JourneyEntriesRVFragment.newInstance(journey.id);
                 fragmentTransaction.replace(R.id.fragment_container, frag);
                 fragmentTransaction.commit();
             }

@@ -13,13 +13,13 @@ import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 
-public class JourneyRecyclerViewFragment extends RecyclerViewFragment {
+public class JourneysRVFragment extends RecyclerViewFragment {
     private ArrayList<Journey> userJourneys;
     private JourneyCardAdapter mAdapter;
     private User user;
 
-    public static JourneyRecyclerViewFragment newInstance(int journeyId) {
-        JourneyRecyclerViewFragment frag = new JourneyRecyclerViewFragment();
+    public static JourneysRVFragment newInstance(int journeyId) {
+        JourneysRVFragment frag = new JourneysRVFragment();
         Bundle args = new Bundle();
         args.putInt("userId", journeyId);
         frag.setArguments(args);

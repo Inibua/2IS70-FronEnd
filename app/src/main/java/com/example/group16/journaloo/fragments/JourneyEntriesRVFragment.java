@@ -2,11 +2,11 @@ package com.example.group16.journaloo.fragments;
 
 import android.os.Bundle;
 
-public class JourneyEntryRecyclerViewFragment extends EntryRecyclerViewFragment {
+public class JourneyEntriesRVFragment extends EntryRecyclerViewFragment {
     private int journeyId;
 
-    public static JourneyEntryRecyclerViewFragment newInstance(int journeyId) {
-        JourneyEntryRecyclerViewFragment frag = new JourneyEntryRecyclerViewFragment();
+    public static JourneyEntriesRVFragment newInstance(int journeyId) {
+        JourneyEntriesRVFragment frag = new JourneyEntriesRVFragment();
         Bundle args = new Bundle();
         args.putInt("journeyId", journeyId);
         frag.setArguments(args);
