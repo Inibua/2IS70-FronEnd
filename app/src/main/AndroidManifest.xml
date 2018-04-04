@@ -45,7 +45,9 @@
         <activity android:name=".activities.ViewProfileActivity" />
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.ViewEntriesActivity" />
-        <activity android:name=".activities.EditEntryActivity" />
+        <activity
+            android:name=".activities.EditEntryActivity"
+            android:noHistory="true" />
         <activity android:name=".activities.ExploreActivity"></activity>
     </application>
 

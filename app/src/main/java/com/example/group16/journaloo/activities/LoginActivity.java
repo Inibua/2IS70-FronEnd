@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences sharedPref = getSharedPreferences("credentials", Context.MODE_PRIVATE);
-        String authToken = sharedPref.getString(getString(R.string.journaloo_auth), "");
+        String authToken = sharedPref.getString("journaloo_auth", "");
         if (!authToken.isEmpty()) {
             try {
                 wrapper.decodeAndStore(authToken);
