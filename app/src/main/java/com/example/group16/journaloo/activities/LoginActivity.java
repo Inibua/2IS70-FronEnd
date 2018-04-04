@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
 
 
     public void signUpLink(View view) {
-        Intent intent = new Intent(this, SignUpActivity.class);
+        Intent intent = new Intent(this, SignupActivity.class);
         finish();
         startActivity(intent);
     }

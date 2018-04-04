@@ -45,17 +45,14 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Entry entry = entryList.get(position);
+        Log.d(TAG, "onBindViewHolder called -----------------------------------------");
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Context context = holder.cardView.getContext();
                 Intent intent = new Intent(context, EditEntryActivity.class);
-                Log.i("EntryCard", "Hi you clicked a button amigo");
                 intent.putExtra("id", entry.id);
-                intent.putExtra("location", entry.location);
-                intent.putExtra("description", entry.description);
-
                 context.startActivity(intent);
             }
         });
@@ -68,7 +65,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
                 .into(holder.image);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.ENGLISH);
-//        format.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+
         try {
             Date date = format.parse(entry.created);
             holder.date.setText(date.toString());
@@ -99,7 +96,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
         public ImageView image;
 
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             cardView = v;
             location = v.findViewById(R.id.locationTextView);

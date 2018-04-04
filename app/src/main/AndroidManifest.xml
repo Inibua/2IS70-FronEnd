@@ -35,7 +35,7 @@
             </intent-filter>
             android:label="@string/title_activity_login">
         </activity>
-        <activity android:name=".activities.SignUpActivity">
+        <activity android:name=".activities.SignupActivity">
             android:label="@string/title_activity_sign_up">
         </activity>
         <activity android:name=".activities.NewEntryActivity" />
@@ -44,7 +44,7 @@
         <!-- <activity android:name=".CreateEntryActivity"></activity> -->
         <activity android:name=".activities.ViewProfileActivity" />
         <activity android:name=".activities.EditProfileActivity" />
-        <activity android:name=".activities.ViewEntries" />
+        <activity android:name=".activities.ViewEntriesActivity" />
         <activity android:name=".activities.EditEntryActivity" />
         <activity android:name=".activities.ExploreActivity"></activity>
     </application>

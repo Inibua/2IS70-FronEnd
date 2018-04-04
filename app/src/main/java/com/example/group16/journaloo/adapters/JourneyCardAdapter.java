@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activities;
+package com.example.group16.journaloo.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.activities.ViewEntriesActivity;
 import com.example.group16.journaloo.models.Journey;
 
 import java.util.List;
@@ -35,9 +36,8 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
             @Override
             public void onClick(View view) {
                 Context context = holder.cardView.getContext();
-                Intent intent = new Intent(context, ViewEntries.class);
+                Intent intent = new Intent(context, ViewEntriesActivity.class);
                 intent.putExtra("id", journey.id);
-
                 context.startActivity(intent);
             }
         });
@@ -55,7 +55,7 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
         public TextView title;
 
 
-        public ViewHolder(View v) {
+        ViewHolder(View v) {
             super(v);
             cardView = v;
             title = v.findViewById(R.id.journey_title);

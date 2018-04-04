@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
-import com.example.group16.journaloo.fragments.EntryRecycleViewFragment;
+import com.example.group16.journaloo.fragments.EntryRecyclerViewFragment;
 import com.example.group16.journaloo.models.Entry;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
@@ -72,33 +72,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                EntryRecycleViewFragment frag = EntryRecycleViewFragment.newInstance(activeJourney.id);
+                EntryRecyclerViewFragment frag = EntryRecyclerViewFragment.newInstance(activeJourney.id);
                 fragmentTransaction.replace(R.id.fragment_container, frag);
                 fragmentTransaction.commit();
             }
         });
     }
-
-
-//    // create custom toolbar
-//    Toolbar toolbar = findViewById(R.id.app_bar);
-//    setSupportActionBar(toolbar);
-//
-//    mRecyclerView = findViewById(R.id.entryRecyclerView);
-//                mRecyclerView.setHasFixedSize(true);
-//    mLayoutManager = new LinearLayoutManager(MainActivity.this);
-//                mRecyclerView.setLayoutManager(mLayoutManager);
-//    activeJourneyEntries = new ArrayList<>();
-//    mAdapter = new EntryCardAdapter(activeJourneyEntries);
-//                mRecyclerView.setAdapter(mAdapter);
-//    // Pagination
-//                mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
-//    isLoading = false;
-//
-//    detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
-//
-//    currentPage = -1;
-//    loadMoreItems();
 
     public void stopJourney(View view) {
         final Intent intent = new Intent(this, MainActivity.class);
@@ -194,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             case R.id.history:
                 intent = new Intent(this, HistoryActivity.class);
                 Toast.makeText(getApplicationContext(), "History", Toast.LENGTH_SHORT).show();
-                intent.putExtra("id", wrapper.getLoggedInUser().id);
+                intent.putExtra("userId", wrapper.getLoggedInUser().id);
                 break;
 
             case R.id.profile:
