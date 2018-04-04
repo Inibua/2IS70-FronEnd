@@ -4,36 +4,26 @@ package com.example.group16.journaloo.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.api.MainThreadCallback;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
-import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.api.MainThreadCallback;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
@@ -49,9 +39,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private LinearLayoutManager mLayoutManager;
     private boolean isLoading = false;
     private boolean isLastPage = false;
-    static int PAGE_SIZE = 10;
-
-
+    private static int PAGE_SIZE = 10;
+    private int currentPage = 0;
     private RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -69,12 +58,39 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0
                         && totalItemCount >= PAGE_SIZE) {
-                    // TODO: implement item loading
-//                    loadMoreItems();
+
+                    loadMoreItems();
                 }
             }
         }
     };
+
+    private void loadMoreItems() {
+        isLoading = true;
+        currentPage += 1;
+        wrapper.getJourneyEntries(activeJourney.id, currentPage, new MainThreadCallback() {
+            @Override
+            public void onFail(Exception error) {
+                Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
+                isLoading = false;
+            }
+
+            @Override
+            public void onSuccess(String responseBody) {
+                ArrayList<Entry> page = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
+                }.getType());
+
+                isLoading = false;
+                if (page.size() < PAGE_SIZE) {
+                    isLastPage = true;
+                }
+
+                activeJourneyEntries.addAll(page);
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+        Log.d(TAG, "loading more items");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,18 +124,25 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 mRecyclerView.setAdapter(mAdapter);
                 // Pagination
                 mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
+                isLoading = false;
 
                 wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
                     @Override
                     public void onFail(Exception error) {
                         Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
+                        isLoading = false;
                     }
 
                     @Override
                     public void onSuccess(String responseBody) {
-                        ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
+                        ArrayList<Entry> page = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
                         }.getType());
-                        activeJourneyEntries.addAll(loaded);
+
+                        if (page.size() < PAGE_SIZE) {
+                            isLastPage = true;
+                        }
+
+                        activeJourneyEntries.addAll(page);
                         mAdapter.notifyDataSetChanged();
 
                         // create custom toolbar
@@ -165,13 +188,13 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
 
         Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        String state = Environment.getExternalStorageState();
-
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            Toast.makeText(getApplicationContext(), "SD card found", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getApplicationContext(), "SD card not found", Toast.LENGTH_LONG).show();
-        }
+//        String state = Environment.getExternalStorageState();
+//
+//        if (Environment.MEDIA_MOUNTED.equals(state)) {
+//            Toast.makeText(getApplicationContext(), "SD card found", Toast.LENGTH_LONG).show();
+//        } else {
+//            Toast.makeText(getApplicationContext(), "SD card not found", Toast.LENGTH_LONG).show();
+//        }
 
         startActivityForResult(photoCaptureIntent, requestCode);
         return true;

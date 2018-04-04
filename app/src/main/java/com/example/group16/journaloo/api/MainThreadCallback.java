@@ -2,12 +2,11 @@ package com.example.group16.journaloo.api;
 
 import android.os.Handler;
 import android.os.Looper;
-
-import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
+
+import java.io.IOException;
 
 public abstract class MainThreadCallback implements Callback {
     private static final String TAG = MainThreadCallback.class.getSimpleName();
@@ -37,14 +36,14 @@ public abstract class MainThreadCallback implements Callback {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                if (response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     try {
                         onSuccess(response.body().string());
                     } catch (IOException e) {
                         e.printStackTrace();
                         onFailure(call, new IOException("Failed"));
                     }
-//                }
+                }
             }
         });
     }
