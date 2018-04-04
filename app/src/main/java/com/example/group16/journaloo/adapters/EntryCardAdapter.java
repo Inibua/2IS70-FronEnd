@@ -32,7 +32,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public EntryCardAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent,
                                                           int viewType) {
-        // create a new view
+
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
         Log.d(TAG, "onCreateViewHolder called");
