@@ -2,16 +2,13 @@ package com.example.group16.journaloo.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
-
-import android.view.View;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.model.User;
 import com.google.gson.Gson;
-
+import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,15 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by s169096 on 14-3-2018.
@@ -72,19 +60,16 @@ public class APIWrapper {
     }
 
     // Only used when logging in and updating user
-    private void decode(String JWTEncoded) throws JSONException {
-        try {
-            String[] split = JWTEncoded.split("\\.");
-            Log.d("TOKEN", token);
-            Log.d("JWT_DECODED", "Header: " + fromBase64(split[0]));
-            Log.d("JWT_DECODED", "Body: " + fromBase64(split[1]));
+    public void decode(String JWTEncoded) throws UnsupportedEncodingException {
+        token = JWTEncoded;
 
-            loggedInUser = gson.fromJson(fromBase64(split[1]), User.class);
-            //Goes to
-        } catch (UnsupportedEncodingException e) {
-            //Error
-            Log.d("hoi", "hoi");
-        }
+        String[] split = JWTEncoded.split("\\.");
+        Log.d("TOKEN", token);
+        Log.d("JWT_DECODED", "Header: " + fromBase64(split[0]));
+        Log.d("JWT_DECODED", "Body: " + fromBase64(split[1]));
+
+        loggedInUser = gson.fromJson(fromBase64(split[1]), User.class);
+        //Goes to
     }
 
     private static String fromBase64(String strEncoded) throws UnsupportedEncodingException {
@@ -176,12 +161,11 @@ public class APIWrapper {
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
+            public void onResponse(Call call, Response response) {
                 if (response.isSuccessful()) {
-                    token = response.body().string();
                     try {
-                        decode(token);
-                    } catch (JSONException e) {
+                        decode(response.body().string());
+                    } catch (Exception e) {
                         onFailure(call, new IOException(e));
                         return;
                     }
@@ -475,7 +459,7 @@ public class APIWrapper {
             public void onResponse(Call call, Response response) throws IOException {
                 Log.d("I ENTERED", "3");
                 int code = response.code();
-                if (code == 200){
+                if (code == 200) {
                     String userJourneysString = response.body().string();
                     Log.d(TAG, userJourneysString);
 
@@ -838,7 +822,7 @@ public class APIWrapper {
     /**
      * Updates an entry for the user
      *
-     * @param entry_id - Entry's id user wants to update
+     * @param entry_id         - Entry's id user wants to update
      * @param entryDescription - Entry's description user wants to update
      */
     public void updateEntry(int entry_id, String entryDescription) { // PUT
