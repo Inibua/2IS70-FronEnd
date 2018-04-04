@@ -68,35 +68,28 @@ public class EntryRecycleViewFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate called");
         super.onCreate(savedInstanceState);
         entryList = new ArrayList<>();
         journeyId = getArguments().getInt("journeyId", -1);
-        initEntryList(journeyId);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.entry_cards_frag, container, false);
+        final View rootView = inflater.inflate(R.layout.entry_cards_frag, container, false);
         rootView.setTag(TAG);
+        Log.d(TAG, "onCreateView called");
 
         mRecyclerView = rootView.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new EntryCardAdapter(entryList);
-        initEntryList(journeyId);
         mRecyclerView.setAdapter(mAdapter);
+
         mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
 
-        return rootView;
-    }
-
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-    private void initEntryList(int journeyId) {
         wrapper.getJourneyEntries(journeyId, 0, new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
@@ -109,9 +102,11 @@ public class EntryRecycleViewFragment extends Fragment {
                 ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>() {
                 }.getType());
                 entryList.addAll(loaded);
-                Log.d(TAG, entryList.toString());
+                mAdapter.notifyDataSetChanged();
+
             }
         });
 
+        return rootView;
     }
 }

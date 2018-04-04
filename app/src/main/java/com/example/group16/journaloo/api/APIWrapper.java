@@ -2,16 +2,13 @@ package com.example.group16.journaloo.api;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
-
-import android.view.View;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.model.User;
 import com.google.gson.Gson;
-
+import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,15 +17,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 /**
  * Created by s169096 on 14-3-2018.
@@ -72,7 +60,7 @@ public class APIWrapper {
     }
 
     // Only used when logging in and updating user
-    private void decode(String JWTEncoded) throws JSONException {
+    private void decode(String JWTEncoded) {
         try {
             String[] split = JWTEncoded.split("\\.");
             Log.d("TOKEN", token);
@@ -448,7 +436,7 @@ public class APIWrapper {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return array with past journeys of given user (userId) and pageNr
      */
-    synchronized public void getUserJourneys(int pageNr) {
+    public void getUserJourneys(int pageNr) {
         Log.d("I ENTERED", "1");
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")

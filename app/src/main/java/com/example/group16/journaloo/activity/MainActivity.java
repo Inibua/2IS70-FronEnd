@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.*;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 setContentView(R.layout.activity_main);
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
-//                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
+                Log.d("main", "didnt get journeys");
             }
 
             @Override
@@ -55,16 +56,15 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 nameJourney.setText(activeJourney.title);
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
-//                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
+                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 EntryRecycleViewFragment frag = EntryRecycleViewFragment.newInstance(activeJourney.id);
-                fragmentTransaction.add(R.id.fragment_container, frag);
+                fragmentTransaction.replace(R.id.fragment_container, frag);
                 fragmentTransaction.commit();
             }
         });
-        detector = new GestureDetectorCompat(this, this);
     }
 
 
