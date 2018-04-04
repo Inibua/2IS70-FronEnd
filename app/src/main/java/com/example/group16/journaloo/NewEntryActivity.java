@@ -3,7 +3,6 @@ package com.example.group16.journaloo;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,7 +42,7 @@ public class NewEntryActivity extends AppCompatActivity {
     }
 
     public void saveEntry(View view) {
-        EditText descriptionEntry = (EditText) findViewById(R.id.descriptionEntryEditText);
+        EditText descriptionEntry = (EditText) findViewById(R.id.descriptionEditEntryEditText);
         EditText locationEntry = (EditText) findViewById(R.id.locationEntryEditText);
         if (locationEntry.getText().toString().matches("")){
             Toast.makeText(getApplicationContext(), "Please give the entry a location", Toast.LENGTH_SHORT).show();
