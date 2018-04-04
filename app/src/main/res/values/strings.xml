@@ -51,7 +51,7 @@
     <string name="login_username_textfield">Username</string>
     <string name="login_password">Password</string>
     <string name="login_password_textfield">Password</string>
-    <string name="auth_token">journaloo_auth</string>
+    <string name="journaloo_auth">journaloo_auth</string>
 
 
 </resources>

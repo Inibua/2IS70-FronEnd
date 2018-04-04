@@ -39,7 +39,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 SharedPreferences sharedPref = getSharedPreferences("credentials", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
-                editor.remove(getString(R.string.auth_token));
+                editor.remove(getString(R.string.journaloo_auth));
                 editor.apply();
 
                 Intent intent = new Intent(ViewProfileActivity.this, LoginActivity.class);
