@@ -210,6 +210,11 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 stopJourney();
                 return true;
 
+            case R.id.addButton:
+                Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(photoCaptureIntent, requestCode);
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
