@@ -1,9 +1,14 @@
 package com.example.group16.journaloo;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.session.MediaSession;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -63,16 +68,16 @@ public class APIWrapper extends AppCompatActivity {
             //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
-            Log.d("hoi","hoi");
+            Log.d("hoi", "hoi");
         }
     }
 
-    private static String getJson(String strEncoded) throws UnsupportedEncodingException{
+    private static String getJson(String strEncoded) throws UnsupportedEncodingException {
         byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
         return new String(decodedBytes, "UTF-8");
     }
 
-    APIWrapper () {
+    APIWrapper() {
 
     }
 
@@ -177,6 +182,10 @@ public class APIWrapper extends AppCompatActivity {
                         throw new Exception("status 404");
                     } else {
                         token = response.body().string();
+                        SharedPreferences sharedPref = getSharedPreferences("userInfo", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("Journalootoken", token);
+                        editor.apply();
                         //Log.d("TOKEN", token);
                         decoded(token);
                     }
@@ -191,7 +200,6 @@ public class APIWrapper extends AppCompatActivity {
 
     /**
      * Function logout() just logouts the currently logged in user.
-     *
      */
     public synchronized void logout() {
         obj = new JSONObject();
@@ -206,11 +214,10 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Gets new password from newPass field. G
      * and submits it to server to update the passed as parameter user in the backend.
-     *
      */
     public synchronized void resetPassword() { // PUT
         obj = new JSONObject();
-        url = "https://polar-cove-19347.herokuapp.com/user/"+ loggedInUser.email +"/reset_password";
+        url = "https://polar-cove-19347.herokuapp.com/user/" + loggedInUser.email + "/reset_password";
         client = new OkHttpClient();
 
         try {
@@ -246,7 +253,7 @@ public class APIWrapper extends AppCompatActivity {
                     // Display toast that email is not found
                     Log.d("Code 404", "Email not found");
                 } else {
-                    Log.d("What happened????","This shouldn't be reached.");
+                    Log.d("What happened????", "This shouldn't be reached.");
                 }
             }
         });
@@ -470,7 +477,7 @@ public class APIWrapper extends AppCompatActivity {
                 Log.i(TAG, currentJourneyJsonString);
                 try {
                     JSONObject jsonGetCurrentJourney = new JSONObject(currentJourneyJsonString);
-                    if (jsonGetCurrentJourney == null){
+                    if (jsonGetCurrentJourney == null) {
                         throw new NoJourneyException("Something went wrong when getting active J");
                     }
                     setCurrentJourney(jsonGetCurrentJourney);
@@ -510,7 +517,7 @@ public class APIWrapper extends AppCompatActivity {
      * @param pageNr - which page number (which 10 journeys exactly)
      * @return Journey[] - array with 10 journeys depending on the pageNr
      */
-    public Journey[] getUserJourneys(String userId, int pageNr){ // GET?POST
+    public Journey[] getUserJourneys(String userId, int pageNr) { // GET?POST
         obj = new JSONObject();
         url = "https://polar-cove-19347.herokuapp.com/journey/" + userId;
         client = new OkHttpClient();
@@ -666,7 +673,7 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Retrieves all the entries that belong to a certain journey
      *
-     * @param userId - User's Id whose entries are retrieved
+     * @param userId  - User's Id whose entries are retrieved
      * @param journey - Journey from which the entries are retrieved
      * @return Entry[] - array with all entries of that journey in it
      */
@@ -680,7 +687,7 @@ public class APIWrapper extends AppCompatActivity {
     /**
      * Retrieves all the entries that belong to a certain user
      *
-     * @param userId - User's Id whose entries are retrieved
+     * @param userId  - User's Id whose entries are retrieved
      * @param pageNum - which page number (which 10 entries exactly)
      * @return Entry[] - array with all the entries of that person
      */
@@ -738,6 +745,7 @@ public class APIWrapper extends AppCompatActivity {
 
     /**
      * Updates an entry for the user
+     *
      * @param entry - Entry user wants to update
      */
     public void updateEntry(Entry entry, Journey journey) { // PUT
