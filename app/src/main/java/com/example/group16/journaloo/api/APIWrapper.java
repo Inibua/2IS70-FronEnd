@@ -342,21 +342,10 @@ public class APIWrapper {
                 .addPathSegment("user")
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("username", currentUser.username);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
         Request request = new Request.Builder()
                 .url(url)
-                .delete(body)
-                .addHeader("Content-Type", "application/json")
+                .delete()
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
