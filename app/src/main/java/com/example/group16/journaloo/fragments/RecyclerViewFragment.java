@@ -19,10 +19,11 @@ public abstract class RecyclerViewFragment extends Fragment {
 
     protected APIWrapper wrapper = APIWrapper.getWrapper();
     RecyclerView mRecyclerView;
-    LinearLayoutManager mLayoutManager;
+    private LinearLayoutManager mLayoutManager;
     boolean isLoading;
     boolean isLastPage;
     int currentPage = 0;
+
     RecyclerView.OnScrollListener recyclerViewOnScrollListener = new RecyclerView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {

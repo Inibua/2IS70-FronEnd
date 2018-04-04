@@ -25,12 +25,10 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     private static final String TAG = "CardAdapter";
     private List<Entry> entryList;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public EntryCardAdapter(List<Entry> entryList) {
         this.entryList = entryList;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public EntryCardAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent,
                                                           int viewType) {
@@ -41,11 +39,9 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
         return new ViewHolder(v);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Entry entry = entryList.get(position);
-        Log.d(TAG, "onBindViewHolder called -----------------------------------------");
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,15 +75,11 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
         holder.description.setText(entry.description);
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return entryList.size();
     }
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View cardView;
         public TextView date;

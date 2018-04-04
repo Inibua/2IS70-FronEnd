@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.*;
@@ -21,12 +19,10 @@ import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
 import com.example.group16.journaloo.fragments.EntryRecyclerViewFragment;
-import com.example.group16.journaloo.models.Entry;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     private final static Gson gson = new Gson();
@@ -35,14 +31,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
-    private ArrayList<Entry> activeJourneyEntries;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private boolean isLoading = false;
-    private boolean isLastPage = false;
-    private static int PAGE_SIZE = 10;
-    private int currentPage = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
