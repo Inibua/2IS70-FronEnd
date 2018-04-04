@@ -2,7 +2,6 @@ package com.example.group16.journaloo.api;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.util.Base64;
 import android.util.Log;
 import com.example.group16.journaloo.R;
@@ -21,18 +20,16 @@ public class APIWrapper {
     public static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
 
     // DECLARATION VARIABLES
-    private static final String TAG = APIWrapper.class.getName();
-    private static final MediaType JSON = MediaType.parse("application/json");
+    private final String TAG = APIWrapper.class.getName();
+    private final MediaType JSON = MediaType.parse("application/json");
 
-    private static final Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private static APIWrapper wrapper;
     private final OkHttpClient client;
 
     private String token;
     private User loggedInUser;
     private Journey activeJourney;
-    private Bitmap bitmap;
-
 
     private APIWrapper() {
         this.client = new OkHttpClient();
@@ -667,18 +664,6 @@ public class APIWrapper {
     public String getLocation(String coordinates) { // GET Nothing on swagger? Research?
         // TODO: query google places api
         return "";
-    }
-
-    public Bitmap getImageCurrentEntryBitmap() {
-        return bitmap;
-    }
-
-    public void setImageCurrentEntryBitmap(Bitmap imageCurrentEntryBitmap) {
-        bitmap = imageCurrentEntryBitmap;
-    }
-
-    public void getImage(int entry_id) {
-
     }
 
     public void getJourney(int journeyId, MainThreadCallback responseHandler) {

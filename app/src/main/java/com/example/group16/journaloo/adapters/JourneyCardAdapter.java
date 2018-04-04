@@ -11,7 +11,9 @@ import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.activities.ViewEntriesActivity;
 import com.example.group16.journaloo.models.Journey;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.ViewHolder> {
     private List<Journey> journeyList;
@@ -43,6 +45,11 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
         });
 
         holder.title.setText(journey.title);
+        SimpleDateFormat fmt = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        holder.start.setText(fmt.format(journey.start_date));
+        if (journey.end_date != null) {
+            holder.end.setText(fmt.format(journey.end_date));
+        }
     }
 
     @Override
@@ -53,12 +60,16 @@ public class JourneyCardAdapter extends RecyclerView.Adapter<JourneyCardAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public View cardView;
         public TextView title;
+        public TextView start;
+        public TextView end;
 
 
         ViewHolder(View v) {
             super(v);
             cardView = v;
             title = v.findViewById(R.id.journey_title);
+            start = v.findViewById(R.id.journey_start);
+            end = v.findViewById(R.id.journey_end);
         }
     }
 

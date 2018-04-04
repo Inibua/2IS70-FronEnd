@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.activities.EditEntryActivity;
+import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.GlideApp;
 import com.example.group16.journaloo.models.Entry;
 
@@ -20,6 +21,7 @@ import java.util.Locale;
 
 public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.ViewHolder> {
     private static final String TAG = "CardAdapter";
+    private APIWrapper wrapper = APIWrapper.getWrapper();
     private List<Entry> entryList;
 
     public EntryCardAdapter(List<Entry> entryList) {
@@ -39,15 +41,17 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Entry entry = entryList.get(position);
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Context context = holder.cardView.getContext();
-                Intent intent = new Intent(context, EditEntryActivity.class);
-                intent.putExtra("entryId", entry.id);
-                context.startActivity(intent);
-            }
-        });
+        if (entry.user_id == wrapper.getLoggedInUser().id) {
+            holder.cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Context context = holder.cardView.getContext();
+                    Intent intent = new Intent(context, EditEntryActivity.class);
+                    intent.putExtra("entryId", entry.id);
+                    context.startActivity(intent);
+                }
+            });
+        }
 
         String url = "https://polar-cove-19347.herokuapp.com/entry/" + entry.id + "/image";
 

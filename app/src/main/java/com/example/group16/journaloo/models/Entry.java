@@ -1,17 +1,15 @@
 package com.example.group16.journaloo.models;
 
-import android.media.Image;
-
 import java.util.Date;
 
 public class Entry {
     public int id;
-    public Image image;
     public Date created;
     public String description;
     public String coordinates;
     public String location;
     public int journey_id;
+    public int user_id;
 
     public Entry() {
     }
