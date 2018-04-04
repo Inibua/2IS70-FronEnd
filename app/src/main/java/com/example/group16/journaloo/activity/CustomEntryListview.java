@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.model.Entry;
 
 /**
  * Created by s146958 on 21-3-2018.
@@ -39,7 +42,7 @@ public class CustomEntryListview extends ArrayAdapter<String> {
         else{
             viewHolder= (ViewHolder) r.getTag();
         }
-        viewHolder.ivw.setImageResource(entries[position].entryId);
+        viewHolder.ivw.setImageResource(entries[position].id);
         viewHolder.tvw1.setText(entries[position].description);
         return r;
 

@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.R;
 
 public class EditEntryActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();

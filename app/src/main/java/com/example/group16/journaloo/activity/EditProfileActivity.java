@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.content.Intent;
 import android.os.Build;
@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.model.User;
 
 import java.util.Objects;
 

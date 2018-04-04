@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.group16.journaloo.CustomListview;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.R;
 
 public class ViewJourneyActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
             CustomListview customListview = new CustomListview(this, journeyNames);
             lst.setAdapter(customListview);
             for (Journey journey : journeys) {
-                final Integer journeyid = journey.journeyId;
+                final Integer journeyid = journey.id;
                 lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

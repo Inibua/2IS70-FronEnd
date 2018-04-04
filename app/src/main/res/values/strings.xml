@@ -35,6 +35,9 @@
     <string name="action_sign_up">action_sign_up</string>
     <string name="prompt_username">prompt_username</string>
     <string name="action_sign_up_short">action_sign_up_short</string>
+    <string name="create_new_entry">Create New Entry</string>
+    <string name="description">description</string>
+    <string name="location">location</string>
 
 
 </resources>

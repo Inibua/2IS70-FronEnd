@@ -1,12 +1,21 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.api;
 
+import android.graphics.Bitmap;
 import android.util.Base64;
 import android.util.Log;
+
+import com.example.group16.journaloo.activity.MainActivity;
+import com.example.group16.journaloo.model.Entry;
+import com.example.group16.journaloo.model.Journey;
+import com.example.group16.journaloo.model.User;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOError;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -29,6 +38,7 @@ public class APIWrapper {
     private static final String TAG = MainActivity.class.getName();
     private static final MediaType JSON = MediaType.parse("application/json");
     private static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
+    private static final Gson gson = new Gson();
     private final OkHttpClient client;
 
     private static APIWrapper wrapper;
@@ -45,7 +55,7 @@ public class APIWrapper {
     }
 
     // Singleton pattern, public
-    public synchronized static APIWrapper getWrapper() {
+    public static APIWrapper getWrapper() {
         if (wrapper == null) {
             wrapper = new APIWrapper();
         }
@@ -57,7 +67,7 @@ public class APIWrapper {
     }
 
     // Only used when logging in and updating user
-    private void decoded(String JWTEncoded) throws Exception {
+    private void decode(String JWTEncoded) throws JSONException {
         try {
             String[] split = JWTEncoded.split("\\.");
             Log.d("TOKEN", token);
@@ -95,7 +105,7 @@ public class APIWrapper {
      *
      * @param userToBeCreated - User to be created in data base
      */
-    public synchronized void signup(User userToBeCreated) { // POST
+    public void signup(User userToBeCreated) { // POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .build();
@@ -136,9 +146,9 @@ public class APIWrapper {
      * Function login(). Accepts the current user from fields in login activity.
      * uses getUser() function to retrieve from backend.
      *
-     * @param userToBeLoggedIn - User who is goind to be logged in
+     * @param user - User who is going to be logged in
      */
-    public synchronized void login(User userToBeLoggedIn) { // POST
+    public void login(User user, final MainThreadCallback responseHandler) { // POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .addPathSegment("login")
@@ -147,8 +157,8 @@ public class APIWrapper {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("username", userToBeLoggedIn.userName);
-            obj.put("password", userToBeLoggedIn.password);
+            obj.put("username", user.userName);
+            obj.put("password", user.password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -163,25 +173,20 @@ public class APIWrapper {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i("ERRRRRROR", e.getMessage());
+                responseHandler.onFailure(call, e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
-                try {
-                    //Log.i("TOKEN NOT TOKEN", response.body().string());
-                    int statusCode = response.code();
-                    if (statusCode == 404 || statusCode == 401) {
-                        loggedInUser = null;
-                    } else {
-                        token = response.body().string();
-                        //Log.d("TOKEN", token);
-                        decoded(token);
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    token = response.body().string();
+                    try {
+                        decode(token);
+                    } catch (JSONException e) {
+                        onFailure(call, new IOException(e));
+                        return;
                     }
-
-                } catch (Exception e) {
-                    Log.i("ERROR IN CATCH", "ERRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOR");
-                    e.printStackTrace();
+                    responseHandler.onSuccess(token);
                 }
             }
         });
@@ -190,17 +195,17 @@ public class APIWrapper {
     /**
      * Function logout() just logouts the currently logged in user.
      */
-    public synchronized void logout() {
+    public void logout() {
         token = null;
 
         // transition to log in screen
     }
 
     /**
-     * Gets new password from newPass field. G
+     * Gets new password from newPass field.
      * and submits it to server to update the passed as parameter user in the backend.
      */
-    public synchronized void resetPassword(String email) { // PUT
+    public void resetPassword(String email) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .addPathSegment(email)
@@ -238,7 +243,7 @@ public class APIWrapper {
     /**
      * Function used to retrieve a user from backend.
      *
-     * @param userId - userId used to get User
+     * @param userId - user_id used to get User
      */
     public void getUser(int userId) { // GET
         HttpUrl url = baseUrl.newBuilder()
@@ -334,7 +339,7 @@ public class APIWrapper {
      *
      * @param currentUser - User to be deleted
      */
-    public synchronized void deleteUser(User currentUser) { // DELETE
+    public void deleteUser(User currentUser) { // DELETE
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("user")
                 .build();
@@ -354,8 +359,6 @@ public class APIWrapper {
                 .url(url)
                 .delete(body)
                 .addHeader("Content-Type", "application/json")
-                .addHeader("Cache-Control", "no-cache")
-                .addHeader("Postman-Token", "4670edef-4cc4-8d2c-5fc9-19b09d9c3e11")
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -377,24 +380,14 @@ public class APIWrapper {
      *
      * @param journey - Journey that user created
      */
-    public synchronized void createJourney(Journey journey) { // POST
+    public void createJourney(Journey.NewJourney journey, MainThreadCallback responseHandler) { // POST
+        assert activeJourney == null;
+
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("user_id", loggedInUser.userId);
-            obj.put("title", journey.title);
-            //obj.put("startDate", journey.startDate);
-            //obj.put("endDate", journey.endDate);
-            //obj.put("privacy", journey.privacy);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
+        RequestBody body = RequestBody.create(JSON, gson.toJson(journey));
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -402,27 +395,16 @@ public class APIWrapper {
                 .addHeader("Authorization", token)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-                // create new journey here, fill in data do front end stuff
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
      * Function which is used to get the currently logged in users journey.
      */
-    public synchronized void getCurrentJourneyRequest() {
+    public void refreshActiveJourney(final MainThreadCallback responseHandler) {
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
-                .addPathSegment(String.valueOf(loggedInUser.userId))
+                .addPathSegment(String.valueOf(loggedInUser.id))
                 .addPathSegment("active")
                 .build();
 
@@ -435,42 +417,18 @@ public class APIWrapper {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-                // Display some toast
+                responseHandler.onFailure(call, e);
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String currentJourneyJsonString = response.body().string();
-                Log.i(TAG, currentJourneyJsonString);
-                try {
-                    JSONObject jsonGetCurrentJourney = new JSONObject(currentJourneyJsonString);
-                    setCurrentJourney(jsonGetCurrentJourney);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(Call call, Response response) {
+                activeJourney = gson.fromJson(response.body().charStream(), Journey.class);
+                responseHandler.onResponse(call, response);
             }
         });
     }
 
-    private void setCurrentJourney(JSONObject jsonJourney) throws JSONException {
-        String idString = String.valueOf(jsonJourney.get("id"));
-        String userIdString = String.valueOf(jsonJourney.get("user_id"));
-        String title = String.valueOf(jsonJourney.get("title"));
-        int id = Integer.valueOf(idString);
-        int user_id = Integer.valueOf(userIdString);
-        activeJourney = new Journey(id, user_id, title);
-        Log.i("SET ACTIVE JOURNEY", activeJourney.title);
-        try {
-            Thread.sleep(1500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Journey getCurrentJourney() { // MAYBE CALL REQUEST HERE SO THAT IT IS EASIER AT FRONT END
-        //Log.i("ACTIVE JOURNEY API", activeJourney.title);
+    public Journey getActiveJourney() {
         return activeJourney;
     }
 
@@ -569,16 +527,16 @@ public class APIWrapper {
     public void updateJourney(Journey journey) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
-                .addPathSegment(String.valueOf(journey.journeyId))
+                .addPathSegment(String.valueOf(journey.id))
                 .build();
 
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("id", journey.journeyId);
-            obj.put("userId", loggedInUser.userId);
-            obj.put("startDate", journey.startDate);
-            obj.put("endDate", journey.endDate);
+            obj.put("id", journey.id);
+            obj.put("user_id", loggedInUser.id);
+            obj.put("start_date", journey.start_date);
+            obj.put("end_date", journey.end_date);
 //            obj.put("privacy", journey.privacy);
             obj.put("title", journey.title);
         } catch (JSONException e) {
@@ -607,6 +565,46 @@ public class APIWrapper {
     }
 
     /**
+     * Ends a journey
+     *
+     * @param journey the journey to end
+     */
+    public void endJourney(Journey journey, final MainThreadCallback responseHandler) {
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl url = baseUrl.newBuilder()
+                .addPathSegment("journey")
+                .addPathSegment(String.valueOf(journey.id))
+                .addPathSegment("end")
+                .build();
+
+        MediaType empty = MediaType.parse("");
+        RequestBody body = RequestBody.create(empty, "");
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .addHeader("Authorization", token)
+                .build();
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                responseHandler.onFailure(call, e);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) {
+                if (response.isSuccessful()) {
+                    activeJourney = null;
+                    responseHandler.onResponse(call, response);
+                } else {
+                    onFailure(call, new IOException("Failed"));
+                }
+            }
+        });
+    }
+
+    /**
      * Deletes a journey for the user
      *
      * @param journey - Journey that user deleted
@@ -614,7 +612,7 @@ public class APIWrapper {
     public void deleteJourney(Journey journey) { //DELETE
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
-                .addPathSegment(String.valueOf(journey.journeyId))
+                .addPathSegment(String.valueOf(journey.id))
                 .build();
 
         Request request = new Request.Builder()
@@ -645,7 +643,7 @@ public class APIWrapper {
     public Entry getEntry(Entry entry) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.entryId))
+                .addPathSegment(String.valueOf(entry.id))
                 .build();
 
         Request request = new Request.Builder()
@@ -762,23 +760,13 @@ public class APIWrapper {
      *
      * @param entry - Entry user wants to create
      */
-    public synchronized void createEntry(Entry entry) { // POST
+    public void createEntry(Entry.NewEntry entry, final String filename, final MainThreadCallback responseHandler) { // POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("journey_id", activeJourney.journeyId);
-            obj.put("description", entry.description);
-            //obj.put("location", entry.location);
-            //obj.put("coordinates", entry.coordinates);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
+        entry.journey_id = activeJourney.id;
+        RequestBody body = RequestBody.create(JSON, gson.toJson(entry));
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
@@ -789,13 +777,35 @@ public class APIWrapper {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
+                responseHandler.onFailure(call, e);
             }
 
             @Override
             public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-                // create new entry here, fill in data do front end stuff
+                if (!response.isSuccessful()) {
+                    onFailure(call, new IOException("Failed"));
+                    return;
+                }
+
+                Entry entry = gson.fromJson(response.body().charStream(), Entry.class);
+
+                HttpUrl url = baseUrl.newBuilder()
+                        .addPathSegment("entry")
+                        .addPathSegment(String.valueOf(entry.id))
+                        .addPathSegment("image")
+                        .build();
+
+                File image = new File(filename);
+                MediaType PNG = MediaType.parse("image/png");
+                RequestBody body = RequestBody.create(PNG, image);
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(body)
+                        .addHeader("Content-Type", "image/png")
+                        .addHeader("Authorization", token)
+                        .build();
+
+                client.newCall(request).enqueue(responseHandler);
             }
         });
     }
@@ -808,13 +818,13 @@ public class APIWrapper {
     public void updateEntry(Entry entry) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.entryId))
+                .addPathSegment(String.valueOf(entry.id))
                 .build();
 
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("journey_id", entry.journeyId);
+            obj.put("journey_id", entry.journey_id);
             obj.put("description", entry.description);
             obj.put("location", entry.location);
             obj.put("coordinates", entry.coordinates);
@@ -852,7 +862,7 @@ public class APIWrapper {
     public void deleteEntry(Entry entry) { //DELETE
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.entryId))
+                .addPathSegment(String.valueOf(entry.id))
                 .build();
 
         Request request = new Request.Builder()
