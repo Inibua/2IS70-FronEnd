@@ -8,9 +8,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -21,7 +20,10 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
+import com.example.group16.journaloo.fragments.AllEntryRecyclerViewFragment;
 import com.example.group16.journaloo.fragments.JourneyEntryRecyclerViewFragment;
+import com.example.group16.journaloo.fragments.JourneyRecyclerViewFragment;
+import com.example.group16.journaloo.fragments.ViewProfileFragment;
 import com.example.group16.journaloo.models.Journey;
 import com.google.gson.Gson;
 
@@ -31,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     private final static Gson gson = new Gson();
     private static final String TAG = MainActivity.class.getName();
     private static final int requestCode = 20;
-    private GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
     private DrawerLayout mDrawerLayout;
@@ -60,7 +61,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         actionbar.setDisplayHomeAsUpEnabled(true);
         actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
 
+        setupLandingFragment();
+    }
 
+    private void setupLandingFragment() {
         wrapper.getActiveJourney(new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
@@ -74,48 +78,61 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 wrapper.setActiveJourney(activeJourney);
                 setTitle(activeJourney.title);
 
-                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 JourneyEntryRecyclerViewFragment frag = JourneyEntryRecyclerViewFragment.newInstance(activeJourney.id);
-                fragmentTransaction.replace(R.id.fragment_container, frag);
-                fragmentTransaction.commit();
+                setFragment(frag);
             }
         });
+    }
 
+    private void setupExploreFragment() {
+        setTitle("Explore");
 
+        AllEntryRecyclerViewFragment frag = new AllEntryRecyclerViewFragment();
+        setFragment(frag);
+    }
+
+    private void setupHistoryFragment() {
+        setTitle("History");
+
+        JourneyRecyclerViewFragment frag = JourneyRecyclerViewFragment.newInstance(wrapper.getLoggedInUser().id);
+        setFragment(frag);
+    }
+
+    private void setupProfileFragment() {
+        ViewProfileFragment frag = new ViewProfileFragment();
+        setFragment(frag);
+    }
+
+    private void setFragment(Fragment frag) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, frag);
+        fragmentTransaction.commit();
     }
 
     private boolean navItemSelected(MenuItem item) {
-        Intent intent;
         switch (item.getItemId()) {
             case R.id.nav_landing:
-                intent = new Intent(this, MainActivity.class);
-                break;
+                setupLandingFragment();
+                return true;
+
             case R.id.nav_explore:
-                intent = new Intent(this, ExploreActivity.class);
-                break;
+                setupExploreFragment();
+                return true;
 
             case R.id.nav_history:
-                intent = new Intent(this, HistoryActivity.class);
-                intent.putExtra("userId", wrapper.getLoggedInUser().id);
-                break;
+                setupHistoryFragment();
+                return true;
 
             case R.id.nav_profile:
-                intent = new Intent(this, ViewProfileActivity.class);
-                break;
+                setupProfileFragment();
+                return true;
 
             case R.id.stopButton:
                 stopJourney();
                 return true;
-
-            default:
-                intent = new Intent(this, MainActivity.class);
         }
 
-        startActivity(intent);
-        return true;
+        return false;
     }
 
     private void stopJourney() {
@@ -140,24 +157,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public void openCreateJourney(View view) {
         Intent intent = new Intent(this, CreateJourneyActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float v, float v1) {
-        if (e2.getX() - e1.getX() <= 50) {
-            return false;
-        }
-        Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(photoCaptureIntent, requestCode);
-        return true;
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (detector != null) {
-            detector.onTouchEvent(event);
-        }
-        return super.onTouchEvent(event);
     }
 
 
@@ -225,6 +224,16 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         }
     }
 
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float v, float v1) {
+        return false;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
 
     // unused required methods
     @Override

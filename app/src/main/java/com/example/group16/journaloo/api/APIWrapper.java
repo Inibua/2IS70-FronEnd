@@ -32,7 +32,7 @@ public class APIWrapper {
     private static final Gson gson = new Gson();
     private static APIWrapper wrapper;
     private final OkHttpClient client;
-    // TODO: Use proper callbacks instead of instance variables for data passing
+
     private String token;
     private User loggedInUser;
     private Journey activeJourney;

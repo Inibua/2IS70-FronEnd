@@ -1,15 +1,14 @@
 package com.example.group16.journaloo.fragments;
 
-import android.app.AlertDialog; // Maybe change this to the other import depending on how it looks
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import com.example.group16.journaloo.activities.LoginActivity;
-import com.example.group16.journaloo.activities.ViewProfileActivity;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.models.User;
 
@@ -22,26 +21,26 @@ public class DeleteAccountConfirmationDialogFragment extends DialogFragment {
         super();
         this.wrapper = APIWrapper.getWrapper();
         this.userToDelete = wrapper.getLoggedInUser();
-
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         this.aContext = getActivity();
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setMessage("Delete account?")
-                     .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                // APIWrapper request to delete account
-                wrapper.deleteUser(userToDelete);
-                wrapper.logout(aContext);
-                dialogInterface.cancel();
-                Intent intent = new Intent(aContext, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // APIWrapper request to delete account
+                        wrapper.deleteUser(userToDelete);
+                        wrapper.logout(aContext);
+                        dialogInterface.cancel();
+                        Intent intent = new Intent(aContext, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 // Dialog cancelled

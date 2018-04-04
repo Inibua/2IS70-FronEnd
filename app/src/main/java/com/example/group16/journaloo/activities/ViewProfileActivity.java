@@ -51,7 +51,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 DeleteAccountConfirmationDialogFragment alert =
                         new DeleteAccountConfirmationDialogFragment();
                 FragmentManager fm = getFragmentManager();
-                alert.show(fm, "");
+//                alert.show(fm, "");
             }
         });
     }

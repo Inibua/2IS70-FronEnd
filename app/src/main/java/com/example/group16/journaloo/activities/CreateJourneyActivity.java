@@ -13,11 +13,8 @@ import com.example.group16.journaloo.models.Journey;
 import com.example.group16.journaloo.models.User;
 
 public class CreateJourneyActivity extends AppCompatActivity {
-
     private APIWrapper wrapper = APIWrapper.getWrapper();
-
-    public String nameJourney;
-    EditText editJourneyName;
+    private EditText editJourneyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +35,7 @@ public class CreateJourneyActivity extends AppCompatActivity {
         User user = wrapper.getLoggedInUser();
         Journey.NewJourney newJourney = new Journey.NewJourney(user.id, title);
         final Intent intent = new Intent(this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
         wrapper.createJourney(newJourney, new MainThreadCallback() {
             @Override
