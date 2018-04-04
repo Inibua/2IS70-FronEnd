@@ -12,7 +12,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.*;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
@@ -35,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        wrapper.refreshActiveJourney(new MainThreadCallback() {
+        wrapper.getActiveJourney(new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
                 setContentView(R.layout.activity_main);
@@ -47,10 +46,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             public void onSuccess(String responseBody) {
                 activeJourney = gson.fromJson(responseBody, Journey.class);
                 wrapper.setActiveJourney(activeJourney);
+                setTitle(activeJourney.title);
 
                 setContentView(R.layout.activity_main_active);
-                TextView nameJourney = findViewById(R.id.nameJourney);
-                nameJourney.setText(activeJourney.title);
 
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
@@ -86,7 +84,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     public void openCreateJourney(View view) {
         Intent intent = new Intent(this, CreateJourneyActivity.class);
-        finish();
         startActivity(intent);
     }
 
