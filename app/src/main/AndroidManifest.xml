@@ -39,14 +39,11 @@
             android:label="@string/title_activity_sign_up">
         </activity>
         <activity android:name=".activities.NewEntryActivity" />
-        <activity android:name=".activities.HistoryActivity" />
 
         <!-- <activity android:name=".CreateEntryActivity"></activity> -->
-        <activity android:name=".activities.ViewProfileActivity" />
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.ViewEntriesActivity" />
         <activity android:name=".activities.EditEntryActivity" />
-        <activity android:name=".activities.ExploreActivity"></activity>
     </application>
 
 </manifest>
