@@ -1,6 +1,6 @@
 package com.example.group16.journaloo.api;
 
-import android.graphics.Bitmap;
+import android.content.Context;
 import android.util.Base64;
 import android.util.Log;
 
@@ -15,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOError;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -71,16 +71,10 @@ public class APIWrapper {
         try {
             String[] split = JWTEncoded.split("\\.");
             Log.d("TOKEN", token);
-            Log.d("JWT_DECODED", "Header: " + getJson(split[0]));
-            Log.d("JWT_DECODED", "Body: " + getJson(split[1]));
+            Log.d("JWT_DECODED", "Header: " + fromBase64(split[0]));
+            Log.d("JWT_DECODED", "Body: " + fromBase64(split[1]));
 
-            JSONObject jsonUSER = new JSONObject(getJson(split[1]));
-            String idString = String.valueOf(jsonUSER.get("id"));
-            String username = String.valueOf(jsonUSER.get("username"));
-            String email = String.valueOf(jsonUSER.get("email"));
-            int id = Integer.valueOf(idString);
-
-            loggedInUser = new User(id, username, email);
+            loggedInUser = gson.fromJson(fromBase64(split[1]), User.class);
             //Goes to
         } catch (UnsupportedEncodingException e) {
             //Error
@@ -88,7 +82,7 @@ public class APIWrapper {
         }
     }
 
-    private static String getJson(String strEncoded) throws UnsupportedEncodingException {
+    private static String fromBase64(String strEncoded) throws UnsupportedEncodingException {
         byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
         return new String(decodedBytes, "UTF-8");
     }
@@ -414,22 +408,15 @@ public class APIWrapper {
                 .addHeader("Authorization", token)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                responseHandler.onFailure(call, e);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                activeJourney = gson.fromJson(response.body().charStream(), Journey.class);
-                responseHandler.onResponse(call, response);
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     public Journey getActiveJourney() {
         return activeJourney;
+    }
+
+    public void setActiveJourney(Journey journey) {
+        activeJourney = journey;
     }
 
     /**
@@ -760,11 +747,12 @@ public class APIWrapper {
      *
      * @param entry - Entry user wants to create
      */
-    public void createEntry(Entry.NewEntry entry, final String filename, final MainThreadCallback responseHandler) { // POST
+    public void createEntry(Entry.NewEntry entry, final String filename, final Context cxt, final MainThreadCallback responseHandler) { // POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .build();
 
+        Log.i(TAG, "pre POST req");
         entry.journey_id = activeJourney.id;
         RequestBody body = RequestBody.create(JSON, gson.toJson(entry));
         Request request = new Request.Builder()
@@ -781,13 +769,15 @@ public class APIWrapper {
             }
 
             @Override
-            public void onResponse(Call call, Response response) {
+            public void onResponse(Call call, Response response) throws IOException {
                 if (!response.isSuccessful()) {
                     onFailure(call, new IOException("Failed"));
                     return;
                 }
 
-                Entry entry = gson.fromJson(response.body().charStream(), Entry.class);
+                Log.i(TAG, "received response");
+
+                Entry entry = gson.fromJson(response.body().string(), Entry.class);
 
                 HttpUrl url = baseUrl.newBuilder()
                         .addPathSegment("entry")
@@ -795,9 +785,11 @@ public class APIWrapper {
                         .addPathSegment("image")
                         .build();
 
-                File image = new File(filename);
+                FileInputStream is = cxt.openFileInput(filename);
+                byte[] bytes = new byte[is.available()];
+                is.read(bytes);
                 MediaType PNG = MediaType.parse("image/png");
-                RequestBody body = RequestBody.create(PNG, image);
+                RequestBody body = RequestBody.create(PNG, bytes);
                 Request request = new Request.Builder()
                         .url(url)
                         .post(body)

@@ -37,16 +37,14 @@ public abstract class MainThreadCallback implements Callback {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (response.isSuccessful()) {
+//                if (response.isSuccessful()) {
                     try {
                         onSuccess(response.body().string());
-                        return;
                     } catch (IOException e) {
                         e.printStackTrace();
+                        onFailure(call, new IOException("Failed"));
                     }
-                }
-
-                onFailure(call, new IOException("Failed"));
+//                }
             }
         });
     }

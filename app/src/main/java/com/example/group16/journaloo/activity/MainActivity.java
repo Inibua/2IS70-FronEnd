@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onSuccess(String responseBody) {
                 activeJourney = gson.fromJson(responseBody, Journey.class);
+                wrapper.setActiveJourney(activeJourney);
                 setContentView(R.layout.activity_main_active);
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);

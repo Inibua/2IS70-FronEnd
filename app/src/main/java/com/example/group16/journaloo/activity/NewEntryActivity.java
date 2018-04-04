@@ -59,7 +59,7 @@ public class NewEntryActivity extends AppCompatActivity {
             Entry.NewEntry newEntry = new Entry.NewEntry();
             newEntry.description = descriptionEntry.getText().toString();
             newEntry.location = locationEntry.getText().toString();
-            wrapper.createEntry(newEntry, filename, new MainThreadCallback() {
+            wrapper.createEntry(newEntry, filename, getApplicationContext(), new MainThreadCallback() {
                 @Override
                 public void onFail(Exception error) {
                     Toast.makeText(getApplicationContext(), "Failed to create entry",

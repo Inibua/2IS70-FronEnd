@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by s169096 on 14-3-2018.
  */
 // Is this an activity ir object template?
-public class Entry extends AppCompatActivity {
+public class Entry {
     public int id;
     public Image image;
     public Date date;
@@ -19,7 +19,6 @@ public class Entry extends AppCompatActivity {
     public int journey_id;
 
     public Entry() {
-
     }
 
     Entry (int id, Image image, Date date, String description, String coordinates,
@@ -51,5 +50,8 @@ public class Entry extends AppCompatActivity {
         public String location;
         public String coordinates;
         public String description;
+
+        public NewEntry() {
+        }
     }
 }
