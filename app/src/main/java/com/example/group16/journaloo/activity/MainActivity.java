@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
                 isLoading = false;
 
+                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
+
                 wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
                     @Override
                     public void onFail(Exception error) {
@@ -152,8 +154,6 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 });
             }
         });
-
-        detector = new GestureDetectorCompat(this, this);
     }
 
 
@@ -202,7 +202,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        detector.onTouchEvent(event);
+        if (detector != null) {
+            detector.onTouchEvent(event);
+        }
         return super.onTouchEvent(event);
     }
 

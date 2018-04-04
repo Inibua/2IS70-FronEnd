@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -91,7 +90,7 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (!isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -131,8 +130,9 @@ public class LoginActivity extends AppCompatActivity /*implements LoaderCallback
     }
 
     private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
+        return !password.isEmpty();
     }
+
 
     public void signUpLink(View view) {
         Intent intent = new Intent(this, SignUpActivity.class);

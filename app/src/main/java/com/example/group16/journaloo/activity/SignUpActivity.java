@@ -178,9 +178,7 @@ public class SignUpActivity extends AppCompatActivity implements LoaderCallbacks
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-//        return password.length() > 4;
-        return true;
+        return !password.isEmpty();
     }
 
     /**

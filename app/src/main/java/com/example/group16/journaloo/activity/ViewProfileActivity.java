@@ -20,9 +20,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_profile);
-        TextView usernameDisplay = findViewById(R.id.usernameDisplayTextView);
-        TextView emailDisplay = findViewById(R.id.emailDisplayTextView);
-        TextView passwordDisplay = findViewById(R.id.passwordDisplayTextView);
+        TextView usernameDisplay = findViewById(R.id.username_textview);
+        TextView emailDisplay = findViewById(R.id.email_textview);
         User user = wrapper.getLoggedInUser();
 
         if (wrapper.getLoggedInUser() == null) {
@@ -33,7 +32,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);
-        passwordDisplay.setText("..........");
 
         Button logoutButton = findViewById(R.id.logout_button);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +40,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 SharedPreferences sharedPref = getSharedPreferences("credentials", Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.remove(getString(R.string.auth_token));
-                editor.commit();
+                editor.apply();
 
                 Intent intent = new Intent(ViewProfileActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
