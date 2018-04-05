@@ -22,6 +22,7 @@ public class Entry extends AppCompatActivity {
     public String description;
     public String coordinates;
     public String location;
+    public int journeyId;
 
     Entry () {
 
