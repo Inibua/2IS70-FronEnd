@@ -1,6 +1,8 @@
 package com.example.group16.journaloo.api;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
@@ -48,6 +50,7 @@ public class APIWrapper {
     private User loggedInUser;
     private Journey activeJourney;
     private User userFromGetUser;
+    private Bitmap bitmap;
 
 
     private APIWrapper() {
@@ -805,21 +808,20 @@ public class APIWrapper {
     /**
      * Updates an entry for the user
      *
-     * @param entry - Entry user wants to update
+     * @param entry_id - Entry's id user wants to update
+     * @param entryDescription - Entry's description user wants to update
      */
-    public void updateEntry(Entry entry) { // PUT
+    public void updateEntry(int entry_id, String entryDescription) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.id))
+                .addPathSegment(String.valueOf(entry_id))
                 .build();
 
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("journey_id", entry.journey_id);
-            obj.put("description", entry.description);
-            obj.put("location", entry.location);
-            obj.put("coordinates", entry.coordinates);
+            obj.put("id", entry_id);
+            obj.put("description", entryDescription);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -886,5 +888,44 @@ public class APIWrapper {
     public String getLocation(String coordinates) { // GET Nothing on swagger? Research?
         // TODO: query google places api
         return "";
+    }
+
+    public void getImage(int entryNoImageId) {
+
+        Request request = new Request.Builder()
+                .url("https://polar-cove-19347.herokuapp.com/entry/" + entryNoImageId + "/image")
+                .get()
+                .addHeader("Cache-Control", "no-cache")
+                .addHeader("Postman-Token", "feeaba26-2966-4aa9-96f6-9d85c5648f8d")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.i(TAG, e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                int code = response.code();
+                if (code == 200) {
+                    Log.d("GET PICTURE", "OKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAy");
+                    Bitmap bmpGET = BitmapFactory.decodeStream(response.body().byteStream());
+                    setImageCurrentEntryBitmap(bmpGET);
+                } else {
+                    Log.d("GET PICTURE", "BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOKKEEEEEEEEEEEEEEEEEEEEEN");
+                }
+                // create new entry here, fill in data do front end stuff
+            }
+        });
+    }
+
+    public void setImageCurrentEntryBitmap(Bitmap imageCurrentEntryBitmap) {
+        bitmap = imageCurrentEntryBitmap;
+
+    }
+
+    public Bitmap getImageCurrentEntryBitmap() {
+        return bitmap;
     }
 }
