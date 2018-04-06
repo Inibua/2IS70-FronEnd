@@ -1,5 +1,6 @@
 package com.example.group16.journaloo.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,8 +45,14 @@ public class EditEntryActivity extends AppCompatActivity {
         if (descriptionEditEntry.getText().toString().matches(description)) {
             Toast.makeText(getApplicationContext(), "There are no changes",
                     Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent (this, MainActivity.class);
+            finish();
+            startActivity(intent);
         } else {
             wrapper.updateEntry(entry_id, descriptionEditEntry.toString());
+            Intent intent = new Intent (this, MainActivity.class);
+            finish();
+            startActivity(intent);
         }
     }
 }
