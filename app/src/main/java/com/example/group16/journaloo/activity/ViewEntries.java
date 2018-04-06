@@ -11,10 +11,12 @@ import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.api.APIWrapper;
 
+import java.util.ArrayList;
+
 public class ViewEntries extends AppCompatActivity {
     ListView lst;
     private APIWrapper wrapper = APIWrapper.getWrapper();
-    Entry[] entries;
+    ArrayList<Entry> entries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

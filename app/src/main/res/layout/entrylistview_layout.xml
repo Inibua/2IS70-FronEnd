@@ -5,15 +5,16 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/item_entry"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/imageViewent"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_weight="0.11"
-            />
+            android:layout_weight="0.11" />
 
         <TextView
             android:id="@+id/tventryname"
@@ -35,8 +36,7 @@
             android:layout_toRightOf="@+id/imageViewent"
             android:layout_weight="1"
             android:paddingLeft="5dp"
-            android:textColor="#333"
-            />
+            android:textColor="#333" />
     </RelativeLayout>
 
 </LinearLayout>

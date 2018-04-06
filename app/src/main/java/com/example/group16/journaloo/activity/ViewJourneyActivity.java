@@ -21,7 +21,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
-        lst =(ListView)findViewById(R.id.listview);
+        lst = findViewById(R.id.listview);
         if (journeys == null) {
 
         } else {
@@ -31,6 +31,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
                 String titleJ = journey.title;
                 journeyNames[i] = titleJ;
             }
+
             CustomListview customListview = new CustomListview(this, journeyNames);
             lst.setAdapter(customListview);
             for (Journey journey : journeys) {

@@ -662,9 +662,8 @@ public class APIWrapper {
      *
      * @param journeyId - Journey from which the entries are retrieved
      * @param pageNr    - page to retrieve journeys of
-     * @return Entry[] - array with all entries of that journey in it
      */
-    public Entry[] getJourneyEntries(int journeyId, int pageNr) { // GET?POST
+    public void getJourneyEntries(int journeyId, int pageNr, MainThreadCallback responseHandler) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .addPathSegment("all")
@@ -677,29 +676,7 @@ public class APIWrapper {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-                // Display some toast
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String journeyEntriesString = response.body().string();
-                Log.i(TAG, journeyEntriesString);
-
-                try {
-                    JSONArray journeyEntriesJson = new JSONArray(journeyEntriesString);
-                    ArrayList<Entry> journeyEntries = new ArrayList<>();
-                    // TODO: make json converter method from JSONObject to Entry and use it
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        return new Entry[5];
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**

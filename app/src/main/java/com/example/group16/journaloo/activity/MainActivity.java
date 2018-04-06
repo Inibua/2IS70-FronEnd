@@ -17,16 +17,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.MainThreadCallback;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
     final static Gson gson = new Gson();
@@ -35,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     public GestureDetectorCompat detector;
     private APIWrapper wrapper = APIWrapper.getWrapper();
     private Journey activeJourney;
+    private ArrayList<Entry> activeJourneyEntries;
+    private ListView lst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,14 +65,52 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
 
-                // create custom toolbar
-                Toolbar toolbar = findViewById(R.id.app_bar);
-                setSupportActionBar(toolbar);
+                wrapper.getJourneyEntries(activeJourney.id, 0, new MainThreadCallback() {
+                    @Override
+                    public void onFail(Exception error) {
+                        Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        activeJourneyEntries = new ArrayList<>();
+
+                        ListView lst = findViewById(R.id.entryListView);
+                        CustomEntryListview entryListview =
+                                new CustomEntryListview(MainActivity.this, activeJourneyEntries);
+
+                        lst.setAdapter(entryListview);
+
+                        ArrayList<Entry> loaded = gson.fromJson(responseBody, new TypeToken<ArrayList<Entry>>(){}.getType());
+                        entryListview.addAll(loaded);
+
+                        // create custom toolbar
+                        Toolbar toolbar = findViewById(R.id.app_bar);
+                        setSupportActionBar(toolbar);
+
+                        for (final Entry entry : activeJourneyEntries) {
+                            lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                    Intent intent = new Intent(MainActivity.this, EditEntryActivity.class);
+                                    Log.i(TAG, "Hi you clicked a button amigo");
+                                    intent.putExtra("id", entry.id);
+                                    intent.putExtra("location", entry.location);
+                                    intent.putExtra("description", entry.description);
+
+                                    startActivity(intent);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         });
 
         detector = new GestureDetectorCompat(this, this);
     }
+
+
 
 
     public void stopJourney(View view) {
