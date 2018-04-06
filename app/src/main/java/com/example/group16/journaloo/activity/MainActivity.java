@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onFail(Exception error) {
                 setContentView(R.layout.activity_main);
+
+                // create custom toolbar
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
             }
 
             @Override
@@ -52,13 +56,14 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 setContentView(R.layout.activity_main_active);
                 TextView nameJourney = findViewById(R.id.nameJourney);
                 nameJourney.setText(activeJourney.title);
+
+                // create custom toolbar
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
             }
         });
 
         detector = new GestureDetectorCompat(this, this);
-        // create custom toolbar
-        Toolbar toolbar = findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
     }
 
 
