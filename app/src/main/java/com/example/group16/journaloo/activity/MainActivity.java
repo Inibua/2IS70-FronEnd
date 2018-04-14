@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                     @Override
                     public void onSuccess(String responseBody) {
                         activeJourneyEntries = new ArrayList<>();
+                        int position = 0;
+                        //Journey entryActive = wrapper.getActiveJourney();
 
                         ListView lst = findViewById(R.id.entryListView);
                         CustomEntryListview entryListview =
@@ -88,10 +90,12 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                         Toolbar toolbar = findViewById(R.id.app_bar);
                         setSupportActionBar(toolbar);
 
+                        //final Entry entry = (Entry) lst.getItemAtPosition(position);
+
                         for (final Entry entry : activeJourneyEntries) {
                             lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                 @Override
-                                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                     Intent intent = new Intent(MainActivity.this, EditEntryActivity.class);
                                     Log.i(TAG, "Hi you clicked a button amigo");
                                     intent.putExtra("id", entry.id);
