@@ -13,8 +13,8 @@ import com.example.group16.journaloo.R;
 
 public class ViewJourneyActivity extends AppCompatActivity {
 
-    Journey[] journeys;
     private APIWrapper wrapper = APIWrapper.getWrapper();
+    Journey[] journeys;
     ListView lst;
 
     @Override
@@ -22,6 +22,18 @@ public class ViewJourneyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
         lst = findViewById(R.id.listview);
+        wrapper.getUserJourneys(0);
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        journeys = wrapper.getArrayWithJourneys();
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (journeys == null) {
 
         } else {

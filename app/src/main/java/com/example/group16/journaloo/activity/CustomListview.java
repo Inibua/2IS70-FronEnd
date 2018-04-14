@@ -21,7 +21,7 @@ public class CustomListview extends ArrayAdapter<String>{
         super(context, R.layout.listview_layout,journeys);
 
         this.context=context;
-        this.journeyNames=journeyNames;
+        this.journeyNames=journeys;
     }
 
     @NonNull

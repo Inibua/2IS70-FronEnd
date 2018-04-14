@@ -49,6 +49,7 @@ public class APIWrapper {
     private Journey activeJourney;
     private User userFromGetUser;
     private Bitmap bitmap;
+    private Journey[] array; // ARRAY OF JOURNEYS. IS TO BE USED FOR PAST JOURNEYS OR EXPLORE JOURNEYS
 
 
     private APIWrapper() {
@@ -425,16 +426,16 @@ public class APIWrapper {
     /**
      * Gets an array of the current user's journeys, aka his past journeys.
      *
-     * @param userId - User's Id whose journeys are retrieved
      * @param pageNr - which page number (which 10 journeys exactly)
-     * @return Journey[] - array with 10 journeys depending on the pageNr
+     * @return array with past journeys of given user (userId) and pageNr
      */
-    public Journey[] getUserJourneys(int userId, int pageNr) {
+    synchronized public void getUserJourneys(int pageNr) {
+        Log.d("I ENTERED", "1");
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
-                .addPathSegment("all")
+                .addPathSegment("user")
+                .addPathSegment(String.valueOf(loggedInUser.id))
                 .addQueryParameter("page", String.valueOf(pageNr))
-                .addQueryParameter("user_id", String.valueOf(userId))
                 .build();
 
         Request request = new Request.Builder()
@@ -442,29 +443,62 @@ public class APIWrapper {
                 .get()
                 .build();
 
+        Log.d("I ENTERED", "2");
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Log.d("I ENTERED", "4");
                 Log.i(TAG, e.getMessage());
                 // Display some toast
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                String userJourneysString = response.body().string();
-                Log.i(TAG, userJourneysString);
+                Log.d("I ENTERED", "3");
+                int code = response.code();
+                if (code == 200){
+                    String userJourneysString = response.body().string();
+                    Log.d(TAG, userJourneysString);
 
-                try {
-                    JSONArray userJourneysJson = new JSONArray(userJourneysString);
-                    ArrayList<Journey> userJourneys = new ArrayList<>();
-                    // TODO: make json converter method from JSONObject to Journey and use it
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    try {
+                        Log.d("I ENTERED", "5");
+                        JSONArray userJourneysJson = new JSONArray(userJourneysString);
+                        Log.d("I ENTERED", "6");
+                        convertJSONArrayToNormalArray(userJourneysJson); // CONVERTS JSON ARRAY TO NORMAL ARRAY
+                        // TODO: make json converter method from JSONObject to Journey and use it
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.d("CODE", "DIFFERENT THAN 200");
+                    Log.d("CODE", String.valueOf(code));
                 }
             }
         });
+    }
 
-        return new Journey[pageNr];
+    private void convertJSONArrayToNormalArray(JSONArray jsonArrayJouneys) throws JSONException {
+        Log.d("I ENTERED", "7");
+        array = new Journey[jsonArrayJouneys.length()];
+        for (int i = 0; i <= jsonArrayJouneys.length() - 1; i++) {
+            JSONObject singleJouneyJSON = jsonArrayJouneys.getJSONObject(i);
+            int id = (Integer) singleJouneyJSON.get("id");
+            int user_id = (Integer) singleJouneyJSON.get("user_id");
+            String title = String.valueOf(singleJouneyJSON.get("title"));
+            Journey singleJourney = new Journey(id, user_id, title);
+
+            array[i] = singleJourney;
+            Log.d("ARRAY JOURNEYS SINGLE", array[i].title);
+        }
+    }
+
+    public Journey[] getArrayWithJourneys() {
+        try {
+            Thread.sleep(2500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return array;
     }
 
     /**
