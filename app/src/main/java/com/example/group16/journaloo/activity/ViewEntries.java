@@ -28,7 +28,7 @@ public class ViewEntries extends AppCompatActivity {
         lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ViewEntries.this, Entry.class);
+                Intent intent = new Intent(ViewEntries.this, EditEntryActivity.class);
                 startActivity(intent);
             }
         });
