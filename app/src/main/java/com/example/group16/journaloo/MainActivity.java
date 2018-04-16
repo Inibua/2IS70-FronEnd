@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
         if(MainActivity.requestCode == requestCode && resultCode == RESULT_OK){
             Bundle extras = data.getExtras();
             Bitmap bmp = (Bitmap) extras.get("data");
+
             try {
                 //Write file
                 String filename = "bitmap.png";
