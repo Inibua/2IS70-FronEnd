@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,20 +7,33 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.group16.journaloo.CustomListview;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.R;
 
 public class ViewJourneyActivity extends AppCompatActivity {
 
-    Journey[] journeys;
     private APIWrapper wrapper = APIWrapper.getWrapper();
+    Journey[] journeys;
     ListView lst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_journey);
-        lst =(ListView)findViewById(R.id.listview);
+        lst = findViewById(R.id.listview);
+        wrapper.getUserJourneys(0);
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        journeys = wrapper.getArrayWithJourneys();
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if (journeys == null) {
 
         } else {
@@ -30,10 +43,11 @@ public class ViewJourneyActivity extends AppCompatActivity {
                 String titleJ = journey.title;
                 journeyNames[i] = titleJ;
             }
+
             CustomListview customListview = new CustomListview(this, journeyNames);
             lst.setAdapter(customListview);
             for (Journey journey : journeys) {
-                final Integer journeyid = journey.journeyId;
+                final Integer journeyid = journey.id;
                 lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

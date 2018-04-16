@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.model.User;
 
 public class ViewProfileActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();
@@ -20,13 +23,13 @@ public class ViewProfileActivity extends AppCompatActivity {
         TextView passwordDisplay = (TextView) findViewById(R.id.passwordDisplayTextView);
         User user = wrapper.getLoggedInUser();
         if (wrapper.getLoggedInUser() == null){
-            Log.d("user", wrapper.getLoggedInUser().userName);
+            Log.d("user", wrapper.getLoggedInUser().username);
         } else {
             Log.d("user found", "whatever");
         }
-        usernameDisplay.setText(user.userName);
+        usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);
-        //passwordDisplay.setText(user.password);
+        passwordDisplay.setText("..........");
     }
 
     public void editPassword(View view) {

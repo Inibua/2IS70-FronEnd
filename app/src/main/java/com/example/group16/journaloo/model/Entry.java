@@ -1,13 +1,7 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.model;
 
-import android.content.Intent;
-import android.location.Location;
 import android.media.Image;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.Date;
 
@@ -15,21 +9,21 @@ import java.util.Date;
  * Created by s169096 on 14-3-2018.
  */
 // Is this an activity ir object template?
-public class Entry extends AppCompatActivity {
-    public int entryId;
+public class Entry {
+    public int id;
     public Image image;
     public Date date;
     public String description;
     public String coordinates;
     public String location;
+    public int journey_id;
 
-    Entry () {
-
+    public Entry() {
     }
 
-    Entry (int entryId, Image image, Date date, String description, String coordinates,
+    Entry (int id, Image image, Date date, String description, String coordinates,
            String location) {
-        this.entryId = entryId;
+        this.id = id;
         this.image = image;
         this.date = date;
         this.description = description;
@@ -39,15 +33,25 @@ public class Entry extends AppCompatActivity {
 
 
     Entry (int entryid, Image image, Date date, String description, String location) {
-        this.entryId = entryid;
+        this.id = entryid;
         this.image = image;
         this.date = date;
         this.description = description;
         this.location = location;
     }
 
-    Entry (String location, String description) {
+    public Entry(String location, String description) {
         this.location = location;
         this.description = description;
+    }
+
+    public static class NewEntry {
+        public int journey_id;
+        public String location;
+        public String coordinates;
+        public String description;
+
+        public NewEntry() {
+        }
     }
 }
