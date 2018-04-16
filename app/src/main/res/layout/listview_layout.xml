@@ -12,7 +12,8 @@
             android:id="@+id/entryImageView"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_weight="0.11" />
+            android:layout_weight="0.11"
+            />
 
         <TextView
             android:id="@+id/tvjourneyname"
@@ -34,7 +35,8 @@
             android:layout_toRightOf="@+id/entryImageView"
             android:layout_weight="1"
             android:paddingLeft="5dp"
-            android:textColor="#333" />
+            android:textColor="#333"
+            />
     </RelativeLayout>
 
 </LinearLayout>

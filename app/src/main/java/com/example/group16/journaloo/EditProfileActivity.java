@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo;
 
 import android.content.Intent;
 import android.os.Build;
@@ -9,14 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.group16.journaloo.api.APIWrapper;
-import com.example.group16.journaloo.R;
-import com.example.group16.journaloo.model.User;
-
 import java.util.Objects;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private APIWrapper wrapper = APIWrapper.getWrapper();
 
     public String passwordNew;
     public String passwordConfirm;
@@ -27,18 +22,18 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    public void editPasswordButton (View view) {
-        User user = wrapper.getLoggedInUser();
+    public void editPasswordButton (View view){
+        EditText oldPassword = (EditText) findViewById(R.id.oldPasswordEditText);
         EditText newPassword = (EditText) findViewById(R.id.newPasswordEditText);
         EditText confirmPassword = (EditText) findViewById(R.id.confirmPasswordEditText);
         passwordNew = newPassword.getText().toString();
         passwordConfirm = confirmPassword.getText().toString();
-
-        if (!Objects.equals(passwordNew, passwordConfirm)) {
+        //add oldpassword check
+        if (!Objects.equals(passwordNew, passwordConfirm)){
             Toast.makeText(getApplicationContext(), "You mistyped your new password", Toast.LENGTH_SHORT).show();
+
         } else if(Objects.equals(passwordNew, passwordConfirm)) {
-            User userUpdate = new User(user.username, user.email, passwordNew);
-            wrapper.updateUser(userUpdate);
+            passwordNew = newPassword.getText().toString();
             Intent intent = new Intent(this, ViewProfileActivity.class);
             finish();
             startActivity(intent);

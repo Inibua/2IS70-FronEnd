@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;
@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.group16.journaloo.R;
-
 public class CustomListview extends ArrayAdapter<String>{
 
     private String[] journeyNames;
@@ -21,7 +19,7 @@ public class CustomListview extends ArrayAdapter<String>{
         super(context, R.layout.listview_layout,journeys);
 
         this.context=context;
-        this.journeyNames=journeys;
+        this.journeyNames=journeyNames;
     }
 
     @NonNull
