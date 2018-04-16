@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.group16.journaloo.R;
@@ -30,17 +31,26 @@ public class ViewEntries extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         int journey_id = getIntent().getExtras().getInt("JourneyId");
+        String journey_name = getIntent().getExtras().getString("JourneyName");
+
+        setContentView(R.layout.activity_view_entries);
+        TextView nameJourney = findViewById(R.id.nameJourney);
+        nameJourney.setText(journey_name);
+        //lst = findViewById(R.id.listviewent);
         wrapper.getJourneyEntries(journey_id, 0, new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
                 Toast.makeText(getApplicationContext(), "Failed to load entries", Toast.LENGTH_SHORT).show();
+                // create custom toolbar
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
             }
 
             @Override
             public void onSuccess(String responseBody) {
                 entries = new ArrayList<>();
 
-                ListView lst = findViewById(R.id.entryListView);
+                ListView lst = findViewById(R.id.entryListView2);
                 CustomEntryListview entryListview =
                         new CustomEntryListview(ViewEntries.this, entries);
 
@@ -69,9 +79,7 @@ public class ViewEntries extends AppCompatActivity {
                 }
             }
         });
-        setContentView(R.layout.activity_view_entries);
-        lst = findViewById(R.id.listviewent);
-        final CustomEntryListview customentryListview = new CustomEntryListview(this, entries);
+        /*final CustomEntryListview customentryListview = new CustomEntryListview(this, entries);
         lst.setAdapter(customentryListview);
         lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -79,6 +87,6 @@ public class ViewEntries extends AppCompatActivity {
                 Intent intent = new Intent(ViewEntries.this, EditEntryActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 }

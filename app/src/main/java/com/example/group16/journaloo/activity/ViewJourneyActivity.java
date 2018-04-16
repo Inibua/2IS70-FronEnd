@@ -24,13 +24,13 @@ public class ViewJourneyActivity extends AppCompatActivity {
         lst = findViewById(R.id.listview);
         wrapper.getUserJourneys(0);
         try {
-            Thread.sleep(1500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         journeys = wrapper.getArrayWithJourneys();
         try {
-            Thread.sleep(1500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -48,11 +48,13 @@ public class ViewJourneyActivity extends AppCompatActivity {
             lst.setAdapter(customListview);
             for (Journey journey : journeys) {
                 final Integer journeyid = journey.id;
+                final String journeyName = journey.title;
                 lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
                         intent.putExtra("JourneyId", journeyid);
+                        intent.putExtra("JourneyName", journeyName);
                         startActivity(intent);
                     }
                 });

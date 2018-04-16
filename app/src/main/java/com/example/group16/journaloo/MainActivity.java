@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
+/*public class MainActivity extends AppCompatActivity implements GestureDetector.OnGestureListener {
 
     public boolean journeyActive; // becomes true if journey is saved, is used to change layout of MainActivity
     public String nameOfJourney; // to be passed too the viewJourney activity when stopping an active journey
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
     */
 
-    @Override
+    /*@Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float v, float v1) {
         Intent photoCaptureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String state = Environment.getExternalStorageState();
@@ -164,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             String partFilename = currentDateFormat();
             storeCameraPhotoInSDCard(bitmap, partFilename);
         */
-        }
+        //}
 
-    }
+    //}
 /*
     private String currentDateFormat(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd_HH_mm_ss");
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
@@ -280,3 +280,4 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 }
 
 
+*/
