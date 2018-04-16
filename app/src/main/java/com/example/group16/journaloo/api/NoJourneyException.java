@@ -1,4 +1,4 @@
-package com.example.group16.journaloo;
+package com.example.group16.journaloo.api;
 
 /**
  * Created by s169096 on 14-3-2018.

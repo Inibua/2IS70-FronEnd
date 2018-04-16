@@ -21,9 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".CreateJourneyActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.MainActivity">
+        </activity>
+        <activity android:name=".activity.CreateJourneyActivity" />
+        <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,19 +32,19 @@
             </intent-filter>
             android:label="@string/title_activity_login">
         </activity>
-        <activity android:name=".SignUpActivity">
+        <activity android:name=".activity.SignUpActivity">
             android:label="@string/title_activity_sign_up">
         </activity>
-        <activity android:name=".NewEntryActivity" />
-        <activity android:name=".ViewJourneyActivity" />
+        <activity android:name=".activity.NewEntryActivity" />
+        <activity android:name=".activity.ViewJourneyActivity" />
 
         <!-- <activity android:name=".CreateEntryActivity"></activity> -->
 
-        <activity android:name=".Entry" />
-        <activity android:name=".ViewProfileActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".ViewEntries" />
-        <activity android:name=".EditEntryActivity"></activity>
+        <activity android:name=".model.Entry" />
+        <activity android:name=".activity.ViewProfileActivity" />
+        <activity android:name=".activity.EditProfileActivity" />
+        <activity android:name=".activity.ViewEntries" />
+        <activity android:name=".activity.EditEntryActivity"></activity>
     </application>
 
 </manifest>
