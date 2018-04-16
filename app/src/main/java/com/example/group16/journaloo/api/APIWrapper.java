@@ -374,6 +374,33 @@ public class APIWrapper {
     }
 
     /**
+     * Function which is used to get the currently logged in users journey.
+     */
+    public void requestPasswordResetMail(final String email, final MainThreadCallback responseHandler) {
+        HttpUrl url = baseUrl.newBuilder()
+                .addPathSegment("user")
+                .addPathSegment(String.valueOf(email))
+                .addPathSegment("reset")
+                .build();
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, obj.toString());
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+
+        client.newCall(request).enqueue(responseHandler);
+    }
+
+    /**
      * Creates a journey for the user
      *
      * @param journey - Journey that user created
