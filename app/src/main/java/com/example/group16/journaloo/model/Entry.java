@@ -1,7 +1,6 @@
 package com.example.group16.journaloo.model;
 
 import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.Date;
 
@@ -12,7 +11,8 @@ import java.util.Date;
 public class Entry {
     public int id;
     public Image image;
-    public Date date;
+    public String created;
+    public Date createdDate;
     public String description;
     public String coordinates;
     public String location;
@@ -21,21 +21,21 @@ public class Entry {
     public Entry() {
     }
 
-    Entry (int id, Image image, Date date, String description, String coordinates,
+    Entry (int id, Image image, String created, String description, String coordinates,
            String location) {
         this.id = id;
         this.image = image;
-        this.date = date;
+        this.created = created;
         this.description = description;
         this.coordinates = coordinates;
         this.location = location;
     }
 
 
-    Entry (int entryid, Image image, Date date, String description, String location) {
+    Entry (int entryid, Image image, String created, String description, String location) {
         this.id = entryid;
         this.image = image;
-        this.date = date;
+        this.created = created;
         this.description = description;
         this.location = location;
     }

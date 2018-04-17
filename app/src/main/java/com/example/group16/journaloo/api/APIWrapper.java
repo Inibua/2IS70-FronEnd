@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
+import android.view.View;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.example.group16.journaloo.model.User;
@@ -34,10 +35,12 @@ import okhttp3.Response;
  */
 
 public class APIWrapper {
+    public static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
+
     // DECLARATION VARIABLES
     private static final String TAG = APIWrapper.class.getName();
     private static final MediaType JSON = MediaType.parse("application/json");
-    private static final HttpUrl baseUrl = HttpUrl.parse("https://polar-cove-19347.herokuapp.com");
+
     private static final Gson gson = new Gson();
     private final OkHttpClient client;
 
@@ -342,21 +345,10 @@ public class APIWrapper {
                 .addPathSegment("user")
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("username", currentUser.username);
-            obj.put("email", currentUser.email);
-            obj.put("password", currentUser.password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
         Request request = new Request.Builder()
                 .url(url)
-                .delete(body)
-                .addHeader("Content-Type", "application/json")
+                .delete()
+                .addHeader("Authorization", token)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -371,6 +363,33 @@ public class APIWrapper {
                 Log.i(TAG, response.body().toString());
             }
         });
+    }
+
+    /**
+     * Function which is used to get the currently logged in users journey.
+     */
+    public void requestPasswordResetMail(final String email, final MainThreadCallback responseHandler) {
+        HttpUrl url = baseUrl.newBuilder()
+                .addPathSegment("user")
+                .addPathSegment(String.valueOf(email))
+                .addPathSegment("reset")
+                .build();
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        RequestBody body = RequestBody.create(JSON, obj.toString());
+        Request request = new Request.Builder()
+                .url(url)
+                .put(body)
+                .build();
+
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
@@ -901,36 +920,6 @@ public class APIWrapper {
         return "";
     }
 
-    public void getImage(int entryNoImageId) {
-
-        Request request = new Request.Builder()
-                .url("https://polar-cove-19347.herokuapp.com/entry/" + entryNoImageId + "/image")
-                .get()
-                .addHeader("Cache-Control", "no-cache")
-                .addHeader("Postman-Token", "feeaba26-2966-4aa9-96f6-9d85c5648f8d")
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                int code = response.code();
-                if (code == 200) {
-                    Log.d("GET PICTURE", "OKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAy");
-                    Bitmap bmpGET = BitmapFactory.decodeStream(response.body().byteStream());
-                    setImageCurrentEntryBitmap(bmpGET);
-                } else {
-                    Log.d("GET PICTURE", "BROOOOOOOOOOOOOOOOOOOOOOOOOOOOOOKKEEEEEEEEEEEEEEEEEEEEEN");
-                }
-                // create new entry here, fill in data do front end stuff
-            }
-        });
-    }
-
     public void setImageCurrentEntryBitmap(Bitmap imageCurrentEntryBitmap) {
         bitmap = imageCurrentEntryBitmap;
 
@@ -938,5 +927,9 @@ public class APIWrapper {
 
     public Bitmap getImageCurrentEntryBitmap() {
         return bitmap;
+    }
+
+    public void getImage(int entry_id) {
+
     }
 }

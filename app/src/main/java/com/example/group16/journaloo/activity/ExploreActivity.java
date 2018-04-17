@@ -9,50 +9,52 @@ import android.widget.ListView;
 
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.model.Journey;
+import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.R;
 
-public class ViewJourneyActivity extends AppCompatActivity {
+public class ExploreActivity extends AppCompatActivity {
 
     private APIWrapper wrapper = APIWrapper.getWrapper();
-    Journey[] journeys;
+    Entry[] explore;
     ListView lst;
+    int page = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_journey);
-        lst = findViewById(R.id.listview);
-        wrapper.getUserJourneys(0);
+        setContentView(R.layout.activity_explore);
+        lst = findViewById(R.id.listviewExplore);
+        explore = wrapper.getAllEntries(page);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        journeys = wrapper.getArrayWithJourneys();
+        //explore = wrapper.getAllEntries(page);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (journeys == null) {
+        if (explore == null) {
 
         } else {
-            String[] journeyNames = new String[journeys.length];
-            for (int i = 0; i < journeys.length; i++) {
-                Journey journey = journeys[i];
-                String titleJ = journey.title;
+            String[] journeyNames = new String[explore.length];
+            for (int i = 0; i < explore.length; i++) {
+                Entry entry = explore[i];
+                String titleJ = entry.description;
                 journeyNames[i] = titleJ;
             }
 
             CustomListview customListview = new CustomListview(this, journeyNames);
             lst.setAdapter(customListview);
-            for (Journey journey : journeys) {
+            for (Entry journey : explore) {
                 final Integer journeyid = journey.id;
-                final String journeyName = journey.title;
+                final String journeyName = journey.description;
                 lst.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent intent = new Intent(ViewJourneyActivity.this, ViewEntries.class);
+                        Intent intent = new Intent(ExploreActivity.this, ViewEntries.class);
                         intent.putExtra("JourneyId", journeyid);
                         intent.putExtra("JourneyName", journeyName);
                         startActivity(intent);
@@ -61,7 +63,7 @@ public class ViewJourneyActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
 }
+
+
+

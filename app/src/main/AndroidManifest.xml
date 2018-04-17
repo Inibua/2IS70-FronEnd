@@ -9,7 +9,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera2" />
-    <uses-feature android:name="android.hardware.camera2" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,9 +24,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
-        </activity>
+        <activity android:name=".activity.MainActivity"></activity>
         <activity android:name=".activity.CreateJourneyActivity" />
+        <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,12 +42,11 @@
         <activity android:name=".activity.ViewJourneyActivity" />
 
         <!-- <activity android:name=".CreateEntryActivity"></activity> -->
-
-        <activity android:name=".model.Entry" />
         <activity android:name=".activity.ViewProfileActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.ViewEntries" />
-        <activity android:name=".activity.EditEntryActivity"></activity>
+        <activity android:name=".activity.EditEntryActivity" />
+        <activity android:name=".activity.ExploreActivity"></activity>
     </application>
 
 </manifest>

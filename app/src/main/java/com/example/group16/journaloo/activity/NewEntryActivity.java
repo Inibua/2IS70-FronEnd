@@ -67,7 +67,7 @@ public class NewEntryActivity extends AppCompatActivity {
 
         ImageView entryImageView = findViewById(R.id.entryImageView);
         entryImageView.setImageBitmap(bmp);
-        
+
 
         /* Old internal storage staving image
         String path = "sdcard/camera_app/cam_image.jpg";
