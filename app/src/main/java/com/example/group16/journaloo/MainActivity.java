@@ -24,6 +24,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.group16.journaloo.activity.CreateJourneyActivity;
+import com.example.group16.journaloo.activity.NewEntryActivity;
+import com.example.group16.journaloo.activity.ViewJourneyActivity;
+import com.example.group16.journaloo.activity.ViewProfileActivity;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.model.Journey;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             setContentView(R.layout.activity_main);
 
         } else {
-            setContentView(R.layout.activity_main_2);
-            activeJourneyObj = wrapper.getCurrentJourney();
+            setContentView(R.layout.activity_main_active);
+            //activeJourneyObj = wrapper.getCurrentJourney();
             TextView nameJourney = (TextView) findViewById(R.id.nameJourney);
             nameJourney.setText(getIntent().getExtras().getString("nameJourney"));
             nameOfJourney = getIntent().getExtras().getString("nameJourney");
@@ -269,9 +276,7 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
     }
 
     @Override
-    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        return false;
-    }
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) { return false;}
 
     @Override
     public void onLongPress(MotionEvent motionEvent) {
