@@ -20,8 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
-        </activity>
+        <activity android:name=".activity.MainActivity"></activity>
         <activity android:name=".activity.CreateJourneyActivity" />
         <activity android:name=".activity.ForgotPasswordActivity" />
         <activity android:name=".activity.LoginActivity">
@@ -42,7 +41,8 @@
         <activity android:name=".activity.ViewProfileActivity" />
         <activity android:name=".activity.EditProfileActivity" />
         <activity android:name=".activity.ViewEntries" />
-        <activity android:name=".activity.EditEntryActivity"/>
+        <activity android:name=".activity.EditEntryActivity" />
+        <activity android:name=".activity.ExploreActivity"></activity>
     </application>
 
 </manifest>

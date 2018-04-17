@@ -240,7 +240,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
                 break;
             case R.id.explore:
                 // fill in what should happen when clicked help
+                Intent intentE = new Intent(this, ExploreActivity.class);
                 Toast.makeText(getApplicationContext(), "Explore", Toast.LENGTH_SHORT).show();
+                startActivity(intentE);
                 break; // break to end action only do the filled in actions
             case R.id.history:
                 Intent intent2 = new Intent(this, ViewJourneyActivity.class);
