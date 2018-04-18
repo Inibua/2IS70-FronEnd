@@ -1,4 +1,4 @@
-package com.example.group16.journaloo.activity;
+package com.example.group16.journaloo.adapter;
 
 
 import android.content.Context;
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.activity.EditEntryActivity;
 import com.example.group16.journaloo.api.GlideApp;
 import com.example.group16.journaloo.model.Entry;
 
@@ -21,25 +22,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.ViewHolder> {
+    private static final String TAG = "CardAdapter";
     private List<Entry> entryList;
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public View cardView;
-        public TextView date;
-        public TextView location;
-        public TextView description;
-        public ImageView image;
-
-
-        public ViewHolder(View v) {
-            super(v);
-            cardView = v;
-            location = v.findViewById(R.id.locationTextView);
-            date =  v.findViewById(R.id.dateTextView);
-            description = v.findViewById(R.id.descriptionTextView);
-            image = v.findViewById(R.id.entryImageView);
-        }
-    }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public EntryCardAdapter(List<Entry> entryList) {
@@ -50,9 +34,10 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public EntryCardAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent,
                                                           int viewType) {
+        // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.card_layout, parent, false);
-
+        Log.d(TAG, "onCreateViewHolder called");
         return new ViewHolder(v);
     }
 
@@ -91,6 +76,8 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
             e.printStackTrace();
         }
 
+        Log.d(TAG, "onBindViewHolder called");
+
         holder.location.setText(entry.location);
         holder.description.setText(entry.description);
     }
@@ -99,6 +86,27 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
     @Override
     public int getItemCount() {
         return entryList.size();
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public View cardView;
+        public TextView date;
+        public TextView location;
+        public TextView description;
+        public ImageView image;
+
+
+        public ViewHolder(View v) {
+            super(v);
+            cardView = v;
+            location = v.findViewById(R.id.locationTextView);
+            date = v.findViewById(R.id.dateTextView);
+            description = v.findViewById(R.id.descriptionTextView);
+            image = v.findViewById(R.id.entryImageView);
+        }
     }
 }
 

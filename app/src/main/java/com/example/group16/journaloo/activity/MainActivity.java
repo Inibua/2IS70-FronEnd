@@ -5,7 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,10 +22,14 @@ import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
+import com.example.group16.journaloo.fragment.EntryRecycleViewFragment;
+import com.example.group16.journaloo.model.Journey;
+import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.api.MainThreadCallback;
 import com.example.group16.journaloo.model.Entry;
 import com.example.group16.journaloo.model.Journey;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -100,10 +108,9 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
             @Override
             public void onFail(Exception error) {
                 setContentView(R.layout.activity_main);
-
-                // create custom toolbar
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
+                Log.d("main", "didnt get journeys");
             }
 
             @Override
@@ -134,10 +141,39 @@ public class MainActivity extends AppCompatActivity implements GestureDetector.O
 
                 currentPage = -1;
                 loadMoreItems();
+                Toolbar toolbar = findViewById(R.id.app_bar);
+                setSupportActionBar(toolbar);
+                detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                EntryRecycleViewFragment frag = EntryRecycleViewFragment.newInstance(activeJourney.id);
+                fragmentTransaction.replace(R.id.fragment_container, frag);
+                fragmentTransaction.commit();
             }
         });
     }
 
+
+//    // create custom toolbar
+//    Toolbar toolbar = findViewById(R.id.app_bar);
+//    setSupportActionBar(toolbar);
+//
+//    mRecyclerView = findViewById(R.id.entryRecyclerView);
+//                mRecyclerView.setHasFixedSize(true);
+//    mLayoutManager = new LinearLayoutManager(MainActivity.this);
+//                mRecyclerView.setLayoutManager(mLayoutManager);
+//    activeJourneyEntries = new ArrayList<>();
+//    mAdapter = new EntryCardAdapter(activeJourneyEntries);
+//                mRecyclerView.setAdapter(mAdapter);
+//    // Pagination
+//                mRecyclerView.addOnScrollListener(recyclerViewOnScrollListener);
+//    isLoading = false;
+//
+//    detector = new GestureDetectorCompat(MainActivity.this, MainActivity.this);
+//
+//    currentPage = -1;
+//    loadMoreItems();
 
     public void stopJourney(View view) {
         final Intent intent = new Intent(this, MainActivity.class);
