@@ -328,7 +328,7 @@ public class APIWrapper {
     /**
      * Function which is used to get the currently logged in users journey.
      */
-    public void refreshActiveJourney(final MainThreadCallback responseHandler) {
+    public void getActiveJourney(final MainThreadCallback responseHandler) {
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("journey")
                 .addPathSegment(String.valueOf(loggedInUser.id))

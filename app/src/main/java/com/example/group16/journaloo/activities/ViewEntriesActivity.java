@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.TextView;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
 import com.example.group16.journaloo.api.MainThreadCallback;
@@ -21,9 +20,9 @@ public class ViewEntriesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_entries);
+        setContentView(R.layout.activity_appbar_recyclerview);
 
-        int journeyId = getIntent().getIntExtra("journeyId", -1);
+        final int journeyId = getIntent().getIntExtra("journeyId", -1);
         wrapper.getJourney(journeyId, new MainThreadCallback() {
             @Override
             public void onFail(Exception error) {
@@ -36,11 +35,9 @@ public class ViewEntriesActivity extends AppCompatActivity {
             public void onSuccess(String responseBody) {
                 journey = gson.fromJson(responseBody, Journey.class);
 
-                TextView nameJourney = findViewById(R.id.nameJourney);
-                nameJourney.setText(journey.title);
-
                 Toolbar toolbar = findViewById(R.id.app_bar);
                 setSupportActionBar(toolbar);
+                setTitle(journey.title);
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

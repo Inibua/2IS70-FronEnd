@@ -41,7 +41,7 @@
     <string name="EntryCardDescription">Insert Description</string>
     <string name="entry_card_description">Description here</string>
     <string name="current_journey">Current Journey</string>
-    <string name="journey_stop_button">Stop</string>
+    <string name="journey_stop_button">End</string>
     <string name="EntryCardLocation">Location</string>
     <string name="EntryCardDate">Date</string>
     <string name="signup_message">Don\'t have an account? Sign up here.</string>
@@ -51,7 +51,7 @@
     <string name="login_username_textfield">Username</string>
     <string name="login_password">Password</string>
     <string name="login_password_textfield">Password</string>
-    <string name="auth_token">journaloo_auth</string>
+    <string name="journaloo_auth">journaloo_auth</string>
 
 
 </resources>
