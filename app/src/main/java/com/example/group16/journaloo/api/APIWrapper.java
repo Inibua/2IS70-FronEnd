@@ -179,7 +179,7 @@ public class APIWrapper {
     public void logout(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences("credentials", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.remove(context.getString(R.string.auth_token));
+        editor.remove(context.getString(R.string.journaloo_auth));
         editor.apply();
     }
 
@@ -511,13 +511,13 @@ public class APIWrapper {
     /**
      * Retrieves a specific entry from the user
      *
-     * @param entry - Entry user wants to get
+     * @param entryID - EntryID user wants to get
      * @return entry
      */
-    public Entry getEntry(Entry entry) { // GET?POST
+    public Entry getEntry(int entryID) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.id))
+                .addPathSegment(String.valueOf(entryID))
                 .build();
 
         Request request = new Request.Builder()

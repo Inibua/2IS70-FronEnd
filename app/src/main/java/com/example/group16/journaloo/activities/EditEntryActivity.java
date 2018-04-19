@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.models.Entry;
 
 public class EditEntryActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();
@@ -53,5 +54,18 @@ public class EditEntryActivity extends AppCompatActivity {
             finish();
             startActivity(intent);
         }
+    }
+
+    /**
+     * Deletes the entry that is currently being viewed in the edit activity
+     * Redirects to the entry list of that journey
+     *
+     * @param view
+     */
+    public void deleteEditEntry(View view) {
+        wrapper.deleteEntry(wrapper.getEntry(entry_id));
+        Intent intent = new Intent (this, MainActivity.class);
+        finish();
+        startActivity(intent);
     }
 }
