@@ -1,9 +1,16 @@
 package com.example.group16.journaloo.api;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
+
+import com.example.group16.journaloo.R;
+import com.example.group16.journaloo.activities.LoginActivity;
+import com.example.group16.journaloo.activities.ViewProfileActivity;
 import com.example.group16.journaloo.models.Entry;
 import com.example.group16.journaloo.models.Journey;
 import com.example.group16.journaloo.models.User;
@@ -163,6 +170,17 @@ public class APIWrapper {
                 }
             }
         });
+    }
+
+    /**
+     * Function logout(). Discards auth token
+     *
+     */
+    public void logout(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences("credentials", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.remove(context.getString(R.string.auth_token));
+        editor.apply();
     }
 
     /**
