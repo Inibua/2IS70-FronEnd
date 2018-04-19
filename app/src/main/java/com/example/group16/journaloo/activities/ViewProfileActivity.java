@@ -15,19 +15,18 @@ import com.example.group16.journaloo.models.User;
 
 public class ViewProfileActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();
-    private Context aContext;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        aContext = this;
+        context = this;
         setContentView(R.layout.activity_view_profile);
 
         User user = wrapper.getLoggedInUser();
 
         TextView usernameDisplay = findViewById(R.id.username_textview);
         TextView emailDisplay = findViewById(R.id.email_textview);
-
 
         usernameDisplay.setText(user.username);
         emailDisplay.setText(user.email);
@@ -36,7 +35,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                wrapper.logout(aContext);
+                wrapper.logout(context);
 
                 Intent intent = new Intent(ViewProfileActivity.this, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -59,10 +58,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     public void editPassword(View view) {
         Intent intent = new Intent(this, EditProfileActivity.class);
-        finish();
         startActivity(intent);
     }
-
-
-
 }

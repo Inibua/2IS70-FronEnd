@@ -1,6 +1,7 @@
 package com.example.group16.journaloo.fragments;
 
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 abstract public class EntryRecyclerViewFragment extends RecyclerViewFragment {
     private ArrayList<Entry> entryList;
-    private EntryCardAdapter mAdapter;
+    private RecyclerView.Adapter mAdapter;
 
 
     final MainThreadCallback responseHandler = new MainThreadCallback() {
