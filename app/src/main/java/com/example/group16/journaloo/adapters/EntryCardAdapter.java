@@ -49,6 +49,7 @@ public class EntryCardAdapter extends RecyclerView.Adapter<EntryCardAdapter.View
                 Context context = holder.cardView.getContext();
                 Intent intent = new Intent(context, EditEntryActivity.class);
                 intent.putExtra("id", entry.id);
+                intent.putExtra("journey_id", entry.journey_id);
                 context.startActivity(intent);
             }
         });

@@ -31,7 +31,6 @@ public class Entry {
         this.location = location;
     }
 
-
     Entry (int entryid, Image image, String created, String description, String location) {
         this.id = entryid;
         this.image = image;

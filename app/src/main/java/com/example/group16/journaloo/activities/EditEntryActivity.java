@@ -1,5 +1,6 @@
 package com.example.group16.journaloo.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -9,15 +10,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.group16.journaloo.R;
 import com.example.group16.journaloo.api.APIWrapper;
+import com.example.group16.journaloo.api.MainThreadCallback;
 import com.example.group16.journaloo.models.Entry;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class EditEntryActivity extends AppCompatActivity {
     private APIWrapper wrapper = APIWrapper.getWrapper();
+    private final static Gson gson = new Gson();
     int entry_id;
+    int journey_id;
     String location;
     String description;
+    private Entry entryToDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +35,7 @@ public class EditEntryActivity extends AppCompatActivity {
         entry_id = getIntent().getExtras().getInt("id");
         location = getIntent().getExtras().getString("location");
         description = getIntent().getExtras().getString("description");
+        journey_id = getIntent().getExtras().getInt("journey_id");
 
         TextView locationTextView = findViewById(R.id.locationTextView);
         EditText descriptionEditEntry = findViewById(R.id.descriptionEditEntryEditText);
@@ -42,18 +51,11 @@ public class EditEntryActivity extends AppCompatActivity {
     public void saveEditEntry(View view){
         EditText descriptionEditEntry = findViewById(R.id.descriptionEditEntryEditText);
 
-        if (descriptionEditEntry.getText().toString().matches(description)) {
-            Toast.makeText(getApplicationContext(), "There are no changes",
-                    Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent (this, MainActivity.class);
-            finish();
-            startActivity(intent);
-        } else {
-            wrapper.updateEntry(entry_id, descriptionEditEntry.toString());
-            Intent intent = new Intent (this, MainActivity.class);
-            finish();
-            startActivity(intent);
-        }
+        String newDescription = descriptionEditEntry.getText().toString();
+        wrapper.updateEntry(entry_id, journey_id, newDescription);
+        Intent intent = new Intent (this, MainActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     /**
@@ -63,7 +65,19 @@ public class EditEntryActivity extends AppCompatActivity {
      * @param view
      */
     public void deleteEditEntry(View view) {
-        wrapper.deleteEntry(wrapper.getEntry(entry_id));
+
+        wrapper.getEntry(entry_id, new MainThreadCallback() {
+            @Override
+            public void onFail(Exception error) {
+                error.printStackTrace();
+            }
+
+            @Override
+            public void onSuccess(String responseBody) {
+                entryToDelete = gson.fromJson(responseBody, Entry.class);
+            }
+        });
+        wrapper.deleteEntry(entryToDelete);
         Intent intent = new Intent (this, MainActivity.class);
         finish();
         startActivity(intent);

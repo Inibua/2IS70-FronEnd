@@ -509,7 +509,7 @@ public class APIWrapper {
      * @param entryID - EntryID user wants to get
      * @return entry
      */
-    public Entry getEntry(int entryID) { // GET?POST
+    public void getEntry(int entryID, MainThreadCallback responseHandler) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .addPathSegment(String.valueOf(entryID))
@@ -520,20 +520,7 @@ public class APIWrapper {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-                // Do something to front end
-            }
-        });
-
-        return new Entry();
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
@@ -644,7 +631,7 @@ public class APIWrapper {
      * @param entry_id         - Entry's id user wants to update
      * @param entryDescription - Entry's description user wants to update
      */
-    public void updateEntry(int entry_id, String entryDescription) { // PUT
+    public void updateEntry(int entry_id, int journey_id, String entryDescription) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
                 .addPathSegment(String.valueOf(entry_id))
@@ -654,6 +641,7 @@ public class APIWrapper {
 
         try {
             obj.put("id", entry_id);
+            obj.put("journey_id", journey_id);
             obj.put("description", entryDescription);
         } catch (JSONException e) {
             e.printStackTrace();
