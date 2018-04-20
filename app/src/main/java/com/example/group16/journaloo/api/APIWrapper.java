@@ -506,13 +506,13 @@ public class APIWrapper {
     /**
      * Retrieves a specific entry from the user
      *
-     * @param entry - Entry user wants to get
+     * @param entryID - EntryID user wants to get
      * @return entry
      */
-    public Entry getEntry(Entry entry) { // GET?POST
+    public void getEntry(int entryID, MainThreadCallback responseHandler) { // GET?POST
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.id))
+                .addPathSegment(String.valueOf(entryID))
                 .build();
 
         Request request = new Request.Builder()
@@ -520,20 +520,7 @@ public class APIWrapper {
                 .get()
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-                // Do something to front end
-            }
-        });
-
-        return new Entry();
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
@@ -640,26 +627,14 @@ public class APIWrapper {
 
     /**
      * Updates an entry for the user
-     *
-     * @param entry_id         - Entry's id user wants to update
-     * @param entryDescription - Entry's description user wants to update
      */
-    public void updateEntry(int entry_id, String entryDescription) { // PUT
+    public void updateEntry(Entry entry, MainThreadCallback responseHandler) { // PUT
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry_id))
+                .addPathSegment(String.valueOf(entry.id))
                 .build();
 
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put("id", entry_id);
-            obj.put("description", entryDescription);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        RequestBody body = RequestBody.create(JSON, obj.toString());
+        RequestBody body = RequestBody.create(JSON, gson.toJson(entry));
         Request request = new Request.Builder()
                 .url(url)
                 .put(body)
@@ -667,29 +642,16 @@ public class APIWrapper {
                 .addHeader("Authorization", token)
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-                // Do something to front end
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
      * Deletes an entry for the user
-     *
-     * @param entry - Entry user wants to delete
      */
-    public void deleteEntry(Entry entry) { //DELETE
+    public void deleteEntry(int entryId, MainThreadCallback responseHandler) { //DELETE
         HttpUrl url = baseUrl.newBuilder()
                 .addPathSegment("entry")
-                .addPathSegment(String.valueOf(entry.id))
+                .addPathSegment(String.valueOf(entryId))
                 .build();
 
         Request request = new Request.Builder()
@@ -697,18 +659,7 @@ public class APIWrapper {
                 .delete()
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.i(TAG, e.getMessage());
-                //Display some Toast
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.i(TAG, response.body().toString());
-            }
-        });
+        client.newCall(request).enqueue(responseHandler);
     }
 
     /**
